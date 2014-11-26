@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang=ja>
+  <head>
+    <title>Peercast Gateway</title>
+    <%= erb :common_head %>
+  </head>
+  <body>
+    <%= erb :navbar %>
+
+    <div class=container>
+
+      <form action="/channels/<%= @channel_id %>" method="POST" role="form">
+
+        <div class="form-group">
+          <label for=name>チャンネル名</label>
+          <input class="form-control" type=text name="name" value="<%= h @info['name'] %>">
+        </div>
+
+        <div class="form-group">
+          <label for=genre>ジャンル</label>
+          <input class="form-control" type=text name="genre" value="<%= h @info['genre'] %>">
+        </div>
+
+        <div class="form-group">
+          <label for=desc>詳細</label>
+          <input class="form-control" type=text name="desc" value="<%= h @info['desc'] %>">
+        </div>
+
+        <div class="form-group">
+          <label for=comment>コメント</label>
+          <input class="form-control" type=text name="comment" value="<%= h @info['comment'] %>">
+        </div>
+
+        <div class="form-group">
+          <label for=url>コンタクトURL</label>
+          <input class="form-control" type=text name="url" value="<%= h @info['url'] %>">
+        </div>
+
+        <p><button type=submit class="btn btn-primary">変更を保存</button>
+
+      </form>
+    </div>
+
+    <%= erb :footer %>
+  </body>
+</html>

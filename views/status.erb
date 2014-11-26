@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang=ja>
+  <head>
+    <title>Peercast Gateway &mdash; チャンネル &mdash; <%= @info['info']['name'] %></title>
+    <%= erb :common_head %>
+  </head>
+
+  <body>
+
+    <%= erb :navbar %>
+
+    <div class=container>
+
+      <h1><%= @info['info']['name'] %></h1>
+
+      <p style="color: red" id=error></p>
+
+      <table class="table">
+        <tr>
+          <th>メディア&thinsp;URL</th>
+          <td class="text-info"><span id="source"><%= h @status['source'] %></span></td>
+        </tr>
+        <tr>
+          <th>状態</th>
+          <td><span id="status"></span></td>
+        </tr>
+        <tr>
+          <th>リレー時間</th>
+          <td><span id="uptime"></span>秒</td>
+        </tr>
+        <tr>
+          <th>ビットレート</th>
+          <td><span id=bitrate></span>Kbps</td>
+        </tr>
+        <tr>
+          <th>リスナー/リレー</th>
+          <td><span id=direct></span>/<span id="relay"></span></td>
+        </tr>
+        <tr>
+          <th>ジャンル</th>
+          <td><span id=genre></span></td>
+        </tr>
+        <tr>
+          <th>詳細</th>
+          <td><span id=desc></span></td>
+        </tr>
+        <tr>
+          <th>コメント</th>
+          <td><span id=comment></span></td>
+        </tr>
+        <tr>
+          <th>コンタクトURL</th>
+          <td><a id=contact></a></td>
+        </tr>
+      </table>
+
+      <p>
+        <form action="/stop" method="POST" role="form">
+          <input type=hidden name="channel_id" value="<%= @channel_id %>">
+          <button type=submit class="btn btn-primary">配信停止</button>
+          <a href="/channels/<%= @channel_id %>/edit" class="btn btn-default">詳細変更</a>
+        </form>
+      </p>
+
+    </div>
+
+    <script>
+      $(function() {
+        $.getScript('/channels/<%= @channel_id %>/update');
+        setInterval(function() {
+          $.getScript('/channels/<%= @channel_id %>/update');
+        }, 1000);
+      });
+    </script>
+
+  </body>
+</html>

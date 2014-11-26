@@ -1,0 +1,28 @@
+<% if @error %>
+// 選択できなくなるのでソースURLは更新しない
+  $('#relay').html("n/a")
+  $('#direct').html("n/a")
+  $('#bitrate').html("n/a")
+  $('#uptime').html("n/a")
+  $('#status').html("n/a")
+  $('#contact').html("n/a")
+  $('#contact').attr("href", "")
+  $('#genre').html("n/a")
+  $('#desc').html("n/a")
+  $('#comment').html("n/a")
+  $('#error').html("<%= @error %>")
+<% else %>
+  $('#relay').html("<%= @status['totalRelays'] %>")
+  $('#direct').html("<%= @status['totalDirects'] %>")
+  $('#bitrate').html("<%= @info['info']['bitrate'] %>")
+  $('#uptime').html("<%= @status['uptime'] %>")
+  $('#status').html("<%= @status['status'] %>")
+  $('#contact').html("<%= @info['info']['url'] %>")
+  $('#contact').attr("href", "<%= @info['info']['url'] %>")
+  $('#genre').html("<%= @info['info']['genre'] %>")
+  $('#comment').html("<%= @info['info']['comment'] %>")
+  $('#desc').html("<%= @info['info']['desc'] %>")
+  $('#error').html("")
+<% end %>
+
+

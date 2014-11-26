@@ -1,0 +1,40 @@
+<nav class="navbar navbar-inverse" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">Peercast Gateway</a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <% if @user %>
+
+
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"
+           style="padding: 8px">
+          <img width="32" src="<%= @user.image %>" alt="<%= @user.name %>">
+        </a>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="/desc">ヘルプ</a></li>
+          <li class=divider></li>
+          <li><a href="/account">設定</a></li>
+          <li><a href="/logout">ログアウト</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <div class="navbar-form">
+          <a href="/create" class="btn btn-default">配信する</a>
+        </div>
+      </li>
+
+      <% else %>
+
+      <li>
+        <a href="/auth/twitter">
+          <img alt="Sign in with Twitter" src="/sign-in-with-twitter-gray.png">
+        </a>
+      </li>
+
+      <% end %>
+    </ul>
+  </div>
+</nav>

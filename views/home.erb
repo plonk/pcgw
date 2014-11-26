@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang=ja>
+  <head>
+    <title>Peercast Gateway &mdash; ホーム</title>
+    <%= erb :common_head %>
+  </head>
+
+  <body>
+
+    <%= erb :navbar %>
+
+    <div class=container>
+      <h1><%= h @user.name %>が配信中のチャンネル</h1>
+      <table class=table>
+        <tr><th>チャンネル名</th><th></th></tr>
+        <% @channels.each do |ch| %>
+        <tr>
+          <td><%= ch.info['info']['name'] %></td>
+          <td><a href="/channels/<%= ch.gnu_id %>" class="btn btn-default btn-xs" style="vertical-align: baseline">詳細</a></td>
+        </tr>
+        <% end %>
+      </table>
+      <form action="/stopall" method="POST" role="form">
+        <% @channels.each do |ch| %>
+          <input type=hidden name="channel_ids[]" value="<%= ch.gnu_id %>">
+        <% end %>
+        <button class="btn btn-warning">全て停止する</button>
+      </form>
+    </div>
+
+    <%= erb :footer %>
+  </body>
+</html>

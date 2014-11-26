@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang=ja>
+  <head>
+    <title>Peercast Gateway</title>
+    <%= erb :common_head %>
+  </head>
+  <body>
+
+    <%= erb :navbar %>
+
+    <div class=container>
+
+      <h1>チャンネルの停止</h1>
+
+      <% @channel_infos.each do |info| %>
+        <p class="text-success">
+          チャンネル「<%= info['info']['name'] %>」を停止しました。
+        </p>
+      <% end %>
+
+      <p><a href="/home" class="btn btn-primary">OK</a></p>
+
+    </div>
+    <%= erb :footer %>
+
+  </body>
+</html>

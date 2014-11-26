@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang=ja>
+  <head>
+    <title>Peercast Gateway</title>
+    <%= erb :common_head %>
+  </head>
+  <body>
+
+    <%= erb :navbar %>
+
+    <div class=container>
+
+      <h1><%= jp_words "ネット環境のせいで Peercast で配信できない？" %></h1>
+
+      <p>
+        Peercast Gateway を使えば、ファイアウォールの内側からでも Open
+        Broadcaster Software などの、RTMP 対応エンコーダーを使って
+        Peercast にFLV 配信を行うことができます。
+      </p>
+
+    </div>
+
+    <%= erb :footer %>
+
+  </body>
+</html>
