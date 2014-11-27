@@ -10,13 +10,13 @@
 
   <div class="form-group">
     <label for=genre>ジャンル</label>
-    <input class="form-control" type=text name=genre   required
+    <input class="form-control" type=text name=genre
            value="<%= h params['genre'] || cookies['genre'] %>">
   </div>
 
   <div class="form-group">
     <label for=desc>詳細</label>
-    <input class="form-control" type=text name=desc  required
+    <input class="form-control" type=text name=desc
            value="<%= h params['desc'] || cookies['desc'] %>">
   </div>
 

@@ -118,8 +118,8 @@ class Pcgw < Sinatra::Base
     get_user
     begin
       raise "チャンネル名が入力されていません" if params['channel'].blank?
-      raise "ジャンルが入力されていません"     if params['genre'].blank?
-      raise "詳細が入力されていません"         if params['desc'].blank?
+      # raise "ジャンルが入力されていません"     if params['genre'].blank?
+      # raise "詳細が入力されていません"         if params['desc'].blank?
       raise "掲載YPが選択されていません"       if params['yp'].blank?
 
       peercast = get_peercast
