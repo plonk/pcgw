@@ -1,3 +1,5 @@
+source 'https://rubygems.org'
+
 gem 'rack', '~> 1.4.5'
 gem 'jimson'
 gem 'sinatra'
