@@ -20,6 +20,7 @@ end
 
 class Pcgw < Sinatra::Base
   helpers Sinatra::Cookies
+  use Rack::MethodOverride
 
   configure do
     enable :sessions
@@ -32,6 +33,8 @@ class Pcgw < Sinatra::Base
   require_relative 'helpers'
 
   before do
+    @yellow_pages = get_peercast.process_call(:getYellowPages, []).map(&OpenStruct.method(:new))
+
     # /auth/ で始まる URL なら omniauth-twitter に任せる。
     pass if request.path_info =~ /^\/auth\//
 
@@ -104,7 +107,6 @@ class Pcgw < Sinatra::Base
 
   get '/create' do
     get_user
-    @yps = get_peercast.process_call(:getYellowPages, []).map(&OpenStruct.method(:new))
     erb :create
   end
 
@@ -176,7 +178,6 @@ class Pcgw < Sinatra::Base
       redirect to("/channels/#{gnuid}")
     rescue StandardError => e
       @message = e.message
-      @yps = get_peercast.process_call(:getYellowPages, []).map(&OpenStruct.method(:new))
       erb :create
     end
   end
@@ -272,7 +273,7 @@ class Pcgw < Sinatra::Base
 
   post '/account' do
     get_user
-    @user.update!(params)
+    @user.update!(params.slice("name"))
     @success_message = "変更を保存しました。"
     erb :account
   end
@@ -304,5 +305,59 @@ class Pcgw < Sinatra::Base
     res = get_peercast.process_call(:setChannelInfo,
                                     { channelId: params[:channel_id], info: info, track: track })
     redirect to("/channels/#{params['channel_id']}")
+  end
+
+  get '/users/:id' do
+    get_user
+    must_be_admin!(@user)
+
+    @content_user = User.find(params[:id])
+    erb :user
+  end
+
+  # ユーザーを削除
+  delete '/users/:id' do
+    get_user
+    must_be_admin!(@user)
+
+    @content_user = User.find(params[:id])
+    @content_user.destroy!
+    erb :delete_user
+  end
+
+  get '/users' do
+    redirect to('/users/')
+  end
+
+  # ユーザー一覧
+  get '/users/' do
+    get_user
+    must_be_admin!(@user)
+
+    @users = User.all
+    erb :users
+  end
+
+  # ユーザー編集画面
+  get '/users/:id/edit' do
+    get_user
+    must_be_admin!(@user)
+
+    @content_user = User.find(params[:id])
+    erb :user_edit
+  end
+
+  # ユーザー情報を変更
+  patch '/users/:id' do
+    get_user
+    must_be_admin!(@user)
+
+    @content_user = User.find(params[:id])
+    p params
+    ps = params.slice(*%w(name image admin twitter_id))
+    p ps
+    @content_user.update!(ps)
+    @content_user.save!
+    redirect to("/users/#{@content_user.id}")
   end
 end

@@ -10,6 +10,11 @@
 
     <div class=container>
       <h1>チャンネル作成</h1>
+
+      <% if pcgw_env == "development" %>
+        <p class="text-warning">開発モード。YP&thinsp;には掲載されません。</p>
+      <% end %>
+
       <%= erb :form %>
     </div>
 

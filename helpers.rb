@@ -29,5 +29,35 @@ class Pcgw
     def h(text)
       Rack::Utils.escape_html(text)
     end
+
+    def user_status_raw(user)
+      words = []
+      words << "<span class=badge>管理者</span>" if user.admin?
+      words.join(" ")
+    end
+
+    def must_be_admin!(user)
+      halt 403, 'Administrator only' unless user.admin
+    end
+
+    def links_to_yellow_pages(ypids)
+      ypids.map do |id|
+        yp = @yellow_pages.find { |y| y.yellowPageId == id }
+        "<a href=\"#{h yellow_page_home(yp.name)}\">" \
+        "#{h yp.name}</a>"
+      end.join(", ")
+    end
+
+    # Data as code!
+    def yellow_page_home(name)
+      case name
+      when "SP"
+        "http://bayonet.ddo.jp/sp/"
+      when "TP"
+        "http://temp.orz.hm/yp/"
+      else
+        ""
+      end
+    end
   end
 end

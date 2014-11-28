@@ -9,40 +9,9 @@
     <%= erb :navbar %>
 
     <div class=container>
-      <div class="jumbotron">
-        <h1><%= jp_words "Peercast&thinsp;Gatewayへ&#8203;ようこそ" %></h1>
-        <p>
-          ファイアウォールの内側から Peercast へ配信しましょう。
-        </p>
+      <%= erb :jumbotron %>
 
-        <p>
-          <a style="vertical-align: baseline"
-             class="btn btn-default btn-lg"
-             role="button"
-             href="desc">詳しく</a>
-          <a style="vertical-align: baseline"
-             class="btn btn-primary btn-lg"
-             role="button"
-             href="/auth/twitter">
-            Twitter でログイン
-          </a>
-        </p>
-      </div>
-
-      <% if @channels.any? %>
-        <h2>
-          <span style="color: #ffa922; font-weight: bold; font-size: 200%"><%= @channels.size %></span>チャンネルが配信中！
-        </h2>
-
-        <table class=table>
-          <tr><th>チャンネル名</th></tr>
-          <% @channels.each do |ch| %>
-          <tr>
-            <td><%= ch.info['info']['name'] %></td>
-          </tr>
-          <% end %>
-        </table>
-      <% end %>
+      <%= erb :onair %>
 
     </div>
     <%= erb :footer %>

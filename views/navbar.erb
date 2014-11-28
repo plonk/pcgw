@@ -10,9 +10,14 @@
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"
            style="padding: 8px">
-          <img width="32" src="<%= @user.image %>" alt="<%= @user.name %>">
+          <img width="32" src="<%= @user.image %>" alt="<%= @user.name %>" class="img-rounded">
         </a>
         <ul class="dropdown-menu" role="menu">
+          <% if @user.admin? %>
+          <li><a href="/users">ユーザー管理</a></li>
+          <li class=divider></li>
+          <% end %>
+
           <li><a href="/desc">ヘルプ</a></li>
           <li class=divider></li>
           <li><a href="/account">設定</a></li>
