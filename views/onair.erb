@@ -1,0 +1,18 @@
+<% if @channels.any? %>
+  <h2>
+    <span style="color: #ffa922; font-weight: bold; font-size: 200%"><%= @channels.size %></span>チャンネルが配信中！
+  </h2>
+
+  <table class=table>
+    <tr>
+      <th>チャンネル名</th>
+      <th>掲載&thinsp;YP</th>
+    </tr>
+    <% @channels.each do |ch| %>
+    <tr>
+      <td><%= ch.info['info']['name'] %></td>
+      <td><%= links_to_yellow_pages(ch.info['yellowPages']) %></td>
+    </tr>
+    <% end %>
+  </table>
+<% end %>

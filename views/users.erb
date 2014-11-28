@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang=ja>
+  <head>
+    <title>Peercast Gateway &mdash; ユーザー</title>
+    <%= erb :common_head %>
+  </head>
+  <body>
+    <%= erb :navbar %>
+
+    <div class=container>
+
+      <h1>ユーザー</h1>
+
+      <p><%=h @users.size %>&thinsp;人</p>
+
+      <table class="table">
+        <tr>
+          <th>
+            ID
+          </th>
+          <th>
+            ユーザー名
+          </th>
+          <th>
+            備考
+          </th>
+        </tr>
+
+        <tr>
+          <% @users.each do |user| %>
+          <td><%= h user.id %></td>
+          <td>
+            <a href="/users/<%= h user.id %>">
+              <%= h user.name %>
+            </a>
+          </td>
+          <td>
+            <%= user_status_raw(user) %>
+          </td>
+          <% end %>
+        </tr>
+      </table>
+    </div>
+
+    <%= erb :footer %>
+  </body>
+</html>
