@@ -23,7 +23,11 @@ class Pcgw < Sinatra::Base
   use Rack::MethodOverride
 
   configure do
-    enable :sessions
+    use Rack::Session::Cookie, expire_after: 30*24*3600, secret: ENV['CONSUMER_SECRET']
+
+    set :cookie_options do
+      { :expires => Time.now + 30*24*3600 }
+    end
 
     use OmniAuth::Builder do
       provider :twitter, ENV['CONSUMER_KEY'], ENV['CONSUMER_SECRET']
