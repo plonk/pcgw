@@ -40,11 +40,10 @@ class Pcgw
       halt 403, 'Administrator only' unless user.admin
     end
 
-    def links_to_yellow_pages(ypids)
-      ypids.map do |id|
-        yp = @yellow_pages.find { |y| y.yellowPageId == id }
-        "<a href=\"#{h yellow_page_home(yp.name)}\">" \
-        "#{h yp.name}</a>"
+    def yellow_page_links(yps)
+      yps.map do |yp|
+        "<a href=\"#{h yellow_page_home(yp['name'])}\">" \
+        "#{h yp['name']}</a>"
       end.join(", ")
     end
 

@@ -11,7 +11,7 @@
     <% @channels.each do |ch| %>
     <tr>
       <td><%= ch.info['info']['name'] %></td>
-      <td><%= links_to_yellow_pages(ch.info['yellowPages']) %></td>
+      <td><%= yellow_page_links(ch.info['yellowPages']) %></td>
     </tr>
     <% end %>
   </table>
