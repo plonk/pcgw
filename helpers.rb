@@ -43,6 +43,7 @@ class Pcgw
     def links_to_yellow_pages(ypids)
       ypids.map do |id|
         yp = @yellow_pages.find { |y| y.yellowPageId == id }
+        next unless yp # ？？？
         "<a href=\"#{h yellow_page_home(yp.name)}\">" \
         "#{h yp.name}</a>"
       end.join(", ")
