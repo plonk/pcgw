@@ -6,11 +6,13 @@
   <table class=table>
     <tr>
       <th>チャンネル名</th>
+      <th>リスナー数</th>
       <th>掲載&thinsp;YP</th>
     </tr>
     <% @channels.each do |ch| %>
     <tr>
-      <td><%= ch.info['info']['name'] %></td>
+      <td><%= h ch.info['info']['name'] %></td>
+      <td><%= h ch.status['totalDirects'] %></td>
       <td><%= yellow_page_links(ch.info['yellowPages']) %></td>
     </tr>
     <% end %>
