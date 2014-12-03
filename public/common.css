@@ -1,2 +1,4 @@
-h1 { word-break: keep-all }
+h1, h2 { word-break: keep-all }
 footer { margin-top: 20px }
+.head-keep th { word-break: keep-all }
+.url { word-wrap: break-word; }
