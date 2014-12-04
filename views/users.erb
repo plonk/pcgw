@@ -26,19 +26,19 @@
           </th>
         </tr>
 
-        <tr>
-          <% @users.each do |user| %>
-          <td><%= h user.id %></td>
-          <td>
-            <a href="/users/<%= h user.id %>">
-              <%= h user.name %>
-            </a>
-          </td>
-          <td>
-            <%= user_status_raw(user) %>
-          </td>
-          <% end %>
-        </tr>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= h user.id %></td>
+            <td>
+              <a href="/users/<%= h user.id %>">
+                <%= h user.name %>
+              </a>
+            </td>
+            <td>
+              <%= user_status_raw(user) %>
+            </td>
+          </tr>
+        <% end %>
       </table>
     </div>
 
