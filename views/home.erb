@@ -10,7 +10,11 @@
     <%= erb :navbar %>
 
     <div class=container>
-      <h1><%= jp_words @user.name + "が配信中のチャンネル" %></h1>
+      <h2>配信しましょう</h2>
+
+      <p><a href="/how-to" class="btn btn-default">開始の手順 &raquo;</a></p>
+
+      <h2><%= jp_words @user.name + "が配信中のチャンネル" %></h2>
       <table class="table">
         <tr><th>チャンネル名</th><th></th></tr>
         <% @channels.each do |ch| %>

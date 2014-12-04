@@ -364,4 +364,9 @@ class Pcgw < Sinatra::Base
     @content_user.save!
     redirect to("/users/#{@content_user.id}")
   end
+
+  get '/how-to' do
+    get_user
+    erb :"how-to"
+  end
 end
