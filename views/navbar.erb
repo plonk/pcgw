@@ -23,6 +23,10 @@
             <img width="32" src="<%= @user.image %>" alt="<%= @user.name %>" class="img-rounded">
           </a>
           <ul class="dropdown-menu" role="menu">
+            <li><a href="/account">
+                <strong><%= h @user.name %></strong><br>
+                <small class="metadata">プロフィールを表示</small></a></li>
+            <li class=divider></li>
             <% if @user.admin? %>
             <li><a href="/users"><span class="text-warning">ユーザー管理</span></a></li>
             <li class=divider></li>
@@ -30,13 +34,16 @@
 
             <li><a href="/how-to">ヘルプ</a></li>
             <li class=divider></li>
-            <li><a href="/account">設定</a></li>
             <li><a href="/logout">ログアウト</a></li>
           </ul>
         </li>
 
         <li>
-          <a href="/create">配信する</a>
+          <form action="/create" method="GET">
+            <button class="btn btn-primary navbar-btn"
+                    title="配信する"
+                    style="padding: 0"><img src="/images/megaphone.png" width="32"></button>
+          </form>
         </li>
 
 

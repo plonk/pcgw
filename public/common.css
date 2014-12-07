@@ -3,3 +3,4 @@ footer { margin-top: 20px; margin-bottom: 20px; }
 .head-keep th { word-break: keep-all }
 .url { word-wrap: break-word; }
 .centering { text-align: center }
+.metadata { color: #999 }

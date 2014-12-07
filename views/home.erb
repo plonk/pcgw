@@ -10,26 +10,31 @@
     <%= erb :navbar %>
 
     <div class=container>
-      <h2>配信しましょう</h2>
+      <h2><%= jp_words @user.name + "のチャンネル" %></h2>
 
-      <p><a href="/how-to" class="btn btn-default">開始の手順 &raquo;</a></p>
-
-      <h2><%= jp_words @user.name + "が配信中のチャンネル" %></h2>
-      <table class="table">
-        <tr><th>チャンネル名</th><th></th></tr>
-        <% @channels.each do |ch| %>
-        <tr>
-          <td><%= ch.info['info']['name'] %></td>
-          <td><a href="/channels/<%= ch.gnu_id %>" class="btn btn-default btn-xs" style="vertical-align: baseline">詳細</a></td>
-        </tr>
-        <% end %>
-      </table>
-      <form action="/stopall" method="POST" role="form">
-        <% @channels.each do |ch| %>
+      <% if @channels.any? %>
+        <table class="table">
+          <tr><th>チャンネル名</th><th></th></tr>
+          <% @channels.each do |ch| %>
+          <tr>
+            <td><%= ch.info['info']['name'] %></td>
+            <td><a href="/channels/<%= ch.gnu_id %>" class="btn btn-default btn-xs" style="vertical-align: baseline">詳細</a></td>
+          </tr>
+          <% end %>
+        </table>
+        <form action="/stopall" method="POST" role="form">
+          <% @channels.each do |ch| %>
           <input type=hidden name="channel_ids[]" value="<%= ch.gnu_id %>">
-        <% end %>
-        <button class="btn btn-warning">全て停止する</button>
-      </form>
+          <% end %>
+          <button class="btn btn-warning">全て停止する</button>
+        </form>
+      <% else %>
+        <p>１つもありません。</p>
+        <p>
+          <a href="/create" class="btn btn-primary"><img src="/images/megaphone.png" width="32"> 配信する</a>
+          <a href="/how-to" class="btn btn-default" style="margin-left: 1em; ">手順 &raquo;</a>
+        </p>
+      <% end %>
 
 
       <%= erb :onair %>
