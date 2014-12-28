@@ -111,6 +111,8 @@ class Pcgw < Sinatra::Base
 
   get '/create' do
     get_user
+    params.merge!(cookies.to_h.slice('channel', 'genre', 'comment', 'desc', 'yp', 'url'))
+    params['channel'] ||= @user.name
     erb :create
   end
 
@@ -181,6 +183,7 @@ class Pcgw < Sinatra::Base
 
       redirect to("/channels/#{gnuid}")
     rescue StandardError => e
+      # 必要なフィールドがなかった場合などフォームを再表示する
       @message = e.message
       erb :create
     end

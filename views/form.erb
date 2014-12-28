@@ -5,30 +5,30 @@
   <div class="form-group">
     <label for=channel>チャンネル名</label>
     <input class="form-control" type=text name=channel required
-           value="<%= @user.name %>">
+           value="<%= h params['channel'] %>">
   </div>
 
   <div class="form-group">
     <label for=genre>ジャンル</label>
     <input class="form-control" type=text name=genre
-           value="<%= h params['genre'] || cookies['genre'] %>">
+           value="<%= h params['genre'] %>">
   </div>
 
   <div class="form-group">
     <label for=desc>詳細</label>
     <input class="form-control" type=text name=desc
-           value="<%= h params['desc'] || cookies['desc'] %>">
+           value="<%= h params['desc'] %>">
   </div>
 
   <div class="form-group">
     <label for=comment>コメント</label>
     <input class="form-control" type=text name=comment
-           value="<%= h params['comment'] || cookies['comment'] %>">
+           value="<%= h params['comment'] %>">
   </div>
 
   <div class="form-group">
     <label for="url">コンタクト&thinsp;URL</label>
-    <input class="form-control" name="url" type=url value="<%= h params['url'] || cookies['url'] %>">
+    <input class="form-control" name="url" type=url value="<%= h params['url'] %>">
   </div>
 
   <div class="form-group">
@@ -37,7 +37,7 @@
       <div class="radio">
         <label>
           <input type="radio" name="yp" value="<%= yp.yellowPageId %>"
-                 <%= cookies['yp'].to_i == yp.yellowPageId ? "checked" : "" %>>
+                 <%= params['yp'].to_i == yp.yellowPageId ? "checked" : "" %>>
           <%= h yp.name %>
         </label>
       </div>
