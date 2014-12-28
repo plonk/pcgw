@@ -3,3 +3,5 @@ config.ru
 db/
 config/
 public/sign-in-with-twitter-gray.png
+test.rb
+memo
