@@ -30,6 +30,9 @@
           <tr>
             <td><%= h user.id %></td>
             <td>
+              <img width="24" src="<%= user.image %>"
+                   alt="<%= @user.name %>"
+                   class="img-rounded">
               <a href="/users/<%= h user.id %>">
                 <%= h user.name %>
               </a>
