@@ -22,6 +22,8 @@ class Pcgw < Sinatra::Base
   helpers Sinatra::Cookies
   use Rack::MethodOverride
 
+  NO_NEW_CHANNEL = true
+
   configure do
     use Rack::Session::Cookie, expire_after: 30*24*3600, secret: ENV['CONSUMER_SECRET']
 
@@ -110,6 +112,8 @@ class Pcgw < Sinatra::Base
   end
 
   get '/create' do
+    halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
+
     get_user
     params.merge!(cookies.to_h.slice('channel', 'genre', 'comment', 'desc', 'yp', 'url'))
     params['channel'] ||= @user.name
@@ -123,6 +127,8 @@ class Pcgw < Sinatra::Base
   end
 
   post '/broadcast' do
+    halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
+
     get_user
     begin
       raise "チャンネル名が入力されていません" if params['channel'].blank?

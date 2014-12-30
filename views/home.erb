@@ -10,6 +10,10 @@
     <%= erb :navbar %>
 
     <div class=container>
+      <% if NO_NEW_CHANNEL %>
+        <p class="text-danger">メンテナンス中のため、現在チャンネルの作成はできません。</p>
+      <% end %>
+
       <h2><%= jp_words @user.name + "のチャンネル" %></h2>
 
       <% if @channels.any? %>
