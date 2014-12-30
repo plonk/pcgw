@@ -22,7 +22,7 @@ class Pcgw < Sinatra::Base
   helpers Sinatra::Cookies
   use Rack::MethodOverride
 
-  NO_NEW_CHANNEL = true
+  NO_NEW_CHANNEL = false
 
   configure do
     use Rack::Session::Cookie, expire_after: 30*24*3600, secret: ENV['CONSUMER_SECRET']
