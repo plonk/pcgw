@@ -16,9 +16,7 @@ class Pcgw
     end
 
     def get_user
-      ActiveRecord::Base.connection_pool.with_connection do
-        @user = User.find(session[:uid].to_i) if logged_in?
-      end
+      @user = User.find(session[:uid].to_i) if logged_in?
     end
 
     def source_uri(user)
