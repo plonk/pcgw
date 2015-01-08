@@ -35,3 +35,5 @@ db_connect
 
 PEERCAST_STATION_PRIVATE_IP = CONFIG['pecastation'][pcgw_env]['private_ip']
 PEERCAST_STATION_GLOBAL_HOSTNAME = CONFIG['pecastation'][pcgw_env]['global_ip']
+
+WM_MIRROR_HOSTNAME = CONFIG['wm_mirror'][pcgw_env]['hostname']

@@ -18,6 +18,7 @@ def get_peercast
   Peercast.new(PEERCAST_STATION_PRIVATE_IP, 7144)
 end
 
+# Peercast Gateway アプリケーションクラス
 class Pcgw < Sinatra::Base
   helpers Sinatra::Cookies
   use Rack::MethodOverride
@@ -25,10 +26,10 @@ class Pcgw < Sinatra::Base
   NO_NEW_CHANNEL = false
 
   configure do
-    use Rack::Session::Cookie, expire_after: 30*24*3600, secret: ENV['CONSUMER_SECRET']
+    use Rack::Session::Cookie, expire_after: 30.days.to_i, secret: ENV['CONSUMER_SECRET']
 
     set :cookie_options do
-      { :expires => Time.now + 30*24*3600 }
+      { expires: Time.now + 30.days.to_i }
     end
 
     use OmniAuth::Builder do
@@ -42,12 +43,12 @@ class Pcgw < Sinatra::Base
     @yellow_pages = get_peercast.process_call(:getYellowPages, []).map(&OpenStruct.method(:new))
 
     # /auth/ で始まる URL なら omniauth-twitter に任せる。
-    pass if request.path_info =~ /^\/auth\//
+    pass if request.path_info =~ %r{^/auth/}
 
     # / はログインしていなくてもアクセスできる。
-    pass if request.path_info == "/"
-    pass if request.path_info == "/welcome"
-    pass if request.path_info == "/desc"
+    pass if request.path_info == '/'
+    pass if request.path_info == '/welcome'
+    pass if request.path_info == '/desc'
 
     # ログインされていなかったらログインさせる。
     redirect to('/auth/twitter') unless logged_in?
@@ -61,7 +62,7 @@ class Pcgw < Sinatra::Base
   get '/auth/twitter/callback' do
     # twitter から取得した名前とアイコンをセッションに設定する。
 
-    if user = User.find_by(twitter_id: env['omniauth.auth']['uid'])
+    if (user = User.find_by(twitter_id: env['omniauth.auth']['uid']))
       session[:uid] = user.id.to_s
       redirect to('/home')
     else
@@ -115,7 +116,7 @@ class Pcgw < Sinatra::Base
     halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
 
     get_user
-    params.merge!(cookies.to_h.slice('channel', 'genre', 'comment', 'desc', 'yp', 'url'))
+    params.merge!(cookies.to_h.slice('channel', 'genre', 'comment', 'desc', 'yp', 'url', 'type'))
     params['channel'] ||= @user.name
     erb :create
   end
@@ -131,10 +132,11 @@ class Pcgw < Sinatra::Base
 
     get_user
     begin
-      raise "チャンネル名が入力されていません" if params['channel'].blank?
-      # raise "ジャンルが入力されていません"     if params['genre'].blank?
-      # raise "詳細が入力されていません"         if params['desc'].blank?
-      raise "掲載YPが選択されていません"       if params['yp'].blank?
+      raise 'チャンネル名が入力されていません'     if params['channel'].blank?
+      raise '掲載YPが選択されていません'           if params['yp'].blank?
+      raise 'ストリームタイプが選択されていません' if params['type'].blank?
+      # raise 'ジャンルが入力されていません'     if params['genre'].blank?
+      # raise '詳細が入力されていません'         if params['desc'].blank?
 
       peercast = get_peercast
       yps = peercast.process_call(:getYellowPages, [])
@@ -145,7 +147,7 @@ class Pcgw < Sinatra::Base
         genre = params['genre']
       when 'production'
         ypid = params['yp'].to_i
-        yp = yps.find { |yp| yp['yellowPageId'] == params['yp'].to_i }
+        yp = yps.find { |y| y['yellowPageId'] == params['yp'].to_i }
         prefix = yp['name'].downcase
         if params['genre'] =~ /^#{prefix}/
           genre = params['genre']
@@ -156,33 +158,41 @@ class Pcgw < Sinatra::Base
         fail
       end
 
-
       # 入力内容をクッキーに保存
-      cookies.merge! params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment')
+      cookies.merge! params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'type')
 
+      info = {
+        name:     params['channel'],
+        url:      params['url'],
+        bitrate:  '',
+        mimeType: '',
+        genre:    genre,
+        desc:     params['desc'],
+        comment:  params['comment']
+      }
+      track = {
+        name:    '',
+        creator: '',
+        genre:   '',
+        album:   '',
+        url:     ''
+      }
       args = {
         yellowPageId:  ypid,
-        sourceUri:     source_uri(@user),
-        sourceStream:  "RTMP Source",
-        contentReader: "Flash Video (FLV)",
-        info: {
-          name:     params['channel'],
-          url:      params['url'],
-          bitrate:  "",
-          mimeType: "",
-          genre:    genre,
-          desc:     params['desc'],
-          comment:  params['comment']
-        },
-        track:
-        {
-          name:    "",
-          creator: "",
-          genre:   "",
-          album:   "",
-          url:     ""
-        }
+        info: info,
+        track: track,
       }
+      if params['type'] == 'WMV'
+        args = args.merge(sourceUri: source_uri_http(@user),
+                          sourceStream: 'http',
+                          contentReader: 'ASF(WMV or WMA)')
+      elsif params['type'] == 'FLV'
+        args = args.merge(sourceUri: source_uri_rtmp(@user),
+                          sourceStream: 'RTMP Source',
+                          contentReader: 'Flash Video (FLV)')
+      else
+        fail "unknown stream type #{params['type']}"
+      end
       gnuid = peercast.process_call(:broadcastChannel, args)
 
       @user.channels.build(gnu_id: gnuid).save!
@@ -218,11 +228,25 @@ class Pcgw < Sinatra::Base
       @info = pc.process_call(:getChannelInfo, [ params[:channel_id] ])
       js = erb :update
 
-      [ 200, { 'Content-Type'=>'text/javascript', 'Content-Length'=>js.bytesize.to_s}, [js] ]
+      [
+        200,
+        {
+          'Content-Type' => 'text/javascript',
+          'Content-Length' => js.bytesize.to_s
+        },
+        [js]
+      ]
     rescue Jimson::Client::Error => e
       @error = e.message
       js = erb :update
-      [ 200, { 'Content-Type'=>'text/javascript', 'Content-Length'=>js.bytesize.to_s}, [js] ]
+      [
+        200,
+        {
+          'Content-Type' => 'text/javascript',
+          'Content-Length' => js.bytesize.to_s
+        },
+        [js]
+      ]
     end
   end
 
@@ -266,9 +290,7 @@ class Pcgw < Sinatra::Base
     @channel_infos = []
     channels = []
     @user.channels.each do |ch|
-      if params[:channel_ids].include?(ch.gnu_id) and ch.exist?
-        channels << ch
-      end
+      channels << ch if params[:channel_ids].include?(ch.gnu_id) && ch.exist?
     end
     pc = get_peercast
     channels.each do |ch|
@@ -286,20 +308,20 @@ class Pcgw < Sinatra::Base
 
   post '/account' do
     get_user
-    @user.update!(params.slice("name"))
-    @success_message = "変更を保存しました。"
+    @user.update!(params.slice('name'))
+    @success_message = '変更を保存しました。'
     erb :account
   end
 
   get '/cleanup' do
     msg = []
     Channel.all.each do |ch|
-      unless ch.exist?
-        msg << "ユーザー番号#{ch.user_id}の#{ch.gnu_id}を削除した"
-        ch.destroy
-      end
+      next if ch.exist?
+
+      msg << "ユーザー番号#{ch.user_id}の#{ch.gnu_id}を削除した"
+      ch.destroy
     end
-    msg.join("<br>")
+    msg.join('<br>')
   end
 
   # チャンネル情報の更新
@@ -315,8 +337,12 @@ class Pcgw < Sinatra::Base
       album:   '',
       url:     ''
     }
-    res = get_peercast.process_call(:setChannelInfo,
-                                    { channelId: params[:channel_id], info: info, track: track })
+    get_peercast.process_call(:setChannelInfo,
+                              {
+                                channelId: params[:channel_id],
+                                info: info,
+                                track: track
+                              })
     redirect to("/channels/#{params['channel_id']}")
   end
 

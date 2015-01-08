@@ -11,7 +11,7 @@ class Pcgw
     end
 
     def jp_words(str)
-      zwsp = "&#8203;"
+      zwsp = '&#8203;'
       Jp.words(str).join(zwsp)
     end
 
@@ -19,9 +19,14 @@ class Pcgw
       @user = User.find(session[:uid].to_i) if logged_in?
     end
 
-    def source_uri(user)
+    def source_uri_rtmp(user)
       port = 9000 + user.id
       "rtmp://#{PEERCAST_STATION_GLOBAL_HOSTNAME}:#{port}/live/livestream"
+    end
+
+    def source_uri_http(user)
+      path = "#{9000 + user.id}"
+      "http://#{WM_MIRROR_HOSTNAME}:5000/#{path}"
     end
 
     def h(text)
@@ -30,8 +35,8 @@ class Pcgw
 
     def user_status_raw(user)
       words = []
-      words << "<span class=badge>管理者</span>" if user.admin?
-      words.join(" ")
+      words << '<span class=badge>管理者</span>' if user.admin?
+      words.join(' ')
     end
 
     def must_be_admin!(user)
@@ -42,18 +47,18 @@ class Pcgw
       yps.map do |yp|
         "<a href=\"#{h yellow_page_home(yp['name'])}\">" \
         "#{h yp['name']}</a>"
-      end.join(", ")
+      end.join(', ')
     end
 
     # Data as code!
     def yellow_page_home(name)
       case name
-      when "SP"
-        "http://bayonet.ddo.jp/sp/"
-      when "TP"
-        "http://temp.orz.hm/yp/"
+      when 'SP'
+        'http://bayonet.ddo.jp/sp/'
+      when 'TP'
+        'http://temp.orz.hm/yp/'
       else
-        ""
+        ''
       end
     end
   end
