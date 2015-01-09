@@ -48,7 +48,7 @@ class Pcgw < Sinatra::Base
     # / はログインしていなくてもアクセスできる。
     pass if request.path_info == '/'
     pass if request.path_info == '/welcome'
-    pass if request.path_info == '/desc'
+    pass if request.path_info =~ %r{^/doc($|/)}
 
     # ログインされていなかったらログインさせる。
     redirect to('/auth/twitter') unless logged_in?
@@ -107,9 +107,18 @@ class Pcgw < Sinatra::Base
     erb :welcome
   end
 
-  get '/desc' do
+
+  get '/doc/?' do
     get_user
-    erb :desc
+    erb :doc
+  end
+
+  get '/doc/:name' do
+    docs = %w[how-to-obs how-to-wme desc]
+    halt 404 unless docs.include? params['name']
+
+    get_user
+    erb params['name'].to_sym
   end
 
   get '/create' do
@@ -398,10 +407,5 @@ class Pcgw < Sinatra::Base
     @content_user.update!(ps)
     @content_user.save!
     redirect to("/users/#{@content_user.id}")
-  end
-
-  get '/how-to' do
-    get_user
-    erb :"how-to"
   end
 end
