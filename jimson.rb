@@ -214,6 +214,7 @@ class Pcgw < Sinatra::Base
     end
   end
 
+require 'ostruct'
   get '/channels/:channel_id' do
     get_user
     begin
@@ -221,7 +222,13 @@ class Pcgw < Sinatra::Base
 
       @status = pc.process_call(:getChannelStatus, [ params[:channel_id] ])
       @info = pc.process_call(:getChannelInfo, [ params[:channel_id] ])
-      @channel_id = params[:channel_id]
+      @channel = Channel.find_by(gnu_id: params[:channel_id])
+      if @channel.info['yellowPages'].any?
+        @link_url = yellow_page_home(@channel.info['yellowPages'].first['name'])
+        @yp_name = "【#{@channel.info['yellowPages'].first['name']}】"
+      else
+        @link_url = "http://pcgw.sun.ddns.vc/"
+      end
 
       erb :status
     rescue Jimson::Client::Error => e

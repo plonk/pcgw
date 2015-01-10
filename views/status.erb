@@ -11,9 +11,13 @@
 
     <div class=container>
 
-      <h1><%= @info['info']['name'] %></h1>
+      <h1>
+        <%= @info['info']['name'] %>
+        <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= h @link_url %>" data-text="【PeerCastで配信中！】<%= h @info['info']['name'] %>「<%= h @info['info']['desc'] %>」<%= h @yp_name %>" data-lang="ja" data-size="large" data-count="none" data-hashtags="PeercastGateway">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      </h1>
 
-      <p style="color: red" id=error></p>
+     <p style="color: red" id=error></p>
+
 
       <table class="table head-keep">
         <tr>
@@ -58,21 +62,21 @@
         </tr>
       </table>
 
-      <p>
+      <div>
         <form action="/stop" method="POST" role="form">
-          <input type=hidden name="channel_id" value="<%= @channel_id %>">
+          <input type=hidden name="channel_id" value="<%= @channel.gnu_id %>">
           <button type=submit class="btn btn-primary">配信停止</button>
-          <a href="/channels/<%= @channel_id %>/edit" class="btn btn-default">詳細変更</a>
+          <a href="/channels/<%= @channel.gnu_id %>/edit" class="btn btn-default">詳細変更</a>
         </form>
-      </p>
+      </div>
 
     </div>
 
     <script>
       $(function() {
-        $.getScript('/channels/<%= @channel_id %>/update');
+        $.getScript('/channels/<%= @channel.gnu_id %>/update');
         setInterval(function() {
-          $.getScript('/channels/<%= @channel_id %>/update');
+          $.getScript('/channels/<%= @channel.gnu_id %>/update');
         }, 1000);
       });
     </script>
