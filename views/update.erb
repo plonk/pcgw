@@ -16,7 +16,7 @@
   $('#direct').html("<%= @status['totalDirects'] %>")
   $('#bitrate').html("<%= @info['info']['bitrate'] %>")
   $('#uptime').html("<%= @status['uptime'] %>")
-  $('#status').html("<%= @status['status'] %>")
+  $('#status').html("<%= @status['status'] %>").removeClass().addClass("<%= @status_class %>")
   $('#contact').html("<%= @info['info']['url'] %>")
   $('#contact').attr("href", "<%= @info['info']['url'] %>")
   $('#genre').html("<%= @info['info']['genre'] %>")

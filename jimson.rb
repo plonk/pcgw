@@ -229,12 +229,24 @@ class Pcgw < Sinatra::Base
     end
   end
 
+  def status_class(status)
+    case status
+    when "Receiving"
+      "text-success"
+    when "Error", "Searching"
+      "text-warning"
+    else
+      "text-error"
+    end
+  end
+
   get '/channels/:channel_id/update' do
     begin
       @error = nil
       pc = get_peercast
       @status = pc.process_call(:getChannelStatus, [ params[:channel_id] ])
       @info = pc.process_call(:getChannelInfo, [ params[:channel_id] ])
+      @status_class = status_class @status['status']
       js = erb :update
 
       [
