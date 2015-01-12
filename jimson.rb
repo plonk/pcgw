@@ -106,7 +106,7 @@ class Pcgw < Sinatra::Base
   end
 
   get '/doc/:name' do
-    docs = %w[how-to-obs how-to-wme desc]
+    docs = %w(how-to-obs how-to-wme desc)
     halt 404 unless docs.include? params['name']
 
     get_user
@@ -133,11 +133,11 @@ class Pcgw < Sinatra::Base
 
     get_user
     begin
-      raise 'チャンネル名が入力されていません'     if params['channel'].blank?
-      raise '掲載YPが選択されていません'           if params['yp'].blank?
-      raise 'ストリームタイプが選択されていません' if params['type'].blank?
-      # raise 'ジャンルが入力されていません'     if params['genre'].blank?
-      # raise '詳細が入力されていません'         if params['desc'].blank?
+      fail 'チャンネル名が入力されていません'     if params['channel'].blank?
+      fail '掲載YPが選択されていません'           if params['yp'].blank?
+      fail 'ストリームタイプが選択されていません' if params['type'].blank?
+      # fail 'ジャンルが入力されていません'     if params['genre'].blank?
+      # fail '詳細が入力されていません'         if params['desc'].blank?
 
       yps = peercast.getYellowPages
 
@@ -216,7 +216,7 @@ class Pcgw < Sinatra::Base
         @link_url = yellow_page_home(@channel.info['yellowPages'].first['name'])
         @yp_name = "【#{@channel.info['yellowPages'].first['name']}】"
       else
-        @link_url = "http://pcgw.sun.ddns.vc/"
+        @link_url = 'http://pcgw.sun.ddns.vc/'
       end
 
       erb :status
@@ -227,12 +227,12 @@ class Pcgw < Sinatra::Base
 
   def status_class(status)
     case status
-    when "Receiving"
-      "text-success"
-    when "Error", "Searching"
-      "text-warning"
+    when 'Receiving'
+      'text-success'
+    when 'Error', 'Searching'
+      'text-warning'
     else
-      "text-error"
+      'text-error'
     end
   end
 
@@ -352,8 +352,8 @@ class Pcgw < Sinatra::Base
       url:     ''
     }
     peercast.setChannelInfo(channelId: params[:channel_id],
-                                info:      info,
-                                track:     track)
+                            info:      info,
+                            track:     track)
     redirect to("/channels/#{params['channel_id']}")
   end
 
