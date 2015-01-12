@@ -23,9 +23,9 @@
             <img width="32" src="<%= @user.image %>" alt="<%= @user.name %>" class="img-rounded">
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="/account">
+            <li><a href="/home">
                 <strong><%= h @user.name %></strong><br>
-                <small class="metadata">プロフィールを表示</small></a></li>
+                <small class="metadata">ホームを表示</small></a></li>
             <li class=divider></li>
             <% if @user.admin? %>
             <li><a href="/users"><span class="text-warning">ユーザー管理</span></a></li>
@@ -34,6 +34,7 @@
 
             <li><a href="/doc">ヘルプ</a></li>
             <li class=divider></li>
+            <li><a href="/account">設定</a></li>
             <li><a href="/logout">ログアウト</a></li>
           </ul>
         </li>

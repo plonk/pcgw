@@ -13,7 +13,9 @@
         <p class="text-danger">メンテナンス中のため、現在チャンネルの作成はできません。</p>
       <% end %>
 
-      <%= erb :jumbotron %>
+      <% unless  @user %>
+        <%= erb :jumbotron %>
+      <% end %>
 
       <%= erb :onair %>
 

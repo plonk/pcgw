@@ -10,6 +10,7 @@ require_relative 'models/user'
 require_relative 'jp'
 require 'pp'
 require 'sinatra/cookies'
+require 'ostruct'
 
 # 初期化処理
 require_relative 'init'
@@ -47,7 +48,6 @@ class Pcgw < Sinatra::Base
 
     # / はログインしていなくてもアクセスできる。
     pass if request.path_info == '/'
-    pass if request.path_info == '/welcome'
     pass if request.path_info =~ %r{^/doc($|/)}
 
     # ログインされていなかったらログインさせる。
@@ -64,7 +64,7 @@ class Pcgw < Sinatra::Base
 
     if (user = User.find_by(twitter_id: env['omniauth.auth']['uid']))
       session[:uid] = user.id.to_s
-      redirect to('/home')
+      redirect '/home'
     else
       p env['omniauth.auth']
       user = User.new(name:       env['omniauth.auth']['info']['name'],
@@ -95,18 +95,10 @@ class Pcgw < Sinatra::Base
 
   # ルート。
   get '/' do
-    if logged_in?
-      redirect to('/home')
-    else
-      redirect to('/welcome')
-    end
-  end
-
-  get '/welcome' do
+    get_user
     @channels = Channel.all.select(&:exist?)
-    erb :welcome
+    erb :top
   end
-
 
   get '/doc/?' do
     get_user
@@ -214,7 +206,6 @@ class Pcgw < Sinatra::Base
     end
   end
 
-require 'ostruct'
   get '/channels/:channel_id' do
     get_user
     begin

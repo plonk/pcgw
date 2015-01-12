@@ -1,29 +1,23 @@
-<% if @channels.any? %>
-  <h2>
-    <span style="color: #ffa922; font-weight: bold; font-size: 200%"><%= @channels.size %></span><%= jp_words 'チャンネルが配信中！' %>
-  </h2>
+<h2>
+  <span style="color: #ffa922; font-weight: bold; font-size: 200%"><%= @channels.size %></span> <%= jp_words 'チャンネルが配信中' %>
+</h2>
 
-  <table class=table>
-    <tr>
-      <th>名前</th>
-      <th>配信者</th>
-      <th>内容</th>
-      <th>リスナー数</th>
-      <th>掲載&thinsp;YP</th>
-    </tr>
-    <% @channels.each do |ch| %>
-    <tr>
-      <td><%= h ch.info['info']['name'] %></td>
-      <td>
-        <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded"> <%= h ch.user.name %></td>
-      <td><%= h ch.info['info']['desc'] %></td>
-      <td><%= h ch.status['totalDirects'] %></td>
-      <td><%= yellow_page_links(ch.info['yellowPages']) %></td>
-    </tr>
-    <% end %>
-  </table>
-<% else %>
-  <h2>
-    現在配信中のチャンネルはありません
-  </h2>
-<% end %>
+<table class=table>
+  <tr>
+    <th>名前</th>
+    <th>配信者</th>
+    <th>内容</th>
+    <th>リスナー</th>
+    <th>YP</th>
+  </tr>
+  <% @channels.each do |ch| %>
+  <tr>
+    <td><%= h ch.info['info']['name'] %></td>
+    <td>
+      <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded"> <%= h ch.user.name %></td>
+    <td><%= h ch.info['info']['desc'] %></td>
+    <td><%= h ch.status['totalDirects'] %></td>
+    <td><%= yellow_page_links(ch.info['yellowPages']) %></td>
+  </tr>
+  <% end %>
+</table>
