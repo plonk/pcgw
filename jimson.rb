@@ -15,8 +15,8 @@ require 'ostruct'
 # 初期化処理
 require_relative 'init'
 
-def get_peercast
-  Peercast.new(PEERCAST_STATION_PRIVATE_IP, 7144)
+def peercast
+  $peercast ||= Peercast.new(PEERCAST_STATION_PRIVATE_IP, 7144)
 end
 
 # Peercast Gateway アプリケーションクラス
@@ -41,7 +41,7 @@ class Pcgw < Sinatra::Base
   require_relative 'helpers'
 
   before do
-    @yellow_pages = get_peercast.process_call(:getYellowPages, []).map(&OpenStruct.method(:new))
+    @yellow_pages = peercast.getYellowPages.map(&OpenStruct.method(:new))
 
     # /auth/ で始まる URL なら omniauth-twitter に任せる。
     pass if request.path_info =~ %r{^/auth/}
@@ -139,8 +139,7 @@ class Pcgw < Sinatra::Base
       # raise 'ジャンルが入力されていません'     if params['genre'].blank?
       # raise '詳細が入力されていません'         if params['desc'].blank?
 
-      peercast = get_peercast
-      yps = peercast.process_call(:getYellowPages, [])
+      yps = peercast.getYellowPages
 
       case pcgw_env
       when 'development'
@@ -194,9 +193,10 @@ class Pcgw < Sinatra::Base
       else
         fail "unknown stream type #{params['type']}"
       end
-      gnuid = peercast.process_call(:broadcastChannel, args)
+      gnuid = peercast.broadcastChannel(args)
 
-      @user.channels.build(gnu_id: gnuid).save!
+      # そもそもあるべきではない
+      @user.channels.build(gnu_id: gnuid).save! unless @user.channels.find_by(gnu_id: gnuid)
 
       redirect to("/channels/#{gnuid}")
     rescue StandardError => e
@@ -209,10 +209,8 @@ class Pcgw < Sinatra::Base
   get '/channels/:channel_id' do
     get_user
     begin
-      pc = get_peercast
-
-      @status = pc.process_call(:getChannelStatus, [ params[:channel_id] ])
-      @info = pc.process_call(:getChannelInfo, [ params[:channel_id] ])
+      @status = peercast.getChannelStatus(params[:channel_id])
+      @info = peercast.getChannelInfo(params[:channel_id])
       @channel = Channel.find_by(gnu_id: params[:channel_id])
       if @channel.info['yellowPages'].any?
         @link_url = yellow_page_home(@channel.info['yellowPages'].first['name'])
@@ -241,9 +239,8 @@ class Pcgw < Sinatra::Base
   get '/channels/:channel_id/update' do
     begin
       @error = nil
-      pc = get_peercast
-      @status = pc.process_call(:getChannelStatus, [ params[:channel_id] ])
-      @info = pc.process_call(:getChannelInfo, [ params[:channel_id] ])
+      @status = peercast.getChannelStatus(params[:channel_id])
+      @info = peercast.getChannelInfo(params[:channel_id])
       @status_class = status_class @status['status']
       js = erb :update
 
@@ -290,8 +287,7 @@ class Pcgw < Sinatra::Base
       if ch
         @channel_infos = [ch.info]
 
-        pc = get_peercast
-        pc.process_call(:stopChannel, [ ch.gnu_id ])
+        peercast.stopChannel(ch.gnu_id)
         ch.destroy
 
         erb :stop
@@ -311,10 +307,9 @@ class Pcgw < Sinatra::Base
     @user.channels.each do |ch|
       channels << ch if params[:channel_ids].include?(ch.gnu_id) && ch.exist?
     end
-    pc = get_peercast
     channels.each do |ch|
       @channel_infos << ch.info
-      pc.process_call(:stopChannel, [ch.gnu_id])
+      peercast.stopChannel(ch.gnu_id)
       ch.destroy
     end
     erb :stop
@@ -356,12 +351,9 @@ class Pcgw < Sinatra::Base
       album:   '',
       url:     ''
     }
-    get_peercast.process_call(:setChannelInfo,
-                              {
-                                channelId: params[:channel_id],
-                                info: info,
-                                track: track
-                              })
+    peercast.setChannelInfo(channelId: params[:channel_id],
+                                info:      info,
+                                track:     track)
     redirect to("/channels/#{params['channel_id']}")
   end
 
