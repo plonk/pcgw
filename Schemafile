@@ -1,9 +1,7 @@
 create_table "channels", force: true do |t|
   t.string  "gnu_id"
-  t.integer "user_id"
+  t.references :user, index: true
 end
-
-add_index "channels", ["user_id"], name: "index_channels_on_user_id"
 
 create_table "users", force: true do |t|
   t.string  "name"
@@ -13,12 +11,13 @@ create_table "users", force: true do |t|
 end
 
 create_table "channel_infos", force: true do |t|
+  t.references :user, index: true
   t.string  "channel"
   t.string  "genre"
   t.string  "desc"
   t.string  "comment"
   t.string  "url"
-  t.string  "type"
+  t.string  "stream_type"
   t.integer "yp"
   t.timestamps
 end
