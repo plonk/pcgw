@@ -1,0 +1,46 @@
+p style="color: red"
+  = @message
+
+form action="/broadcast" method="POST" role="form"
+
+  div class="form-group"
+    label for="channel" チャンネル名
+    input class="form-control" type="text" name="channel" required=true value=params['channel']
+
+  div class="form-group"
+    label for="genre" ジャンル
+    input class="form-control" type="text" name="genre" value=params['genre']
+
+  div class="form-group"
+    label for="desc" 詳細
+    input class="form-control" type="text" name="desc" value=params['desc']
+
+  div class="form-group"
+    label for="comment" コメント
+    input class="form-control" type="text" name="comment" value=params['comment']
+
+  div class="form-group"
+    label for="url" コンタクト&thinsp;URL
+    input class="form-control" name="url" type="url" value=params['url']
+
+  div class="form-group"
+    label for="type" ストリームタイプ
+    div class="radio"
+      label title="Flash Video (Open Broadcaster Software などはこちら)"
+        input type="radio" name="stream_type" value="FLV" required=true checked=(params['stream_type'] == 'FLV')
+        | FLV
+
+    div class="radio"
+      label title="Windows Media Video (Windows Media Encoder や Expression Encoder はこちら)"
+        input type="radio" name="stream_type" value="WMV" checked=(params['stream_type'] == 'WMV')
+        | WMV
+
+  div class="form-group"
+    label for="yp" 掲載YP
+    - @yellow_pages.each do |yp|
+      div class="radio"
+        label
+          input required="required" type="radio" name="yp" value="#{yp.yellowPageId}" checked=(params['yp'].to_i == yp.yellowPageId)
+          = yp.name
+
+  button type="submit" class="btn btn-primary" 開始

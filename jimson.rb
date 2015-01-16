@@ -7,10 +7,12 @@ require 'omniauth-twitter'
 require 'active_record'
 require_relative 'models/channel'
 require_relative 'models/user'
+require_relative 'models/channel_info'
 require_relative 'jp'
 require 'pp'
 require 'sinatra/cookies'
 require 'ostruct'
+require 'slim'
 
 # 初期化処理
 require_relative 'init'
@@ -28,6 +30,7 @@ class Pcgw < Sinatra::Base
 
   configure do
     use Rack::Session::Cookie, expire_after: 30.days.to_i, secret: ENV['CONSUMER_SECRET']
+    Slim::Engine.set_default_options pretty: true
 
     set :cookie_options do
       { expires: Time.now + 30.days.to_i }
@@ -97,7 +100,7 @@ class Pcgw < Sinatra::Base
   get '/' do
     get_user
     @channels = Channel.all.select(&:exist?)
-    erb :top
+    erb :top, locals: { recent_programs: ChannelInfo.all.order(created_at: :desc).limit(10) }
   end
 
   get '/doc/?' do
@@ -117,7 +120,7 @@ class Pcgw < Sinatra::Base
     halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
 
     get_user
-    params.merge!(cookies.to_h.slice('channel', 'genre', 'comment', 'desc', 'yp', 'url', 'type'))
+    params.merge!(cookies.to_h.slice('channel', 'genre', 'comment', 'desc', 'yp', 'url', 'stream_type'))
     params['channel'] ||= @user.name
     erb :create
   end
@@ -135,7 +138,7 @@ class Pcgw < Sinatra::Base
     begin
       fail 'チャンネル名が入力されていません'     if params['channel'].blank?
       fail '掲載YPが選択されていません'           if params['yp'].blank?
-      fail 'ストリームタイプが選択されていません' if params['type'].blank?
+      fail 'ストリームタイプが選択されていません' if params['stream_type'].blank?
       # fail 'ジャンルが入力されていません'     if params['genre'].blank?
       # fail '詳細が入力されていません'         if params['desc'].blank?
 
@@ -159,7 +162,8 @@ class Pcgw < Sinatra::Base
       end
 
       # 入力内容をクッキーに保存
-      cookies.merge! params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'type')
+      cookies.merge! params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type')
+      channel_info = ChannelInfo.new params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type').merge(user: @user)
 
       info = {
         name:     params['channel'],
@@ -182,21 +186,22 @@ class Pcgw < Sinatra::Base
         info: info,
         track: track,
       }
-      if params['type'] == 'WMV'
+      if params['stream_type'] == 'WMV'
         args = args.merge(sourceUri: source_uri_http(@user),
                           sourceStream: 'http',
                           contentReader: 'ASF(WMV or WMA)')
-      elsif params['type'] == 'FLV'
+      elsif params['stream_type'] == 'FLV'
         args = args.merge(sourceUri: source_uri_rtmp(@user),
                           sourceStream: 'RTMP Source',
                           contentReader: 'Flash Video (FLV)')
       else
-        fail "unknown stream type #{params['type']}"
+        fail "unknown stream type #{params['stream_type']}"
       end
       gnuid = peercast.broadcastChannel(args)
 
       # そもそもあるべきではない
       @user.channels.build(gnu_id: gnuid).save! unless @user.channels.find_by(gnu_id: gnuid)
+      channel_info.save!
 
       redirect to("/channels/#{gnuid}")
     rescue StandardError => e

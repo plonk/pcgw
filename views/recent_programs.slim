@@ -1,0 +1,18 @@
+h2 最近の配信
+
+table.table
+  tr
+    th チャンネル名
+    th 内容
+    th 開始
+    th 配信者
+
+  - recent_programs.each do |info|
+    tr
+      td
+        img.img-rounded width="28" src=info.user.image alt=info.user.name &nbsp;
+        = info.channel
+      td #{info.desc}
+      td #{render_date info.created_at}
+      td
+        = info.user.name
