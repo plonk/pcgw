@@ -131,41 +131,40 @@ class Pcgw < Sinatra::Base
     erb :home
   end
 
-  post '/broadcast' do
-    halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
-
-    get_user
-    begin
-      fail 'チャンネル名が入力されていません'     if params['channel'].blank?
-      fail '掲載YPが選択されていません'           if params['yp'].blank?
-      fail 'ストリームタイプが選択されていません' if params['stream_type'].blank?
-      # fail 'ジャンルが入力されていません'     if params['genre'].blank?
-      # fail '詳細が入力されていません'         if params['desc'].blank?
-
-      yps = peercast.getYellowPages
-
-      case pcgw_env
-      when 'development'
-        ypid = nil
+  # YP の ID とジャンル文字列を params から決定する。
+  def yellow_page_id_and_genre
+    case pcgw_env
+    when 'development'
+      ypid = nil
+      genre = params['genre']
+    when 'production'
+      ypid = params['yp'].to_i
+      yp = peercast.getYellowPages.find { |y| y['yellowPageId'] == params['yp'].to_i }
+      prefix = yp['name'].downcase
+      if params['genre'] =~ /^#{prefix}/
         genre = params['genre']
-      when 'production'
-        ypid = params['yp'].to_i
-        yp = yps.find { |y| y['yellowPageId'] == params['yp'].to_i }
-        prefix = yp['name'].downcase
-        if params['genre'] =~ /^#{prefix}/
-          genre = params['genre']
-        else
-          genre = "#{prefix}#{params['genre']}"
-        end
       else
-        fail
+        genre = "#{prefix}#{params['genre']}"
       end
+    else
+      fail
+    end
+    [ypid, genre]
+  end
 
-      # 入力内容をクッキーに保存
-      cookies.merge! params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type')
-      channel_info = ChannelInfo.new params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type').merge(user: @user)
+  def broadcast_check_params
+    fail 'チャンネル名が入力されていません'     if params['channel'].blank?
+    fail '掲載YPが選択されていません'           if params['yp'].blank?
+    fail 'ストリームタイプが選択されていません' if params['stream_type'].blank?
+    # fail 'ジャンルが入力されていません'     if params['genre'].blank?
+    # fail '詳細が入力されていません'         if params['desc'].blank?
+    true
+  end
 
-      info = {
+  def create_broadcast_args(ypid, genre)
+    args = {
+      yellowPageId:  ypid,
+      info: {
         name:     params['channel'],
         url:      params['url'],
         bitrate:  '',
@@ -173,34 +172,50 @@ class Pcgw < Sinatra::Base
         genre:    genre,
         desc:     params['desc'],
         comment:  params['comment']
-      }
-      track = {
+      },
+      track: {
         name:    '',
         creator: '',
         genre:   '',
         album:   '',
         url:     ''
-      }
-      args = {
-        yellowPageId:  ypid,
-        info: info,
-        track: track,
-      }
-      if params['stream_type'] == 'WMV'
-        args = args.merge(sourceUri: source_uri_http(@user),
-                          sourceStream: 'http',
-                          contentReader: 'ASF(WMV or WMA)')
-      elsif params['stream_type'] == 'FLV'
-        args = args.merge(sourceUri: source_uri_rtmp(@user),
-                          sourceStream: 'RTMP Source',
-                          contentReader: 'Flash Video (FLV)')
-      else
-        fail "unknown stream type #{params['stream_type']}"
-      end
+      },
+    }
+    if params['stream_type'] == 'WMV'
+      args.merge!(sourceUri:     source_uri_http(@user),
+                  sourceStream:  'http',
+                  contentReader: 'ASF(WMV or WMA)')
+    elsif params['stream_type'] == 'FLV'
+      args.merge!(sourceUri:     source_uri_rtmp(@user),
+                  sourceStream:  'RTMP Source',
+                  contentReader: 'Flash Video (FLV)')
+    else
+      fail "unknown stream type #{params['stream_type']}"
+    end
+    args
+  end
+
+  post '/broadcast' do
+    halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
+
+    get_user
+    begin
+      broadcast_check_params
+
+      # 入力内容をクッキーに保存
+      channel_fields = params.slice('channel', 'desc', 'genre', 'yp', 'url',
+                                    'comment', 'stream_type')
+      cookies.merge! channel_fields
+      channel_info = ChannelInfo.new channel_fields.merge(user: @user)
+
+      args = create_broadcast_args(*yellow_page_id_and_genre)
       gnuid = peercast.broadcastChannel(args)
 
-      # そもそもあるべきではない
-      @user.channels.build(gnu_id: gnuid).save! unless @user.channels.find_by(gnu_id: gnuid)
+      # チャンネルが残っているときに増えるのをふせぐ。
+      # そもそも残っているべきではないが。
+      unless @user.channels.find_by(gnu_id: gnuid)
+        @user.channels.build(gnu_id: gnuid).save!
+      end
       channel_info.save!
 
       redirect to("/channels/#{gnuid}")
@@ -218,7 +233,7 @@ class Pcgw < Sinatra::Base
       @info = peercast.getChannelInfo(params[:channel_id])
       @channel = Channel.find_by(gnu_id: params[:channel_id])
       if @channel.info['yellowPages'].any?
-        @link_url = yellow_page_home(@channel.info['yellowPages'].first['name'])
+        @link_url = yellow_page_home @channel.info['yellowPages'].first['name']
         @yp_name = "【#{@channel.info['yellowPages'].first['name']}】"
       else
         @link_url = 'http://pcgw.sun.ddns.vc/'
