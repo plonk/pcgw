@@ -11,3 +11,14 @@ create_table "users", force: true do |t|
   t.integer "twitter_id"
   t.boolean "admin",      default: false
 end
+
+create_table "channel_infos", force: true do |t|
+  t.string  "channel"
+  t.string  "genre"
+  t.string  "desc"
+  t.string  "comment"
+  t.string  "url"
+  t.string  "type"
+  t.integer "yp"
+  t.timestamps
+end
