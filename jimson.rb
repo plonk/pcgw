@@ -379,9 +379,10 @@ class Pcgw < Sinatra::Base
 
   get '/profile/:id' do
     get_user
-    programs = ChannelInfo.where(user: @user).order(created_at: :desc).limit(10)
+    user = User.find(params['id']) rescue halt(404, 'user not found')
+    programs = ChannelInfo.where(user: user).order(created_at: :desc).limit(10)
 
-    slim :profile, {}, user: @user, recent_programs: programs
+    slim :profile, {}, user: user, recent_programs: programs
   end
 
   get '/users/:id' do
