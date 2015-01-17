@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    title Peercast Gateway &mdash; #{user.name}
+    == erb :common_head
+  body
+    == erb :navbar
+
+  .container
+    h1
+      img.img-rounded width="48" src=user.image alt=user.name  #{user.name}
+    == slim :recent_programs, {}, recent_programs: recent_programs
+    div
+      a href=back class="btn btn-primary" 戻る
+
+    == erb :footer

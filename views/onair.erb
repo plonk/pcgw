@@ -14,7 +14,11 @@
   <tr>
     <td><%= h ch.info['info']['name'] %></td>
     <td>
-      <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded"> <%= h ch.user.name %></td>
+      <a href="/profile/<%= ch.user.id %>">
+        <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded">
+        <%= h ch.user.name %>
+      </a>
+    </td>
     <td><%= h ch.info['info']['desc'] %></td>
     <td><%= h ch.status['totalDirects'] %></td>
     <td><%= yellow_page_links(ch.info['yellowPages']) %></td>

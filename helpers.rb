@@ -62,9 +62,9 @@ class Pcgw
       end
     end
 
-    def render_date t
-      weekday = [*'日月火水木金土'.each_char]
-      delta = Time.now - t
+    def render_date(t, ref = Time.now)
+      weekday = [*'㊐㊊㊋㊌㊍㊎㊏'.each_char][t.wday]
+      delta = ref - t
 
       case delta
       when 0...1
@@ -73,12 +73,16 @@ class Pcgw
         "#{delta.to_i}秒前"
       when (1.minute)...(1.hour)
         "#{(delta / 60).to_i}分前"
-      when (1.hour)...(24.hours)
+      when (1.hour)...(1.day)
         "#{(delta / 3600).to_i}時間前"
-        # when (1.day)...Float::INFINITY
+      when (1.day)...(1.month)
+        "%d日%s %02d時%02d分" % [t.day, weekday, t.hour, t.min]
+      when (1.month)...(1.year)
+        "%02d月%02d日%s %02d時%02d分" % \
+        [t.year, t.month, t.day, weekday, t.hour, t.min]
       else
-        "%04d/%02d/%02d(%s) %02d:%02d:%02d" % \
-        [t.year, t.month, t.day, weekday[t.wday], t.hour, t.min, t.sec]
+        "%04d年%02d月%02d日%s %02d:%02d" % \
+        [t.year, t.month, t.day, weekday, t.hour, t.min]
       end
     end
 

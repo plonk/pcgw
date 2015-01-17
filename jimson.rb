@@ -377,6 +377,13 @@ class Pcgw < Sinatra::Base
     redirect to("/channels/#{params['channel_id']}")
   end
 
+  get '/profile/:id' do
+    get_user
+    programs = ChannelInfo.where(user: @user).order(created_at: :desc).limit(10)
+
+    slim :profile, {}, user: @user, recent_programs: programs
+  end
+
   get '/users/:id' do
     get_user
     must_be_admin!(@user)
