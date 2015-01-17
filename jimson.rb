@@ -49,9 +49,14 @@ class Pcgw < Sinatra::Base
     # /auth/ で始まる URL なら omniauth-twitter に任せる。
     pass if request.path_info =~ %r{^/auth/}
 
-    # / はログインしていなくてもアクセスできる。
+
+    # 以下のページはログインしていなくてもアクセスできる。
+    # トップページ
     pass if request.path_info == '/'
+    # ヘルプ
     pass if request.path_info =~ %r{^/doc($|/)}
+    # プロフィール
+    pass if request.path_info =~ %r{^/profile/}
 
     # ログインされていなかったらログインさせる。
     redirect to('/auth/twitter') unless logged_in?
