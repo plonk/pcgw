@@ -19,7 +19,11 @@
         <%= h ch.user.name %>
       </a>
     </td>
-    <td><%= h ch.info['info']['desc'] %></td>
+    <td>
+      <a href="<%= h ch.info['info']['url'] %>">
+        <%= h ch.info['info']['desc'] %>
+      </a>
+    </td>
     <td><%= h ch.status['totalDirects'] %></td>
     <td><%= yellow_page_links(ch.info['yellowPages']) %></td>
   </tr>

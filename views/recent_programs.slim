@@ -12,5 +12,6 @@ table.table
         a href="/profile/#{info.user.id}"
           img.img-rounded width="28" src=info.user.image alt=info.user.name
         |  #{info.channel}
-      td #{info.desc}
+      td
+        a href=info.url #{info.desc}
       td #{render_date info.created_at}
