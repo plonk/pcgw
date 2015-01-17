@@ -133,7 +133,8 @@ class Pcgw < Sinatra::Base
   get '/home' do
     get_user
     @channels = @user.channels.select(&:exist?)
-    erb :home
+    programs = ChannelInfo.where(user: @user).order(created_at: :desc).limit(10)
+    erb :home, {}, recent_programs: programs
   end
 
   # YP の ID とジャンル文字列を params から決定する。

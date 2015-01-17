@@ -40,6 +40,8 @@
         <a href="/doc/how-to-wme" class="btn btn-default" style="margin-left: 1em; ">手順 WME編 &raquo;</a>
       </p>
       <% end %>
+
+      <%= slim :recent_programs, {}, recent_programs: recent_programs %>
     </div>
 
     <%= erb :footer %>
