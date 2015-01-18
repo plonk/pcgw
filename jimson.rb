@@ -236,6 +236,7 @@ class Pcgw < Sinatra::Base
       @status = peercast.getChannelStatus(params[:channel_id])
       @info = peercast.getChannelInfo(params[:channel_id])
       @channel = Channel.find_by(gnu_id: params[:channel_id])
+      halt 404, 'channel not found' unless @channel
       if @channel.info['yellowPages'].any?
         @link_url = yellow_page_home @channel.info['yellowPages'].first['name']
         @yp_name = "【#{@channel.info['yellowPages'].first['name']}】"
@@ -366,11 +367,8 @@ class Pcgw < Sinatra::Base
   # チャンネル情報の更新
   post '/channels/:channel_id' do
     # チャンネル存在チェック。PCGWに関係ないチャンネルは変更しない
-    begin
-      channel = Channel.find_by(gnu_id: params['channel_id'])
-    rescue
-      halt 404, 'channel not found'
-    end
+    channel = Channel.find_by(gnu_id: params['channel_id'])
+    halt 404, 'channel not found' unless channel
     # チャンネル所有チェック
     get_user
     halt 403, 'permission denied' if channel.user != @user
