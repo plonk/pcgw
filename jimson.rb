@@ -9,7 +9,6 @@ require_relative 'models/channel'
 require_relative 'models/user'
 require_relative 'models/channel_info'
 require_relative 'jp'
-require 'pp'
 require 'sinatra/cookies'
 require 'ostruct'
 require 'slim'
@@ -74,7 +73,6 @@ class Pcgw < Sinatra::Base
       session[:uid] = user.id.to_s
       redirect '/home'
     else
-      p env['omniauth.auth']
       user = User.new(name:       env['omniauth.auth']['info']['name'],
                       image:      env['omniauth.auth']['info']['image'],
                       twitter_id: env['omniauth.auth']['uid'])
@@ -244,6 +242,7 @@ class Pcgw < Sinatra::Base
       else
         @link_url = 'http://pcgw.sun.ddns.vc/'
       end
+      @data_text = "【PeerCastで配信中！】#{@info['info']['name']}「#{@info['info']['desc']}」 #{@info['info']['url']} #{@yp_name}"
 
       erb :status
     rescue Jimson::Client::Error => e
@@ -366,10 +365,17 @@ class Pcgw < Sinatra::Base
 
   # チャンネル情報の更新
   post '/channels/:channel_id' do
+    # チャンネル存在チェック。PCGWに関係ないチャンネルは変更しない
+    begin
+      channel = Channel.find_by(gnu_id: params['channel_id'])
+    rescue
+      halt 404, 'channel not found'
+    end
     # チャンネル所有チェック
+    get_user
+    halt 403, 'permission denied' if channel.user != @user
 
     info = params.slice('name', 'url', 'genre', 'desc', 'comment')
-    pp info
     track = {
       name:    '',
       creator: '',
@@ -437,9 +443,7 @@ class Pcgw < Sinatra::Base
     must_be_admin!(@user)
 
     @content_user = User.find(params[:id])
-    p params
     ps = params.slice(*%w(name image admin twitter_id))
-    p ps
     @content_user.update!(ps)
     @content_user.save!
     redirect to("/users/#{@content_user.id}")
