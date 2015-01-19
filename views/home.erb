@@ -18,11 +18,18 @@
       <h1><img width="48" src="<%= @user.image %>" alt="<%= @user.name %>" class="img-rounded"> <%= @user.name %></h1>
       <% if @channels.any? %>
       <table class="table">
-        <tr><th>チャンネル名</th><th></th></tr>
+        <tr><th>チャンネル名</th><th>アクション</th></tr>
         <% @channels.each do |ch| %>
         <tr>
           <td><%= ch.info['info']['name'] %></td>
-          <td><a href="/channels/<%= ch.gnu_id %>" class="btn btn-default btn-xs" style="vertical-align: baseline">詳細</a></td>
+          <td>
+            <a href="/channels/<%= ch.id %>/play" class="btn btn-default btn-xs" style="display: inline-block">再生</a>
+            <a href="/channels/<%= ch.gnu_id %>" class="btn btn-default btn-xs" style="display: inline-block">状態</a>
+            <form action="/stop" method="POST" role="form" style="display: inline-block">
+              <input type=hidden name="channel_id" value="<%= ch.gnu_id %>">
+              <button class="btn btn-warning btn-xs">停止</button>
+            </form>
+          </td>
         </tr>
         <% end %>
       </table>
