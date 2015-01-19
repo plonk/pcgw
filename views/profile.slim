@@ -9,7 +9,10 @@ html
   .container
     h1
       img.img-rounded width="48" src=user.image alt=user.name  #{user.name}
-    == slim :recent_programs, {}, recent_programs: recent_programs
+
+    == slim :profile_onair, locals: { user: user }
+
+    == slim :recent_programs, locals: { recent_programs: recent_programs }
     div
       a href=back class="btn btn-primary" 戻る
 
