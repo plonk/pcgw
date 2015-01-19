@@ -44,6 +44,7 @@ class Pcgw < Sinatra::Base
 
   before do
     @yellow_pages = peercast.getYellowPages.map(&OpenStruct.method(:new))
+    Channel.all.reject { |ch| ch.exist? }.each { |ch| ch.destroy }
 
     # /auth/ で始まる URL なら omniauth-twitter に任せる。
     pass if request.path_info =~ %r{^/auth/}
@@ -102,7 +103,7 @@ class Pcgw < Sinatra::Base
   # ルート。
   get '/' do
     get_user
-    @channels = Channel.all.select(&:exist?)
+    @channels = Channel.all
     erb :top, locals: { recent_programs: ChannelInfo.all.order(created_at: :desc).limit(10) }
   end
 
@@ -130,7 +131,7 @@ class Pcgw < Sinatra::Base
 
   get '/home' do
     get_user
-    @channels = @user.channels.select(&:exist?)
+    @channels = @user.channels
     programs = ChannelInfo.where(user: @user).order(created_at: :desc).limit(10)
     erb :home, {}, recent_programs: programs
   end
@@ -331,7 +332,7 @@ class Pcgw < Sinatra::Base
     @channel_infos = []
     channels = []
     @user.channels.each do |ch|
-      channels << ch if params[:channel_ids].include?(ch.gnu_id) && ch.exist?
+      channels << ch if params[:channel_ids].include?(ch.gnu_id)
     end
     channels.each do |ch|
       @channel_infos << ch.info
@@ -351,17 +352,6 @@ class Pcgw < Sinatra::Base
     @user.update!(params.slice('name'))
     @success_message = '変更を保存しました。'
     erb :account
-  end
-
-  get '/cleanup' do
-    msg = []
-    Channel.all.each do |ch|
-      next if ch.exist?
-
-      msg << "ユーザー番号#{ch.user_id}の#{ch.gnu_id}を削除した"
-      ch.destroy
-    end
-    msg.join('<br>')
   end
 
   # チャンネル情報の更新
