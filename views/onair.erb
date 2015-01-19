@@ -12,7 +12,11 @@
   </tr>
   <% @channels.each do |ch| %>
   <tr>
-    <td><%= h ch.info['info']['name'] %></td>
+    <td>
+      <a href="/channels/<%= h ch.id %>/play">
+        <%= h ch.info['info']['name'] %>
+      </a>
+    </td>
     <td>
       <a href="/profile/<%= ch.user.id %>">
         <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded">

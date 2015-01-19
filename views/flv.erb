@@ -1,0 +1,11 @@
+<!-- 何かサイズの初期値を入れておかないと表示されないので -->
+<object width="640" height="480"
+        style="width: calc(100vw - 10px); height: calc(100vh - 10px)"
+        id="undefined" name="undefined"
+        data="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf"
+        type="application/x-shockwave-flash">
+  <param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf" />
+  <param name="allowfullscreen" value="true" />
+  <param name="allowscriptaccess" value="always" />
+  <param name="flashvars" value='config={"clip":{"url":"<%= stream %>"},"playlist":[{"url":"<%= stream %>","scaling":"fit"}]}' />
+</object>

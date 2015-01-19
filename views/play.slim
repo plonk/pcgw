@@ -1,0 +1,11 @@
+doctype html
+html
+  head
+    style
+      | html, body { margin: 0; padding: 0 }
+    title #{channel.info['info']['name']} | Peercast Gateway
+  body
+    - if channel.info['info']['contentType'] == 'WMV'
+      == erb :wmv, locals: { playlist: channel.playlist_url, stream: channel.stream_url }
+    - elsif channel.info['info']['contentType'] == 'FLV'
+      == erb :flv, locals: { stream: channel.stream_url }

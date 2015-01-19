@@ -387,6 +387,13 @@ class Pcgw < Sinatra::Base
     redirect to("/channels/#{params['channel_id']}")
   end
 
+  get '/channels/:id/play' do
+    ch = Channel.find(params['id'])
+    halt 404, 'channel not found' unless ch
+
+    slim :play, locals: { channel: ch }
+  end
+
   get '/profile/:id' do
     get_user
     user = User.find(params['id']) rescue halt(404, 'user not found')
