@@ -1,0 +1,31 @@
+<style>
+html, body { margin: 0; padding: 0 }
+</style>
+
+<!-- saved from url=(0022)http://<%= h env['SERVER_NAME'] %> -->
+<object
+   id="wmplayer"
+   width="640" height="480"
+   style="width: calc(100vw - 10px); height: calc(100vh - 10px)"
+   classid="CLSID:22D6F312-B0F6-11D0-94AB-0080C74C7E95"
+   codebase="http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=6,4,5,715"
+   standby="Loading MicrosoftR WindowsR Media Player components..."
+   type="application/x-oleobject">
+
+  <param name="FileName" value="<%= playlist %>" />
+  <!-- 自動再生の有無 -->
+  <param name="AutoStart" value="true" />
+  <!-- コントロール表示の有無 -->
+  <param name="ShowControls" value="true" />
+
+  <!-- IE 以外用 -->
+  <embed
+     name="wmplayer"
+     width="640" height="480"
+     style="width: calc(100vw - 10px); height: calc(100vh - 10px)"
+     pluginspage="http://www.microsoft.com/Windows/MediaPlayer/"
+     type="application/x-mplayer2"
+     src="<%= stream %>"
+     autostart="1"
+     showcontrols="1">
+</object>
