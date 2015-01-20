@@ -1,5 +1,6 @@
 <% if @error %>
 // 選択できなくなるのでソースURLは更新しない
+  $('#connection').html("n/a")
   $('#relay').html("n/a")
   $('#direct').html("n/a")
   $('#bitrate').html("n/a")
@@ -12,9 +13,10 @@
   $('#comment').html("n/a")
   $('#error').html("<%= @error %>")
 <% else %>
+  $('#connection').html("<%= @connection %>")
   $('#relay').html("<%= @status['totalRelays'] %>")
   $('#direct').html("<%= @status['totalDirects'] %>")
-  $('#bitrate').html("<%= @info['info']['bitrate'] %>")
+  $('#bitrate').html("<%= @source_kbps %>Kbps / <%= @info['info']['bitrate'] %>")
   $('#uptime').html("<%= @status['uptime'] %>")
   $('#status').html("<%= @status['status'] %>").removeClass().addClass("<%= @status_class %>")
   $('#contact').html("<%= @info['info']['url'] %>")
