@@ -218,12 +218,13 @@ class Pcgw < Sinatra::Base
 
       # チャンネルが残っているときに増えるのをふせぐ。
       # そもそも残っているべきではないが。
-      unless @user.channels.find_by(gnu_id: gnuid)
-        @user.channels.build(gnu_id: gnuid).save!
+      unless ch = @user.channels.find_by(gnu_id: gnuid)
+        ch = @user.channels.build(gnu_id: gnuid)
+        ch.save!
       end
       channel_info.save!
 
-      redirect to("/channels/#{gnuid}")
+      redirect to("/channels/#{ch.id}")
     rescue StandardError => e
       # 必要なフィールドがなかった場合などフォームを再表示する
       @message = e.message
@@ -231,12 +232,12 @@ class Pcgw < Sinatra::Base
     end
   end
 
-  get '/channels/:channel_id' do
+  get '/channels/:id' do
     get_user
     begin
-      @status = peercast.getChannelStatus(params[:channel_id])
-      @info = peercast.getChannelInfo(params[:channel_id])
-      @channel = Channel.find_by(gnu_id: params[:channel_id])
+      @channel = Channel.find(params['id'])
+      @status = peercast.getChannelStatus(@channel.gnu_id)
+      @info = peercast.getChannelInfo(@channel.gnu_id)
       halt 404, 'channel not found' unless @channel
       if @channel.info['yellowPages'].any?
         @link_url = yellow_page_home @channel.info['yellowPages'].first['name']
@@ -252,7 +253,7 @@ class Pcgw < Sinatra::Base
     end
   end
 
-  def status_class(status)
+  def status_semantic_class(status)
     case status
     when 'Receiving'
       'text-success'
@@ -263,12 +264,13 @@ class Pcgw < Sinatra::Base
     end
   end
 
-  get '/channels/:channel_id/update' do
+  get '/channels/:id/update' do
     begin
+      channel = Channel.find(params['id'])
       @error = nil
-      @status = peercast.getChannelStatus(params[:channel_id])
-      @info = peercast.getChannelInfo(params[:channel_id])
-      @status_class = status_class @status['status']
+      @status = peercast.getChannelStatus(channel.gnu_id)
+      @info = peercast.getChannelInfo(channel.gnu_id)
+      @status_class = status_semantic_class @status['status']
       js = erb :update
 
       [
@@ -293,23 +295,52 @@ class Pcgw < Sinatra::Base
     end
   end
 
-  get '/channels/:channel_id/edit' do
+  get '/channels/:id/edit' do
     get_user
-    ch = @user.channels.find_by(gnu_id: params[:channel_id])
+    ch = @user.channels.find(params['id'])
     if ch
       @info = ch.info['info']
-      @channel_id = params[:channel_id]
+      @channel_id = ch.id
       erb :edit
     else
-      h "#{params[:channel_id]}は#{@user.name}のチャンネルじゃないです。"
+      h "そのチャンネルは存在しないか、#{@user.name}のチャンネルではありません。"
     end
   end
 
-  post '/stop' do
+  # チャンネル情報の更新
+  post '/channels/:id' do
+    channel = Channel.find(params['id'])
+    halt 404, 'channel not found' unless channel
+    # チャンネル所有チェック
+    get_user
+    halt 403, 'permission denied' if channel.user != @user
+
+    info = params.slice('name', 'url', 'genre', 'desc', 'comment')
+    track = {
+      name:    '',
+      creator: '',
+      genre:   '',
+      album:   '',
+      url:     ''
+    }
+    peercast.setChannelInfo(channelId: channel.gnu_id,
+                            info:      info,
+                            track:     track)
+    redirect to("/channels/#{channel.id}")
+  end
+
+  get '/channels/:id/play' do
+    ch = Channel.find(params['id'])
+    halt 404, 'channel not found' unless ch
+
+    slim :play, locals: { channel: ch }
+  end
+
+  post '/channels/:id/stop' do
     get_user
     begin
       # チャンネルの所有者であるかのチェック
-      ch = @user.channels.find_by(gnu_id: params[:channel_id])
+      ch = @user.channels.find(params[:id])
 
       if ch
         @channel_infos = [ch.info]
@@ -319,7 +350,7 @@ class Pcgw < Sinatra::Base
 
         erb :stop
       else
-        h "#{params[:channel_id]}は#{@user.name}のチャンネルではないです。"
+        halt 403, "そのチャンネルは#{@user.name}のチャンネルではありません。"
       end
     rescue Jimson::Client::Error => e
       h e.inspect
@@ -330,9 +361,9 @@ class Pcgw < Sinatra::Base
     get_user
 
     @channel_infos = []
-    channels = []
-    @user.channels.each do |ch|
-      channels << ch if params[:channel_ids].include?(ch.gnu_id)
+    ids = params[:channel_ids].map(&:to_i)
+    channels = @user.channels.select do |ch|
+      ids.include?(ch.id)
     end
     channels.each do |ch|
       @channel_infos << ch.info
@@ -352,36 +383,6 @@ class Pcgw < Sinatra::Base
     @user.update!(params.slice('name'))
     @success_message = '変更を保存しました。'
     erb :account
-  end
-
-  # チャンネル情報の更新
-  post '/channels/:channel_id' do
-    # チャンネル存在チェック。PCGWに関係ないチャンネルは変更しない
-    channel = Channel.find_by(gnu_id: params['channel_id'])
-    halt 404, 'channel not found' unless channel
-    # チャンネル所有チェック
-    get_user
-    halt 403, 'permission denied' if channel.user != @user
-
-    info = params.slice('name', 'url', 'genre', 'desc', 'comment')
-    track = {
-      name:    '',
-      creator: '',
-      genre:   '',
-      album:   '',
-      url:     ''
-    }
-    peercast.setChannelInfo(channelId: params[:channel_id],
-                            info:      info,
-                            track:     track)
-    redirect to("/channels/#{params['channel_id']}")
-  end
-
-  get '/channels/:id/play' do
-    ch = Channel.find(params['id'])
-    halt 404, 'channel not found' unless ch
-
-    slim :play, locals: { channel: ch }
   end
 
   get '/profile/:id' do
