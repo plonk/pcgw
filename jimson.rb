@@ -264,6 +264,10 @@ class Pcgw < Sinatra::Base
     end
   end
 
+  def source_stream(channel)
+    peercast.getChannelConnections(channel.gnu_id).find { |conn| conn['type'] == 'source' }
+  end
+
   get '/channels/:id/update' do
     begin
       channel = Channel.find(params['id'])
@@ -271,6 +275,14 @@ class Pcgw < Sinatra::Base
       @status = peercast.getChannelStatus(channel.gnu_id)
       @info = peercast.getChannelInfo(channel.gnu_id)
       @status_class = status_semantic_class @status['status']
+
+      src = source_stream(channel)
+      @source_kbps = (src['recvRate'] * 8 / 1000).round
+      if src['remoteEndPoint']
+        @connection = "#{src['remoteEndPoint']} の #{src['agentName']}"
+      else
+        @connection = 'n/a'
+      end
       js = erb :update
 
       [
