@@ -24,9 +24,8 @@
           <td><%= ch.info['info']['name'] %></td>
           <td>
             <a href="/channels/<%= ch.id %>/play" class="btn btn-default btn-xs" style="display: inline-block">再生</a>
-            <a href="/channels/<%= ch.gnu_id %>" class="btn btn-default btn-xs" style="display: inline-block">状態</a>
-            <form action="/stop" method="POST" role="form" style="display: inline-block">
-              <input type=hidden name="channel_id" value="<%= ch.gnu_id %>">
+            <a href="/channels/<%= ch.id %>" class="btn btn-default btn-xs" style="display: inline-block">状態</a>
+            <form action="/channels/<%= ch.id %>/stop" method="POST" role="form" style="display: inline-block">
               <button class="btn btn-warning btn-xs">停止</button>
             </form>
           </td>
@@ -35,7 +34,7 @@
       </table>
       <form action="/stopall" method="POST" role="form">
         <% @channels.each do |ch| %>
-        <input type=hidden name="channel_ids[]" value="<%= ch.gnu_id %>">
+        <input type=hidden name="channel_ids[]" value="<%= ch.id %>">
         <% end %>
         <button class="btn btn-warning">全て停止する</button>
       </form>

@@ -63,10 +63,9 @@
       </table>
 
       <div>
-        <form action="/stop" method="POST" role="form">
-          <input type=hidden name="channel_id" value="<%= @channel.gnu_id %>">
+        <form action="/channels/<%= @channel.id %>/stop" method="POST" role="form">
           <button type=submit class="btn btn-warning">配信停止</button>
-          <a href="/channels/<%= @channel.gnu_id %>/edit" class="btn btn-default">詳細変更</a>          <a href="/channels/<%= @channel.id %>/play" class="btn btn-default" target="_blank"><span class="glyphicon glyphicon-new-window"></span> 再生</a>
+          <a href="/channels/<%= @channel.id %>/edit" class="btn btn-default">詳細変更</a>          <a href="/channels/<%= @channel.id %>/play" class="btn btn-default" target="_blank"><span class="glyphicon glyphicon-new-window"></span> 再生</a>
 
         </form>
       </div>
@@ -75,9 +74,9 @@
 
     <script>
       $(function() {
-        $.getScript('/channels/<%= @channel.gnu_id %>/update');
+        $.getScript('/channels/<%= @channel.id %>/update');
         setInterval(function() {
-          $.getScript('/channels/<%= @channel.gnu_id %>/update');
+          $.getScript('/channels/<%= @channel.id %>/update');
         }, 1000);
       });
     </script>
