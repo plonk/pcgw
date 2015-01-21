@@ -4,7 +4,7 @@ table.table
   tr
     th チャンネル名
     th 内容
-    th 開始
+    th.hidden-xs 開始
 
   - recent_programs.each do |info|
     tr
@@ -14,4 +14,4 @@ table.table
         |  #{info.channel}
       td
         a href=info.url #{info.summary}
-      td #{render_date info.created_at}
+      td.hidden-xs #{render_date info.created_at}

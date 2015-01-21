@@ -1,11 +1,11 @@
-<h2>
+<h2 style="padding-left: 1.4em; text-indent: -1.4em">
   <span style="color: #ffa922; font-weight: bold; font-size: 200%"><%= @channels.size %></span> <%= jp_words 'チャンネルが配信中' %>
 </h2>
 
 <table class=table>
   <tr>
     <th>チャンネル名</th>
-    <th>配信者</th>
+    <th class="hidden-xs">配信者</th>
     <th>内容</th>
     <th>リスナー</th>
     <th>YP</th>
@@ -13,11 +13,14 @@
   <% @channels.each do |ch| %>
   <tr>
     <td>
-      <a href="/channels/<%= h ch.id %>/play">
+      <a class="hidden-xs" href="/channels/<%= h ch.id %>/play">
         <%= h ch.info['info']['name'] %>
       </a>
+      <a class="visible-xs" href="/channels/<%= h ch.id %>/play">
+        <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded"> <%= h ch.info['info']['name'] %>
+      </a>
     </td>
-    <td>
+    <td class="hidden-xs">
       <a href="/profile/<%= ch.user.id %>">
         <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded">
         <%= h ch.user.name %>
