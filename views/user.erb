@@ -21,7 +21,11 @@
 
         <tr>
           <th>Twitter ID</th>
-          <td><%= h @content_user.twitter_id %></td>
+          <td>
+            <a href="https://twitter.com/intent/user?user_id=<%= h @content_user.twitter_id %>">
+              <%= h @content_user.twitter_id %>
+            </a>
+          </td>
         </tr>
 
         <tr>
