@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-class Pcgw
+class Pcgw < Sinatra::Base
   helpers do
     # ログインされていたら true
-    def current_user
-      session[:uid] != nil
-    end
-
     def logged_in?
-      current_user
+      not session[:uid].blank?
     end
 
     def jp_words(str)
@@ -84,6 +80,22 @@ class Pcgw
         "%04d年%02d月%02d日%s %02d:%02d" % \
         [t.year, t.month, t.day, weekday, t.hour, t.min]
       end
+    end
+
+    def status_semantic_class(status)
+      case status
+      when 'Receiving'
+        'text-success'
+      when 'Error', 'Searching'
+        'text-warning'
+      else
+        'text-error'
+      end
+    end
+
+    # Channel モデルに移したほうがよいかも
+    def source_stream(channel)
+      peercast.getChannelConnections(channel.gnu_id).find { |conn| conn['type'] == 'source' }
     end
 
   end
