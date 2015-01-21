@@ -138,11 +138,10 @@ class Pcgw < Sinatra::Base
 
   # YP の ID とジャンル文字列を params から決定する。
   def yellow_page_id_and_genre
-    case pcgw_env
-    when 'development'
+    if params['yp'].blank?
       ypid = nil
       genre = params['genre']
-    when 'production'
+    else
       ypid = params['yp'].to_i
       yp = peercast.getYellowPages.find { |y| y['yellowPageId'] == params['yp'].to_i }
       prefix = yp['name'].downcase
@@ -151,15 +150,13 @@ class Pcgw < Sinatra::Base
       else
         genre = "#{prefix}#{params['genre']}"
       end
-    else
-      fail
     end
     [ypid, genre]
   end
 
   def broadcast_check_params
     fail 'チャンネル名が入力されていません'     if params['channel'].blank?
-    fail '掲載YPが選択されていません'           if params['yp'].blank?
+    # fail '掲載YPが選択されていません'           if params['yp'].blank?
     fail 'ストリームタイプが選択されていません' if params['stream_type'].blank?
     # fail 'ジャンルが入力されていません'     if params['genre'].blank?
     # fail '詳細が入力されていません'         if params['desc'].blank?
