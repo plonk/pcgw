@@ -232,10 +232,10 @@ class Pcgw < Sinatra::Base
   get '/channels/:id' do
     get_user
     begin
-      @channel = Channel.find(params['id'])
+      @channel = Channel.find(params['id']) rescue halt(404, 'channel not found')
       @status = peercast.getChannelStatus(@channel.gnu_id)
       @info = peercast.getChannelInfo(@channel.gnu_id)
-      halt 404, 'channel not found' unless @channel
+
       if @channel.info['yellowPages'].any?
         @link_url = yellow_page_home @channel.info['yellowPages'].first['name']
         @yp_name = "【#{@channel.info['yellowPages'].first['name']}】"
@@ -318,8 +318,7 @@ class Pcgw < Sinatra::Base
 
   # チャンネル情報の更新
   post '/channels/:id' do
-    channel = Channel.find(params['id'])
-    halt 404, 'channel not found' unless channel
+    channel = Channel.find(params['id']) rescue halt(404, 'channel not found')
     # チャンネル所有チェック
     get_user
     halt 403, 'permission denied' if channel.user != @user
@@ -339,8 +338,7 @@ class Pcgw < Sinatra::Base
   end
 
   get '/channels/:id/play' do
-    ch = Channel.find(params['id'])
-    halt 404, 'channel not found' unless ch
+    ch = Channel.find(params['id']) rescue halt(404, 'channel not found')
 
     slim :play, locals: { channel: ch }
   end
