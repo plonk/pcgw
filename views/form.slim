@@ -42,5 +42,9 @@ form action="/broadcast" method="POST" role="form"
         label
           input required="required" type="radio" name="yp" value="#{yp.yellowPageId}" checked=(params['yp'].to_i == yp.yellowPageId)
           = yp.name
+    div class="radio"
+      label.text-warning
+        input required="required" type="radio" name="yp" value="" checked=params['yp'].blank?
+        | 掲載しない
 
   button type="submit" class="btn btn-primary" 開始
