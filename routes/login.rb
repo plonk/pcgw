@@ -4,6 +4,7 @@ class Pcgw < Sinatra::Base
     # twitter から取得した名前とアイコンをセッションに設定する。
 
     if (user = User.find_by(twitter_id: env['omniauth.auth']['uid']))
+      user.update!(image: env['omniauth.auth']['info']['image'])
       session[:uid] = user.id.to_s
       redirect '/home'
     else
