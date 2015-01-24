@@ -14,10 +14,22 @@
       <h1>
         <%= @info['info']['name'] %>
         <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= h @link_url %>" data-text="<%= @data_text %>" data-lang="ja" data-size="large" data-count="none" data-hashtags="PeercastGateway">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+        <div class="btn-group" style="vertical-align: -0.07em;">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            更新の間隔 <span id="refresh-interval"></span>秒
+            <span style="margin-left: 0.5em" class="caret"></span>
+            <span class="sr-only">ドロップダウンをトグルします</span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#" onclick="changeInterval(1)">1秒</a></li>
+            <li><a href="#" onclick="changeInterval(5)">5秒</a></li>
+            <li><a href="#" onclick="changeInterval(10)">10秒</a></li>
+          </ul>
+        </div>
       </h1>
 
-     <p style="color: red" id=error></p>
-
+      <p style="color: red" id=error></p>
 
       <table class="table head-keep">
         <tr>
@@ -77,11 +89,19 @@
     </div>
 
     <script>
+      var g_interval;
+      function changeInterval(int) {
+        g_interval = int;
+        $("#refresh-interval").text(int);
+      }
       $(function() {
+        changeInterval(1);
         $.getScript('/channels/<%= @channel.id %>/update');
-        setInterval(function() {
+        var recur = function() {
           $.getScript('/channels/<%= @channel.id %>/update');
-        }, 1000);
+          setTimeout(recur, g_interval * 1000);
+        };
+        setTimeout(recur, g_interval * 1000);
       });
     </script>
 
