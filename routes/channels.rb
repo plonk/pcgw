@@ -31,11 +31,6 @@ class Pcgw < Sinatra::Base
 
       src = source_stream(@channel)
       @source_kbps = (src['recvRate'] * 8 / 1000).round
-      if src['remoteEndPoint']
-        @connection = "#{src['remoteEndPoint']} の #{src['agentName']}"
-      else
-        @connection = 'n/a'
-      end
       js = erb :update
 
       [200,
