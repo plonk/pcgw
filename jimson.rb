@@ -46,9 +46,13 @@ class Pcgw < Sinatra::Base
     Channel.all.reject { |ch| ch.exist? }.each { |ch| ch.destroy }
     get_user
 
+    # クッキーを消す
+    (cookies.keys - ['rack.session']).each do |key|
+      response.delete_cookie(key)
+    end
+
     # /auth/ で始まる URL なら omniauth-twitter に任せる。
     pass if request.path_info =~ %r{^/auth/}
-
 
     # 以下のページはログインしていなくてもアクセスできる。
     # トップページ

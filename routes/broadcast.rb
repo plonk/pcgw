@@ -2,9 +2,13 @@ class Pcgw < Sinatra::Base
   get '/create' do
     halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
 
-    params.merge!(cookies.to_h.slice('channel', 'genre', 'comment', 'desc', 'yp', 'url', 'stream_type'))
-    params['channel'] ||= @user.name
-    erb :create
+    info = ChannelInfo.where(user: @user).order(created_at: :desc).limit(1)
+    if info.empty?
+      template = ChannelInfo.new(user: @user, channel: @user.name)
+    else
+      template, = info
+    end
+    erb :create, locals: { template: template }
   end
 
   # YP の ID とジャンル文字列を params から決定する。
@@ -72,30 +76,23 @@ class Pcgw < Sinatra::Base
     halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
 
     begin
-      broadcast_check_params
+      props = params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type')
+      channel_info = ChannelInfo.new({ user: @user }.merge(props))
 
-      # 入力内容をクッキーに保存
-      channel_fields = params.slice('channel', 'desc', 'genre', 'yp', 'url',
-                                    'comment', 'stream_type')
-      cookies.merge! channel_fields
-      channel_info = ChannelInfo.new channel_fields.merge(user: @user)
+      broadcast_check_params
 
       args = create_broadcast_args(*yellow_page_id_and_genre)
       gnuid = peercast.broadcastChannel(args)
 
-      # チャンネルが残っているときに増えるのをふせぐ。
-      # そもそも残っているべきではないが。
-      unless ch = @user.channels.find_by(gnu_id: gnuid)
-        ch = @user.channels.build(gnu_id: gnuid)
-        ch.save!
-      end
+      ch = @user.channels.build(gnu_id: gnuid)
+      ch.save!
       channel_info.save!
 
       redirect to("/channels/#{ch.id}")
     rescue StandardError => e
       # 必要なフィールドがなかった場合などフォームを再表示する
       @message = e.message
-      erb :create
+      erb :create, locals: { template: channel_info }
     end
   end
 

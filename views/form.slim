@@ -5,34 +5,34 @@ form action="/broadcast" method="POST" role="form"
 
   div class="form-group"
     label for="channel" チャンネル名
-    input class="form-control" type="text" name="channel" required=true value=params['channel']
+    input class="form-control" type="text" name="channel" required=true value=template.channel
 
   div class="form-group"
     label for="genre" ジャンル
-    input class="form-control" type="text" name="genre" value=params['genre']
+    input class="form-control" type="text" name="genre" value=template.genre
 
   div class="form-group"
     label for="desc" 詳細
-    input class="form-control" type="text" name="desc" value=params['desc']
+    input class="form-control" type="text" name="desc" value=template.desc
 
   div class="form-group"
     label for="comment" コメント
-    input class="form-control" type="text" name="comment" value=params['comment']
+    input class="form-control" type="text" name="comment" value=template.comment
 
   div class="form-group"
     label for="url" コンタクト&thinsp;URL
-    input class="form-control" name="url" type="url" value=params['url']
+    input class="form-control" name="url" type="url" value=template.url
 
   div class="form-group"
     label for="type" ストリームタイプ
     div class="radio"
       label title="Flash Video (Open Broadcaster Software などはこちら)"
-        input type="radio" name="stream_type" value="FLV" required=true checked=(params['stream_type'] == 'FLV')
+        input type="radio" name="stream_type" value="FLV" required=true checked=(template.stream_type == 'FLV')
         | FLV
 
     div class="radio"
       label title="Windows Media Video (Windows Media Encoder や Expression Encoder はこちら)"
-        input type="radio" name="stream_type" value="WMV" checked=(params['stream_type'] == 'WMV')
+        input type="radio" name="stream_type" value="WMV" checked=(template.stream_type == 'WMV')
         | WMV
 
   div class="form-group"
@@ -40,11 +40,11 @@ form action="/broadcast" method="POST" role="form"
     - @yellow_pages.each do |yp|
       div class="radio"
         label
-          input required="required" type="radio" name="yp" value="#{yp.yellowPageId}" checked=(params['yp'].to_i == yp.yellowPageId)
+          input required="required" type="radio" name="yp" value="#{yp.yellowPageId}" checked=(template.yp.to_i == yp.yellowPageId)
           = yp.name
-    div class="radio"
-      label.text-warning
-        input required="required" type="radio" name="yp" value="" checked=params['yp'].blank?
-        | 掲載しない
+    - unless pcgw_env == 'production'
+      div class="radio"
+        label.text-warning
+          input required="required" type="radio" name="yp" value="" checked=template.yp.blank? 掲載しない
 
   button type="submit" class="btn btn-primary" 開始
