@@ -38,25 +38,15 @@ class Pcgw < Sinatra::Base
       end
       js = erb :update
 
-      [
-        200,
-        {
-          'Content-Type' => 'text/javascript',
-          'Content-Length' => js.bytesize.to_s
-        },
-        [js]
-      ]
+      [200,
+       { 'Content-Type' => 'text/javascript', 'Content-Length' => js.bytesize.to_s },
+       [js]]
     rescue Jimson::Client::Error => e
       @error = e.message
       js = erb :update
-      [
-        200,
-        {
-          'Content-Type' => 'text/javascript',
-          'Content-Length' => js.bytesize.to_s
-        },
-        [js]
-      ]
+      [200,
+       { 'Content-Type' => 'text/javascript', 'Content-Length' => js.bytesize.to_s },
+       [js]]
     end
   end
 
