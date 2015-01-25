@@ -59,7 +59,7 @@ class Pcgw < Sinatra::Base
     end
 
     def render_date(t, ref = Time.now)
-      weekday = [*'㊐㊊㊋㊌㊍㊎㊏'.each_char][t.wday]
+      weekday = [*'㈰㈪㈫㈬㈭㈮㈯'.each_char][t.wday]
       delta = ref - t
 
       case delta
