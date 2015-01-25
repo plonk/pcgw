@@ -1,0 +1,34 @@
+doctype html
+html
+  head
+    title Peercast Gateway
+    == erb :common_head
+  body
+    == erb :navbar
+
+  .container
+    h1 配信中のチャンネル
+
+    table.table
+      tr
+        th チャンネル名
+        th 状態
+        th ID
+        th アクション
+
+      - channels.each do |ch|
+        tr
+          td
+            a href="/profile/#{ch.user.id}"
+              img.img-rounded width="28" src=ch.user.image alt=ch.user.name
+            = ch.info['info']['name']
+          td
+            = ch.status['status']
+          td
+            = ch.gnu_id
+          td
+            - if @user.admin?
+              form action="/channels/#{ch.id}/stop" method="POST"
+                button.btn.btn-warning.btn-xs type="submit" 停止
+
+    == erb :footer

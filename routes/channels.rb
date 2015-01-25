@@ -83,7 +83,7 @@ class Pcgw < Sinatra::Base
   post '/channels/:id/stop' do
     begin
       # チャンネルの所有者であるかのチェック
-      if @channel.user == @user
+      if @user.admin? || @channel.user == @user
         @channel_infos = [@channel.info]
 
         peercast.stopChannel(@channel.gnu_id)
@@ -107,6 +107,11 @@ class Pcgw < Sinatra::Base
     else
       "接続は切断できませんでした。"
     end
+  end
+
+  get '/channels/?' do
+    channels = Channel.all
+    slim :channels, locals: { channels: channels }
   end
 
   post '/stopall' do
