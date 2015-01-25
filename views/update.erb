@@ -13,7 +13,7 @@
   $('#comment').text("n/a")
   $('#error').text("<%= @error %>")
 <% else %>
-  $('#connections').html(<%= @connections.inspect %>)
+  $('#connections').html(<%= javascript_string @connections %>)
   $('#relay').text("<%= @status['totalRelays'] %>")
   $('#direct').text("<%= @status['totalDirects'] %>")
   $('#bitrate').text("<%= @source_kbps %>Kbps / <%= @info['info']['bitrate'] %>")

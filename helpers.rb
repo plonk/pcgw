@@ -98,5 +98,11 @@ class Pcgw < Sinatra::Base
       peercast.getChannelConnections(channel.gnu_id).find { |conn| conn['type'] == 'source' }
     end
 
+    JS_ESCAPE_TABLE = {"\r" => '\r', "\n" => '\n', '"' => '\"' }
+
+    def javascript_string(str)
+      '"' + str.gsub(/(\r|\n|")/m) { |c| JS_ESCAPE_TABLE[c] } + '"'
+    end
+
   end
 end
