@@ -1,0 +1,9 @@
+table.table
+  - connections.each do |conn|
+    tr
+      td #{conn.remoteEndPoint} #{conn.labels}
+      td #{conn.sendRateKbps} Kbps
+      td
+        form action="/channels/#{channel.id}/connections/#{conn.connectionId}" method="POST"
+          input type="hidden" name="_method" value="DELETE"
+          button.btn.btn-default.btn-xs type="submit" 切断

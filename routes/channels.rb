@@ -31,6 +31,8 @@ class Pcgw < Sinatra::Base
 
       src = source_stream(@channel)
       @source_kbps = (src['recvRate'] * 8 / 1000).round
+      connections = @channel.connections.select { |c| c.type == "relay" }
+      @connections = slim :connections, locals: { channel: @channel, connections: connections }
       js = erb :update
 
       [200,
@@ -93,6 +95,17 @@ class Pcgw < Sinatra::Base
       end
     rescue Jimson::Client::Error => e
       h e.inspect
+    end
+  end
+
+  delete '/channels/:id/connections/:connection_id' do
+    halt 403, "チャンネルを所有していません。" unless @channel.user == @user
+
+    success = peercast.stopChannelConnection(@channel.gnu_id, params['connection_id'])
+    if success
+      redirect back
+    else
+      "接続は切断できませんでした。"
     end
   end
 

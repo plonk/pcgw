@@ -1,3 +1,5 @@
+require_relative 'connection'
+
 class Channel < ActiveRecord::Base
   belongs_to :user
 
@@ -30,6 +32,10 @@ class Channel < ActiveRecord::Base
     else
       ''
     end
+  end
+
+  def connections
+    peercast.getChannelConnections(gnu_id).map(&Connection.method(:new))
   end
 
   def exist?
