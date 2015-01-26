@@ -88,6 +88,8 @@ class Pcgw < Sinatra::Base
       ch.save!
       channel_info.save!
 
+      log.info("user #{@user.id} created channel #{ch.id}")
+
       redirect to("/channels/#{ch.id}")
     rescue StandardError => e
       # 必要なフィールドがなかった場合などフォームを再表示する

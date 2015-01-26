@@ -57,7 +57,13 @@ class Pcgw < Sinatra::Base
 
   before do
     @yellow_pages = peercast.getYellowPages.map(&OpenStruct.method(:new))
-    Channel.all.reject { |ch| ch.exist? }.each { |ch| ch.destroy }
+    live_chids = peercast.getChannels.map { |ch| ch['channelId'] }
+    Channel.all.each do |ch|
+      unless live_chids.include? ch.gnu_id
+        ch.destroy
+        log.error("stale channel entry #{ch.id}(#{ch.gnu_id}) deleted")
+      end
+    end
     get_user
 
     # クッキーを消す

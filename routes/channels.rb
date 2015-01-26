@@ -89,6 +89,8 @@ class Pcgw < Sinatra::Base
         peercast.stopChannel(@channel.gnu_id)
         @channel.destroy
 
+        log.info("user #{@user.id} destroyed channel #{@channel.id}")
+
         erb :stop
       else
         halt 403, "そのチャンネルは#{@user.name}のチャンネルではありません。"
@@ -122,6 +124,8 @@ class Pcgw < Sinatra::Base
       @channel_infos << ch.info
       peercast.stopChannel(ch.gnu_id)
       ch.destroy
+
+      log.info("user #{@user.id} destroyed channel #{ch.id}")
     end
     erb :stop
   end
