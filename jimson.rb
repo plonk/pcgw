@@ -13,6 +13,8 @@ require 'sinatra/cookies'
 require 'ostruct'
 require 'slim'
 require_relative 'helpers'
+require 'logger'
+require_relative 'logging'
 
 # 初期化処理
 require_relative 'init'
@@ -23,14 +25,16 @@ end
 
 # Peercast Gateway アプリケーションクラス
 class Pcgw < Sinatra::Base
+  include Logging
+
   helpers Sinatra::Cookies
+  # delete や patch などのメソッドが使えるようにする
   use Rack::MethodOverride
 
   NO_NEW_CHANNEL = false
 
   configure do
     use Rack::Session::Cookie, expire_after: 30.days.to_i, secret: ENV['CONSUMER_SECRET']
-    Slim::Engine.set_default_options pretty: true
 
     set :cookie_options do
       { expires: Time.now + 30.days.to_i }
@@ -39,6 +43,16 @@ class Pcgw < Sinatra::Base
     use OmniAuth::Builder do
       provider :twitter, ENV['CONSUMER_KEY'], ENV['CONSUMER_SECRET']
     end
+  end
+
+  configure :development do
+    Logging.logger = Logger.new(STDERR)
+    Slim::Engine.set_default_options pretty: true
+  end
+
+  configure :production do
+    Logging.logger = Logger.new('log/pcgw.log', 'daily')
+    Slim::Engine.set_default_options pretty: false
   end
 
   before do
