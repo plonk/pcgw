@@ -8,6 +8,7 @@
     <th class="hidden-xs">配信者</th>
     <th>内容</th>
     <th>リスナー</th>
+    <th>配信時間</th>
     <th>YP</th>
   </tr>
   <% @channels.each do |ch| %>
@@ -32,6 +33,7 @@
       </a>
     </td>
     <td><%= h ch.status['totalDirects'] %></td>
+    <td><%= h IndexTxt.uptime_fmt(ch.status['uptime']) %></td>
     <td><%= yellow_page_links(ch.info['yellowPages']) %></td>
   </tr>
   <% end %>
