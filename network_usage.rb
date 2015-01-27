@@ -9,8 +9,8 @@ class NetworkUsage
     @baseline_kbps = baseline_kbps
 
     settings = peercast.getSettings
-    @maxRelaysPerChannel = settings['maxRelaysPerChannel']
-    @maxUpstreamRate = settings['maxUpstreamRate']
+    @maxRelaysPerChannel = infinityIfZero settings['maxRelaysPerChannel']
+    @maxUpstreamRatePerChannel = infinityIfZero settings['maxUpstreamRatePerChannel']
   end
 
   def total_kbps
@@ -27,8 +27,16 @@ class NetworkUsage
 
   private
 
+  def infinityIfZero(num)
+    num==0 ? Float::INFINITY : num
+  end
+
+  def numberRelaysByBitrate(channel_bitrate)
+    @maxUpstreamRatePerChannel / channel_bitrate
+  end
+
   # あるチャンネルがリレーに使う最大の帯域
   def relay_bandwidth(channel_bitrate)
-    [(@maxUpstreamRate / channel_bitrate), @maxRelaysPerChannel].min * channel_bitrate
+    [numberRelaysByBitrate(channel_bitrate), @maxRelaysPerChannel].min * channel_bitrate
   end
 end
