@@ -104,5 +104,16 @@ class Pcgw < Sinatra::Base
       '"' + str.gsub(/(\r|\n|")/m) { |c| JS_ESCAPE_TABLE[c] } + '"'
     end
 
+    def usage_rate_semantic_class(rate)
+      case
+      when rate < 1.0
+        'text-success'
+      when rate < 2.0
+        'text-warning'
+      else
+        'text-danger'
+      end
+    end
+
   end
 end

@@ -3,7 +3,10 @@ class Pcgw < Sinatra::Base
   get '/' do
     @channels = Channel.all
     programs = ChannelInfo.all.order(created_at: :desc).limit(10)
-    erb :top, locals: { recent_programs: programs }
+    erb :top, locals: {
+      network_usage: NetworkUsage.new(peercast, 3700),
+      recent_programs: programs
+    }
   end
 
   # ホーム
