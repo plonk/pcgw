@@ -4,8 +4,8 @@ class Pcgw < Sinatra::Base
   end
 
   get '/doc/:name' do |name|
-    docs = %w(how-to-obs how-to-wme desc)
-    halt 404 unless docs.include? name
+    docs = %w(how-to-obs how-to-wme desc faq)
+    halt 404, 'Not Found' unless docs.include? name
 
     erb name.to_sym
   end
