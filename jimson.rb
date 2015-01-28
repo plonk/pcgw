@@ -5,9 +5,6 @@ require_relative 'peercast'
 require 'active_support/core_ext'
 require 'omniauth-twitter'
 require 'active_record'
-require_relative 'models/channel'
-require_relative 'models/user'
-require_relative 'models/channel_info'
 require_relative 'jp'
 require 'sinatra/cookies'
 require 'ostruct'
@@ -95,4 +92,5 @@ class Pcgw < Sinatra::Base
 
 end
 
+require_relative 'models/init'
 require_relative 'routes/init'
