@@ -32,7 +32,11 @@ class NetworkUsage
   end
 
   def numberRelaysByBitrate(channel_bitrate)
-    @maxUpstreamRatePerChannel / channel_bitrate
+    if channel_bitrate == 0
+      Float::INFINITY
+    else
+      @pmaxUpstreamRatePerChannel / channel_bitrate
+    end
   end
 
   # あるチャンネルがリレーに使う最大の帯域
