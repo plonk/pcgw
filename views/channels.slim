@@ -14,7 +14,8 @@ html
         th チャンネル名
         th 状態
         th ID
-        th アクション
+        - if @user.admin?
+          th アクション
 
       - channels.each do |ch|
         tr
@@ -26,9 +27,12 @@ html
             = ch.status['status']
           td
             = ch.gnu_id
-          td
-            - if @user.admin?
-              form action="/channels/#{ch.id}/stop" method="POST"
-                button.btn.btn-warning.btn-xs type="submit" 停止
+          - if @user.admin?
+            td
+              form action="/channels/#{ch.id}/stop" id="stop#{ch.id}" method="POST"
+              div.btn-group.btn-group-xs role="group"
+                a.btn.btn-primary href="/channels/#{ch.id}" 状態
+                a.btn.btn-default href="/channels/#{ch.id}/play" 再生
+                button.btn.btn-warning form="stop#{ch.id}" type="submit" 停止
 
     == erb :footer
