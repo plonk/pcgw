@@ -35,7 +35,7 @@ class NetworkUsage
     if channel_bitrate == 0
       Float::INFINITY
     else
-      @pmaxUpstreamRatePerChannel / channel_bitrate
+      @maxUpstreamRatePerChannel / channel_bitrate
     end
   end
 
