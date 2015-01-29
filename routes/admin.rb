@@ -35,4 +35,9 @@ class Pcgw < Sinatra::Base
     erb :delete_user
   end
 
+  get '/admin/?' do
+    must_be_admin!(@user)
+    slim :admin, locals: { network_usage: NetworkUsage.new(peercast, 3700) }
+  end
+
 end

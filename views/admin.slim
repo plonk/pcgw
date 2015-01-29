@@ -1,0 +1,29 @@
+doctype html
+html
+  head
+    title 管理画面 | Peercast Gateway
+    == erb :common_head
+  body
+    == erb :navbar
+
+  .container
+    h1 管理画面
+
+    p
+      | #{peercast.getVersionInfo['agentName']} は #{peercast.getStatus['uptime']} 秒間稼動しています。
+
+    == slim :network_usage, locals: { network_usage: network_usage }
+
+    ul
+      li
+        a href="/users" ユーザー&nbsp;
+        span.badge #{User.all.count}
+      li
+        a href="/channels" 配信中チャンネル&nbsp;
+        span.badge #{Channel.all.count}
+      li
+        a href="/programs" 配信履歴&nbsp;
+        span.badge #{ChannelInfo.all.count}
+
+
+  == erb :footer
