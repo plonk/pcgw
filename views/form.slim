@@ -40,7 +40,7 @@ form action="/broadcast" method="POST" role="form"
     - @yellow_pages.each do |yp|
       div class="radio"
         label
-          input required="required" type="radio" name="yp" value="#{yp.yellowPageId}" checked=(template.yp.to_i == yp.yellowPageId)
+          input required="required" type="radio" name="yp" value="#{yp.name}" checked=(template.yp == yp.name)
           = yp.name
     - unless pcgw_env == 'production'
       div class="radio"

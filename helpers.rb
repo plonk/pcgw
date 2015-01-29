@@ -15,16 +15,6 @@ class Pcgw < Sinatra::Base
       @user = User.find(session[:uid].to_i) if logged_in?
     end
 
-    def source_uri_rtmp(user)
-      port = 9000 + user.id
-      "rtmp://#{PEERCAST_STATION_GLOBAL_HOSTNAME}:#{port}/live/livestream"
-    end
-
-    def source_uri_http(user)
-      path = "#{9000 + user.id}"
-      "http://#{WM_MIRROR_HOSTNAME}:5000/#{path}"
-    end
-
     def h(text)
       Rack::Utils.escape_html(text)
     end

@@ -1,3 +1,78 @@
+class BroadcastRequest
+  def initialize(ch_info, yellow_pages)
+    @ch_info = ch_info
+    @yellow_pages = yellow_pages
+  end
+
+  def ypid
+    yp ? yp.id : nil
+  end
+
+  def genre
+    if !yp
+      @ch_info.genre
+    else
+      yp.add_prefix(@ch_info.genre)
+    end
+  end
+
+  def yp
+    if @ch_info.yp.blank?
+      nil
+    else
+      ret = @yellow_pages.find { |y| y.name == @ch_info.yp }
+      fail "yellow page #{@ch_info.yp.inspect} not found" unless ret
+      ret
+    end
+  end
+
+  def to_h
+    args = {
+      yellowPageId:  ypid,
+      info: {
+        name:     @ch_info.channel,
+        url:      @ch_info.url,
+        bitrate:  '',
+        mimeType: '',
+        genre:    genre,
+        desc:     @ch_info.desc,
+        comment:  @ch_info.comment
+      },
+      track: {
+        name:    '',
+        creator: '',
+        genre:   '',
+        album:   '',
+        url:     ''
+      },
+    }
+    case @ch_info.stream_type
+    when 'WMV'
+      args.merge!(sourceUri:     source_uri_http(@ch_info.user),
+                  sourceStream:  'http',
+                  contentReader: 'ASF(WMV or WMA)')
+    when 'FLV'
+      args.merge!(sourceUri:     source_uri_rtmp(@ch_info.user),
+                  sourceStream:  'RTMP Source',
+                  contentReader: 'Flash Video (FLV)')
+    else
+      fail "unknown stream type #{@ch_info.stream_type}"
+    end
+    args
+  end
+
+  def source_uri_rtmp(user)
+    port = 9000 + user.id
+    "rtmp://#{PEERCAST_STATION_GLOBAL_HOSTNAME}:#{port}/live/livestream"
+  end
+
+  def source_uri_http(user)
+    path = "#{9000 + user.id}"
+    "http://#{WM_MIRROR_HOSTNAME}:5000/#{path}"
+  end
+
+end
+
 class Pcgw < Sinatra::Base
   get '/create' do
     halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
@@ -11,24 +86,6 @@ class Pcgw < Sinatra::Base
     erb :create, locals: { template: template }
   end
 
-  # YP の ID とジャンル文字列を params から決定する。
-  def yellow_page_id_and_genre
-    if params['yp'].blank?
-      ypid = nil
-      genre = params['genre']
-    else
-      ypid = params['yp'].to_i
-      yp = peercast.getYellowPages.find { |y| y['yellowPageId'] == params['yp'].to_i }
-      prefix = yp['name'].downcase
-      if params['genre'] =~ /^#{prefix}/
-        genre = params['genre']
-      else
-        genre = "#{prefix}#{params['genre']}"
-      end
-    end
-    [ypid, genre]
-  end
-
   def broadcast_check_params
     fail 'チャンネル名が入力されていません'     if params['channel'].blank?
     # fail '掲載YPが選択されていません'           if params['yp'].blank?
@@ -38,53 +95,19 @@ class Pcgw < Sinatra::Base
     true
   end
 
-  def create_broadcast_args(ypid, genre)
-    args = {
-      yellowPageId:  ypid,
-      info: {
-        name:     params['channel'],
-        url:      params['url'],
-        bitrate:  '',
-        mimeType: '',
-        genre:    genre,
-        desc:     params['desc'],
-        comment:  params['comment']
-      },
-      track: {
-        name:    '',
-        creator: '',
-        genre:   '',
-        album:   '',
-        url:     ''
-      },
-    }
-    if params['stream_type'] == 'WMV'
-      args.merge!(sourceUri:     source_uri_http(@user),
-                  sourceStream:  'http',
-                  contentReader: 'ASF(WMV or WMA)')
-    elsif params['stream_type'] == 'FLV'
-      args.merge!(sourceUri:     source_uri_rtmp(@user),
-                  sourceStream:  'RTMP Source',
-                  contentReader: 'Flash Video (FLV)')
-    else
-      fail "unknown stream type #{params['stream_type']}"
-    end
-    args
-  end
-
   post '/broadcast' do
     halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
 
     begin
+      broadcast_check_params
+
       props = params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type')
       channel_info = ChannelInfo.new({ user: @user }.merge(props))
 
-      broadcast_check_params
+      request = BroadcastRequest.new(channel_info, @yellow_pages)
+      chid = peercast.broadcastChannel(request.to_h)
 
-      args = create_broadcast_args(*yellow_page_id_and_genre)
-      gnuid = peercast.broadcastChannel(args)
-
-      ch = @user.channels.build(gnu_id: gnuid)
+      ch = @user.channels.build(gnu_id: chid)
       ch.save!
       channel_info.save!
 

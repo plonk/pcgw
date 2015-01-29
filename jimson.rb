@@ -54,7 +54,7 @@ class Pcgw < Sinatra::Base
   end
 
   before do
-    @yellow_pages = peercast.getYellowPages.map(&OpenStruct.method(:new))
+    @yellow_pages = peercast.getYellowPages.map(&YellowPage.method(:new))
     live_chids = peercast.getChannels.map { |ch| ch['channelId'] }
     Channel.all.each do |ch|
       unless live_chids.include? ch.gnu_id

@@ -18,6 +18,6 @@ create_table "channel_infos", force: true do |t|
   t.string  "comment"
   t.string  "url"
   t.string  "stream_type"
-  t.integer "yp"
+  t.string  "yp"
   t.timestamps
 end
