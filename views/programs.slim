@@ -14,7 +14,8 @@ html
         th チャンネル名
         th 内容
         th.hidden-xs 開始
-        th アクション
+        - if @user && @user.admin?
+          th アクション
 
       - programs.each do |info|
         tr
@@ -27,7 +28,7 @@ html
           td.hidden-xs
             = render_date info.created_at
           td
-            - if @user.admin?
+            - if @user && @user.admin?
               form action="/programs/#{info.id}" method="POST"
                 input type="hidden" name="_method" value="DELETE"
                 button.btn.btn-warning.btn-xs type="submit" 削除
