@@ -1,5 +1,6 @@
 require 'active_record'
 require_relative 'connection'
+require_relative 'genre'
 
 class Channel < ActiveRecord::Base
   belongs_to :user
@@ -37,6 +38,18 @@ class Channel < ActiveRecord::Base
 
   def connections
     peercast.getChannelConnections(gnu_id).map(&Connection.method(:new))
+  end
+
+  def listener_count_display
+    genre = Genre.new(info['info']['genre'])
+
+    if genre.hide_listener_count?
+      '㊙'
+    else
+      status['totalDirects'].to_s
+    end
+  rescue ArgumentError
+    return status['totalDirects'].to_s
   end
 
   def exist?

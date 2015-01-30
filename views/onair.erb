@@ -32,7 +32,7 @@
         <%= h ch.info['info']['desc'] %>
       </a>
     </td>
-    <td><%= h ch.status['totalDirects'] %></td>
+    <td><%= h ch.listener_count_display %></td>
     <td class="hidden-xs"><%= h IndexTxt.uptime_fmt(ch.status['uptime']) %></td>
     <td><%= yellow_page_links(ch.info['yellowPages']) %></td>
   </tr>
