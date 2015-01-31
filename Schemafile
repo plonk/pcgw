@@ -8,6 +8,7 @@ create_table "users", force: true do |t|
   t.string  "image"
   t.integer "twitter_id"
   t.boolean "admin",      default: false
+  t.boolean "suspended",  default: false
 end
 
 create_table "channel_infos", force: true do |t|

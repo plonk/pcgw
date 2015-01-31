@@ -37,7 +37,14 @@
 
           <tr>
             <th>管理者</th>
-            <td><input class="form-control" type="text" name="admin" value="<%= h @content_user.admin %>"></td>
+            <td>
+              <input class="form-control" type="checkbox" name="admin" value="true" <%= @content_user.admin && 'checked' %>>
+            </td>
+          </tr>
+
+          <tr>
+            <th>一時停止中</th>
+            <td><input class="form-control" type="checkbox" name="suspended" value="true" <%= @content_user.suspended && 'checked' %>></td>
           </tr>
         </table>
 

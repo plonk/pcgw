@@ -37,6 +37,11 @@
           <th>管理者</th>
           <td><%= h (@content_user.admin ? 'YES' : 'NO') %></td>
         </tr>
+
+        <tr>
+          <th>一時停止中</th>
+          <td><%= h (@content_user.suspended ? 'YES' : 'NO') %></td>
+        </tr>
       </table>
 
       <div>

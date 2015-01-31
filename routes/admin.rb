@@ -18,7 +18,8 @@ class Pcgw < Sinatra::Base
   # ユーザー情報を変更
   patch '/users/:id' do |id|
     @content_user = User.find(id)
-    @content_user.update!(params.slice('name', 'image', 'admin', 'twitter_id'))
+    @content_user.update!(params.slice('name', 'image', 'twitter_id'))
+    @content_user.update!(admin: !params['admin'].blank?, suspended: !params['suspended'].blank?)
     @content_user.save!
     redirect to("/users/#{@content_user.id}")
   end
