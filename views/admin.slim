@@ -1,13 +1,13 @@
 doctype html
 html
   head
-    title 管理画面 | Peercast Gateway
+    title 管理 | Peercast Gateway
     == erb :common_head
   body
     == erb :navbar
 
   .container
-    h1 管理画面
+    h1 管理
 
     p
       | #{peercast.getVersionInfo['agentName']} は #{peercast.getStatus['uptime']} 秒間稼動しています。
