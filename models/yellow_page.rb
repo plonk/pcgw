@@ -13,7 +13,7 @@ class YellowPage
                       ['TP',
                        'tp',
                        'http://temp.orz.hm/yp/rule.html',
-                       'pcp://temp.orz.hm/',
+                       'http://temp.orz.hm/yp/',
                        'http://temp.orz.hm/yp/favicon.ico',
                        'pcp://temp.orz.hm/']]
       yellow_pages.each do |name, prefix, terms, top, icon, pcp|
