@@ -13,15 +13,30 @@
         <h1>Peercast Gateway とは</h1>
       </div>
 
-      <h2><%= jp_words "ネット環境のせいで Peercast で配信できない？" %></h1>
+      <h2><%= jp_words "ポート０環境から配信する" %></h2>
       <p>
-        Peercast Gateway を使えば、外部からポートにアクセスさせられないネット接続環境でも、Peercast に配信を行うことができます。
+        Peercast は P2P の仕組み上、個々の PC がクライアントかつサーバーになる必要がありますが、外部からのサービス要求が遮断されているネット環境では、いわゆるポート０状態になり配信を行うことができません。
       </p>
+
+      <p>
+        Peercast Gateway では配信サーバーがライブ動画をエンコーダーからプッシュ接続で受けとり、配信者に代わって YP にチャンネルを掲載することで Peercast で視聴ができる状態にします。
+      </p>
+
+      <div style="width: 80%; margin: auto">
+        <img style="margin: 2em"  class="img-responsive" src="/images/diagram_normal.jpg" alt="普通の配信の模式図">
+        <img style="margin: 2em" class="img-responsive" src="/images/diagram_pcgw.jpg" alt="Peercast Gateway での配信の模式図">
+      </div>
 
       <h2><%= jp_words "対応している動画フォーマットとエンコーダー" %></h2>
       <p>
-        <a href="/doc/how-to-obs">Open Broadcaster Software</a> などが扱える Flash Video 形式と、<a href="/doc/how-to-wme">Windows Media エンコーダ</a>が対応している Windows Media Video 形式に対応しています。
+        <a href="/doc/how-to-wme">Windows Media エンコーダ</a>などが対応している従来からの Windows Media Video 形式と、<a href="/doc/how-to-obs">Open Broadcaster Software</a> などが扱える Flash Video 形式とに対応しています。
       </p>
+
+      <p>
+        なお、WMV 形式の場合でもエンコーダーからサーバーへ要求を送るプッシュ接続で動画を受け渡します。設定方法が通常と若干異なりますのでご注意ください。
+      </p>
+
+      <p>エンコーダー別の配信手順は<a href="/doc">ヘルプ</a>をご覧ください。</p>
 
     </div>
 
