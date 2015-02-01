@@ -1,6 +1,10 @@
 class Pcgw < Sinatra::Base
-  before '/channels/:id/?*' do |id, _|
-    @channel = Channel.find(id) rescue halt(404, 'channel not found')
+  before '/channels/:id/?*' do |id, resource|
+    if resource == 'update'
+      @channel = Channel.find(id) rescue nil
+    else
+      @channel = Channel.find(id) rescue halt(404, erb(:channel_not_found))
+    end
   end
 
   get '/channels/:id' do
@@ -23,6 +27,13 @@ class Pcgw < Sinatra::Base
   end
 
   get '/channels/:id/update' do
+    unless @channel
+      js = "$(window).off('beforeunload'); location.reload();"
+      return [200,
+              { 'Content-Type' => 'text/javascript',
+                'Content-Length' => js.bytesize.to_s }, [js]]
+    end
+
     begin
       @error = nil
       @status = peercast.getChannelStatus(@channel.gnu_id)
@@ -38,9 +49,8 @@ class Pcgw < Sinatra::Base
       [200,
        { 'Content-Type' => 'text/javascript', 'Content-Length' => js.bytesize.to_s },
        [js]]
-    rescue Jimson::Client::Error => e
+    rescue => e
       @error = e.message
-      js = erb :update
       [200,
        { 'Content-Type' => 'text/javascript', 'Content-Length' => js.bytesize.to_s },
        [js]]
