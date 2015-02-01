@@ -41,7 +41,14 @@ form action="/broadcast" method="POST" role="form"
       div class="radio"
         label
           input required="required" type="radio" name="yp" value="#{yp.name}" checked=(template.yp == yp.name)
-          = yp.name
+          img src=yp.icon
+          | &nbsp;
+          a href=yp.top
+            = yp.name
+          | &nbsp;
+          a.btn.btn-default.btn-xs href=yp.terms target="_blank"
+            span.glyphicon.glyphicon-new-window
+            | &nbsp;利用規約
     - unless pcgw_env == 'production'
       div class="radio"
         label.text-warning

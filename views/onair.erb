@@ -34,7 +34,7 @@
     </td>
     <td><%= h ch.listener_count_display %></td>
     <td class="hidden-xs"><%= h IndexTxt.uptime_fmt(ch.status['uptime']) %></td>
-    <td><%= yellow_page_links(ch.info['yellowPages']) %></td>
+    <td><%= slim :yellow_page_links, locals: { yp_names: ch.info['yellowPages'].map { |y| y['name'] } } %></td>
   </tr>
   <% end %>
 </table>

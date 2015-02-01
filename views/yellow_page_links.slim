@@ -1,0 +1,4 @@
+- yp_names.each do |name|
+  - yp = @yellow_pages.find { |y| y.name == name }
+  a href=yp.top
+    img src=yp.icon alt=yp.name title=yp.name

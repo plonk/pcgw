@@ -29,26 +29,7 @@ class Pcgw < Sinatra::Base
       halt 403, 'Administrator only' unless user.admin
     end
 
-    def yellow_page_links(yps)
-      yps.map do |yp|
-        "<a href=\"#{h yellow_page_home(yp['name'])}\">" \
-        "#{h yp['name']}</a>"
-      end.join(', ')
-    end
-
-    # Data as code!
-    def yellow_page_home(name)
-      case name
-      when 'SP'
-        'http://bayonet.ddo.jp/sp/'
-      when 'TP'
-        'http://temp.orz.hm/yp/'
-      else
-        ''
-      end
-    end
-
-    def render_date(t, ref = Time.now)
+   def render_date(t, ref = Time.now)
       weekday = [*'㈰㈪㈫㈬㈭㈮㈯'.each_char][t.wday]
       delta = ref - t
 

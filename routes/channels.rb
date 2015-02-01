@@ -9,7 +9,7 @@ class Pcgw < Sinatra::Base
       @info = peercast.getChannelInfo(@channel.gnu_id)
 
       if @channel.info['yellowPages'].any?
-        @link_url = yellow_page_home @channel.info['yellowPages'].first['name']
+        @link_url = @yellow_pages.find { |y| y.name == @channel.info['yellowPages'].first['name'] }.top
         @yp_name = "【#{@channel.info['yellowPages'].first['name']}】"
       else
         @link_url = 'http://pcgw.sun.ddns.vc/'
