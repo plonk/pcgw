@@ -28,7 +28,7 @@ class Pcgw
        '','','','',
        URI.encode(i['name']),IndexTxt.uptime_fmt(s['uptime']),'click',i['comment'],"0"]
         .map(&:to_s).map(&IndexTxt.method(:field_escape))
-        .join('<>')
-    }.join("\n") + "\n"
+        .join('<>') + "\n"
+    }.join
   end
 end
