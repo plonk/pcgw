@@ -3,7 +3,7 @@
 ## 概要
 
 ピアキャストに配信するサービス Peercast Gateway
-(http://pcgw.sun.ddns.vc/)の Web インターフェイスです。
+(http://pcgw.sun.ddns.vc/) の Web インターフェイスです。
 Sinatra で書かれています。
 
 サービス全体は次のものに依存しています。
