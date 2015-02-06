@@ -90,3 +90,18 @@ class Pcgw < Sinatra::Base
 
   end
 end
+
+module IndexTxt
+  def uptime_fmt(sec)
+    min = (sec % 3600) / 60
+    hour = sec / 3600
+    "%d:%02d" % [hour, min]
+  end
+  module_function :uptime_fmt
+
+  ESCAPE_TABLE = { '<' => '&lt;', '>' => '&gt;' }
+  def field_escape(str)
+    str.gsub(/[<>]/) { |ch| ESCAPE_TABLE[ch] }
+  end
+  module_function :field_escape
+end
