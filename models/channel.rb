@@ -4,6 +4,8 @@ require_relative 'genre'
 
 class Channel < ActiveRecord::Base
   belongs_to :user
+  # info は JSON API、channel_info は ActiveRecord
+  has_one :channel_info
 
   def status
     @status ||= peercast.getChannelStatus(gnu_id)

@@ -108,6 +108,7 @@ class Pcgw < Sinatra::Base
       chid = peercast.broadcastChannel(request.to_h)
 
       ch = @user.channels.build(gnu_id: chid)
+      ch.channel_info = channel_info
       ch.save!
       channel_info.save!
 

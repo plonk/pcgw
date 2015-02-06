@@ -83,6 +83,18 @@ class Pcgw < Sinatra::Base
     peercast.setChannelInfo(channelId: @channel.gnu_id,
                             info:      info,
                             track:     track)
+    channel_info = @channel.channel_info
+    new_channel_info = channel_info.dup
+
+    channel_info.terminated_at = Time.now
+    channel_info.save!
+
+    key_map = { 'name' => 'channel' }
+
+    new_channel_info.update!(Hash[info.map { |k,v| [key_map[k] || k, v] }])
+
+    @channel.channel_info = new_channel_info
+
     redirect to("/channels/#{@channel.id}")
   end
 
@@ -97,6 +109,8 @@ class Pcgw < Sinatra::Base
         @channel_infos = [@channel.info]
 
         peercast.stopChannel(@channel.gnu_id)
+        @channel.channel_info.terminated_at = Time.now
+        @channel.channel_info.save!
         @channel.destroy
 
         log.info("user #{@user.id} destroyed channel #{@channel.id}")

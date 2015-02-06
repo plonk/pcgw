@@ -13,7 +13,7 @@ html
       tr
         th チャンネル名
         th 内容
-        th.hidden-xs 開始
+        th.hidden-xs 時間
         - if @user && @user.admin?
           th アクション
 
@@ -26,7 +26,7 @@ html
           td
             a href=info.url #{info.summary}
           td.hidden-xs
-            = render_date info.created_at
+            | #{render_date info.created_at}&thinsp;〜&thinsp;#{info.terminated_at ? render_date(info.terminated_at) : ''}
           td
             - if @user && @user.admin?
               form action="/programs/#{info.id}" method="POST"

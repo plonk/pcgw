@@ -13,6 +13,7 @@ end
 
 create_table "channel_infos", force: true do |t|
   t.references :user, index: true
+  t.references :channel, index: true
   t.string  "channel"
   t.string  "genre"
   t.string  "desc"
@@ -21,4 +22,6 @@ create_table "channel_infos", force: true do |t|
   t.string  "stream_type"
   t.string  "yp"
   t.timestamps
+  # t.boolean "on_air"
+  t.datetime "terminated_at"
 end
