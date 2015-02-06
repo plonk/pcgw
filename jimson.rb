@@ -54,7 +54,13 @@ class Pcgw < Sinatra::Base
   end
 
   before do
-    @yellow_pages = YellowPage.all
+    begin
+      @yellow_pages = YellowPage.all
+    rescue RestClient::Unauthorized
+      halt 500, 'PeerCast Station に認証を要求されました。'
+    rescue RestClient::ResourceNotFound
+      halt 500, 'PeerCast Station は API による操作を受け付けていません。'
+    end
     live_chids = peercast.getChannels.map { |ch| ch['channelId'] }
     Channel.all.each do |ch|
       unless live_chids.include? ch.gnu_id
