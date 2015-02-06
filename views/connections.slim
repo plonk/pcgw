@@ -6,4 +6,4 @@ table.connections
       td
         form action="/channels/#{channel.id}/connections/#{conn.connectionId}" method="POST"
           input type="hidden" name="_method" value="DELETE"
-          button.btn.btn-warning.btn-xs type="submit" 切断
+          button.btn.btn-warning.btn-xs type="submit" onclick="$(window).off('beforeunload')" 切断
