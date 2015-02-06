@@ -22,7 +22,7 @@
             <span class="sr-only">ドロップダウンをトグルします</span>
           </button>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="#" onclick="changeInterval(1)">1秒</a></li>
+            <!-- <li><a href="#" onclick="changeInterval(1)">1秒</a></li> -->
             <li><a href="#" onclick="changeInterval(5)">5秒</a></li>
             <li><a href="#" onclick="changeInterval(10)">10秒</a></li>
           </ul>
@@ -96,7 +96,7 @@
         $("#refresh-interval").text(int);
       }
       $(function() {
-        changeInterval(1);
+        changeInterval(5);
         $.getScript('/channels/<%= @channel.id %>/update');
         var recur = function() {
           $.getScript('/channels/<%= @channel.id %>/update');
