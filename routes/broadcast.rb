@@ -1,6 +1,8 @@
 class BroadcastRequest
+  attr_reader :info
+
   def initialize(ch_info, yellow_pages)
-    @ch_info = ch_info
+    @info = ch_info
     @yellow_pages = yellow_pages
   end
 
@@ -10,18 +12,18 @@ class BroadcastRequest
 
   def genre
     if !yp
-      @ch_info.genre
+      @info.genre
     else
-      yp.add_prefix(@ch_info.genre)
+      yp.add_prefix(@info.genre)
     end
   end
 
   def yp
-    if @ch_info.yp.blank?
+    if @info.yp.blank?
       nil
     else
-      ret = @yellow_pages.find { |y| y.name == @ch_info.yp }
-      fail "yellow page #{@ch_info.yp.inspect} not found" unless ret
+      ret = @yellow_pages.find { |y| y.name == @info.yp }
+      fail "yellow page #{@info.yp.inspect} not found" unless ret
       ret
     end
   end
@@ -30,13 +32,13 @@ class BroadcastRequest
     args = {
       yellowPageId:  ypid,
       info: {
-        name:     @ch_info.channel,
-        url:      @ch_info.url,
+        name:     @info.channel,
+        url:      @info.url,
         bitrate:  '',
         mimeType: '',
         genre:    genre,
-        desc:     @ch_info.desc,
-        comment:  @ch_info.comment
+        desc:     @info.desc,
+        comment:  @info.comment
       },
       track: {
         name:    '',
@@ -46,20 +48,33 @@ class BroadcastRequest
         url:     ''
       },
     }
-    case @ch_info.stream_type
+    case @info.stream_type
     when 'WMV'
-      args.merge!(sourceUri:     source_uri_http(@ch_info.user),
+      args.merge!(sourceUri:     source_uri,
                   sourceStream:  'http',
                   contentReader: 'ASF(WMV or WMA)')
     when 'FLV'
-      args.merge!(sourceUri:     source_uri_rtmp(@ch_info.user),
+      args.merge!(sourceUri:     source_uri,
                   sourceStream:  'RTMP Source',
                   contentReader: 'Flash Video (FLV)')
     else
-      fail "unknown stream type #{@ch_info.stream_type}"
+      fail "unknown stream type #{@info.stream_type}"
     end
     args
   end
+
+  def source_uri
+    case @info.stream_type
+    when 'WMV'
+      source_uri_http(@info.user)
+    when 'FLV'
+      source_uri_rtmp(@info.user)
+    else
+      fail
+    end
+  end
+
+  private
 
   def source_uri_rtmp(user)
     port = 9000 + user.id
@@ -86,31 +101,43 @@ class Pcgw < Sinatra::Base
     erb :create, locals: { template: template }
   end
 
-  def broadcast_check_params
+  def broadcast_check_params!
     fail 'チャンネル名が入力されていません'     if params['channel'].blank?
-    # fail '掲載YPが選択されていません'           if params['yp'].blank?
     fail 'ストリームタイプが選択されていません' if params['stream_type'].blank?
-    # fail 'ジャンルが入力されていません'     if params['genre'].blank?
-    # fail '詳細が入力されていません'         if params['desc'].blank?
-    true
+  end
+
+  def ascertain_new!(req)
+    if peercast.getChannels.any? { |ch|
+        ch['info']['name']     == req.info.channel &&
+        ch['info']['genre']    == req.genre        &&
+        ch['status']['source'] == req.source_uri
+      }
+      fail 'チャンネルはすでにあります。'
+    end
   end
 
   post '/broadcast' do
     halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
 
     begin
-      broadcast_check_params
-
       props = params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type')
       channel_info = ChannelInfo.new({ user: @user }.merge(props))
 
+      broadcast_check_params!
+
       request = BroadcastRequest.new(channel_info, @yellow_pages)
-      chid = peercast.broadcastChannel(request.to_h)
+
+      # PeerCast Station に同じ ID のチャンネルが立たないことを
+      # 保証するために ActiveRecord のデータベースロックを流用する。
+      chid = nil
+      ActiveRecord::Base.transaction do
+        ascertain_new!(request)
+        chid = peercast.broadcastChannel(request.to_h)
+      end
 
       ch = @user.channels.build(gnu_id: chid)
       ch.channel_info = channel_info
       ch.save!
-      channel_info.save!
 
       log.info("user #{@user.id} created channel #{ch.id}")
 

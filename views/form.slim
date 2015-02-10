@@ -52,6 +52,22 @@ form action="/broadcast" method="POST" role="form"
     - unless pcgw_env == 'production'
       div class="radio"
         label.text-warning
-          input required="required" type="radio" name="yp" value="" checked=template.yp.blank? 掲載しない
+          input required="required" type="radio" name="yp" value="" checked=template.yp.blank?
+          | 掲載しない
 
   button type="submit" class="btn btn-primary" 開始
+
+javascript:
+  jQuery.fn.preventDoubleSumission = function() {
+    $(this).on('submit', function(e) {
+      var $form = $(this);
+
+      if ($form.data('submitted') === true) {
+        e.preventDefault();
+      } else {
+        $form.data('submitted', true);
+      }
+    });
+    return this;
+  };
+  $('form').preventDoubleSumission();
