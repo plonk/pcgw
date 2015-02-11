@@ -1,36 +1,40 @@
 doctype html
 html
   head
-    title Peercast Gateway
+    title 配信履歴 | Peercast Gateway
     == erb :common_head
   body
     == erb :navbar
 
-  .container
-    h1 配信履歴
+    .container
+      h1 配信履歴
 
-    table.table
-      tr
-        th チャンネル名
-        th 内容
-        th.hidden-xs 時間
-        - if @user && @user.admin?
-          th アクション
+      == slim :paginator, locals: { pagination: pagination, base_path: base_path }
 
-      - programs.each do |info|
+      table.table
         tr
-          td
-            a href="/profile/#{info.user.id}"
-              img.img-rounded width="28" src=info.user.image alt=info.user.name
-            |  #{info.channel}
-          td
-            a href=info.url #{info.summary}
-          td.hidden-xs
-            | #{render_date info.created_at}&thinsp;〜&thinsp;#{info.terminated_at ? render_date(info.terminated_at) : ''}
-          td
-            - if @user && @user.admin?
-              form action="/programs/#{info.id}" method="POST"
-                input type="hidden" name="_method" value="DELETE"
-                button.btn.btn-warning.btn-xs type="submit" 削除
+          th チャンネル名
+          th 内容
+          th.hidden-xs 時間
+          - if @user && @user.admin?
+            th アクション
 
-    == erb :footer
+        - programs.each do |info|
+          tr
+            td
+              a href="/profile/#{info.user.id}"
+                img.img-rounded width="28" src=info.user.image alt=info.user.name
+              |  #{info.channel}
+            td
+              a href=info.url #{info.summary}
+            td.hidden-xs
+              | #{render_date info.created_at}&thinsp;〜&thinsp;#{info.terminated_at ? render_date(info.terminated_at) : ''}
+            td
+              - if @user && @user.admin?
+                form action="/programs/#{info.id}" method="POST"
+                  input type="hidden" name="_method" value="DELETE"
+                  button.btn.btn-warning.btn-xs type="submit" 削除
+
+      == slim :paginator, locals: { pagination: pagination, base_path: base_path }
+
+      == erb :footer

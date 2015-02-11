@@ -1,0 +1,14 @@
+- prev_url = pagination.current != pagination.first ? "#{base_path}/#{pagination.current-1}" : ""
+- next_url = pagination.current != pagination.last  ? "#{base_path}/#{pagination.current+1}" : ""
+
+nav style="text-align: center"
+  ul.pagination
+    li class="#{prev_url.blank? ? 'disabled' : ''}"
+      a href=prev_url aria-label="前へ" title="前へ"
+        span aria-hidden="true" &laquo;
+    - pagination.first.upto(pagination.last) do |i|
+      li class="#{i==pagination.current ? 'active' : ''}"
+        a href="#{base_path}/#{i}" #{i}
+    li class="#{next_url.blank? ? 'disabled' : ''}"
+      a href=next_url aria-label="次へ" title="次へ"
+        span aria-hidden="true" &raquo;
