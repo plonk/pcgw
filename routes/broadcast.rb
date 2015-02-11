@@ -1,3 +1,5 @@
+require 'lockfile'
+
 class BroadcastRequest
   attr_reader :info
 
@@ -128,9 +130,9 @@ class Pcgw < Sinatra::Base
       request = BroadcastRequest.new(channel_info, @yellow_pages)
 
       # PeerCast Station に同じ ID のチャンネルが立たないことを
-      # 保証するために ActiveRecord のデータベースロックを流用する。
+      # 保証するためにロックファイルを使用する
       chid = nil
-      ActiveRecord::Base.transaction do
+      Lockfile('tmp/lock.file') do
         ascertain_new!(request)
         chid = peercast.broadcastChannel(request.to_h)
       end
