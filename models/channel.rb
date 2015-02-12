@@ -39,7 +39,7 @@ class Channel < ActiveRecord::Base
   end
 
   def connections
-    peercast.getChannelConnections(gnu_id).map(&Connection.method(:new))
+    @connections ||= peercast.getChannelConnections(gnu_id).map(&Connection.method(:new))
   end
 
   def listener_count_display
@@ -59,5 +59,9 @@ class Channel < ActiveRecord::Base
     true
   rescue Jimson::Client::Error
     false
+  end
+
+  def source_stream
+    connections.find { |conn| conn.type == 'source' }
   end
 end

@@ -66,11 +66,6 @@ class Pcgw < Sinatra::Base
       end
     end
 
-    # Channel モデルに移したほうがよいかも
-    def source_stream(channel)
-      peercast.getChannelConnections(channel.gnu_id).find { |conn| conn['type'] == 'source' }
-    end
-
     JS_ESCAPE_TABLE = {"\r" => '\r', "\n" => '\n', '"' => '\"' }
 
     def javascript_string(str)
