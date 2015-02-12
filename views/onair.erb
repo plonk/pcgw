@@ -15,10 +15,10 @@
   <tr>
     <td>
       <a class="hidden-xs" href="/channels/<%= h ch.id %>/play">
-        <%= h ch.info['info']['name'] %>
+        <%= h ch.channel_info.channel %>
       </a>
       <a class="visible-xs" href="/channels/<%= h ch.id %>/play">
-        <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded"> <%= h ch.info['info']['name'] %>
+        <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded"> <%= h ch.channel_info.channel %>
       </a>
     </td>
     <td class="hidden-xs">
@@ -28,8 +28,8 @@
       </a>
     </td>
     <td>
-      <a href="<%= h ch.info['info']['url'] %>">
-        <%= h ch.info['info']['desc'] %>
+      <a href="<%= h ch.channel_info.url %>">
+        <%= h ch.channel_info.summary %>
       </a>
     </td>
     <td><%= h ch.listener_count_display %></td>
