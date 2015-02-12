@@ -3,6 +3,7 @@ class YellowPage
   class << self
     def all
       # 登録されていなかったら登録する
+      added = false
       json_ary = peercast.getYellowPages
       yellow_pages = [['SP',
                        'sp',
@@ -18,12 +19,13 @@ class YellowPage
                        'pcp://temp.orz.hm/']]
       yellow_pages.each do |name, prefix, terms, top, icon, pcp|
         unless json_ary.find { |y| y['name'] == name }
+          added = true
           peercast.addYellowPage('pcp', name, pcp)
         end
       end
 
       # オブジェクトの作成
-      json_ary = peercast.getYellowPages # 再読み込み
+      json_ary = peercast.getYellowPages if added # 再読み込み
       return yellow_pages.map do |name, prefix, terms, top, icon, pcp|
         hash = json_ary.find { |y| y['name'] == name }
         hash.merge!('prefix'=>prefix, 'terms'=>terms, 'top'=>top, 'icon'=>icon)
