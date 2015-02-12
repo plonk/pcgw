@@ -41,6 +41,10 @@ class NetworkUsage
 
   # あるチャンネルがリレーに使う最大の帯域
   def relay_bandwidth(channel_bitrate)
-    [numberRelaysByBitrate(channel_bitrate), @maxRelaysPerChannel].min * channel_bitrate
+    if channel_bitrate == 0
+      0
+    else
+      [numberRelaysByBitrate(channel_bitrate), @maxRelaysPerChannel].min * channel_bitrate
+    end
   end
 end
