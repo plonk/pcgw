@@ -8,11 +8,20 @@ class Channel < ActiveRecord::Base
   has_one :channel_info
 
   def status
-    @status ||= peercast.getChannelStatus(gnu_id)
+    set_status_info unless @status
+    @status
   end
 
   def info
-    @info ||= peercast.getChannelInfo(gnu_id)
+    set_status_info unless @info
+    @info
+  end
+
+  def set_status_info
+    dict = peercast.getChannels.find { |ch| ch['channelId'] == gnu_id }
+    raise 'channel not found' unless dict
+    @status = dict['status']
+    @info = { 'info' => dict['info'], 'track' => dict['track'], 'yellowPages' => dict['yellowPages'] }
   end
 
   def playlist_url
@@ -64,4 +73,11 @@ class Channel < ActiveRecord::Base
   def source_stream
     connections.find { |conn| conn.type == 'source' }
   end
+
+  def destroy
+    channel_info.terminated_at = Time.now
+    channel_info.save!
+    super
+  end
+
 end

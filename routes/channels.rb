@@ -37,8 +37,8 @@ class Pcgw < Sinatra::Base
 
     begin
       @error = nil
-      @status = peercast.getChannelStatus(@channel.gnu_id)
-      @info = peercast.getChannelInfo(@channel.gnu_id)
+      @status = @channel.status
+      @info = @channel.info
       @status_class = status_semantic_class @status['status']
 
       src = @channel.source_stream
@@ -111,8 +111,6 @@ class Pcgw < Sinatra::Base
         @channel_infos = [@channel.info]
 
         peercast.stopChannel(@channel.gnu_id)
-        @channel.channel_info.terminated_at = Time.now
-        @channel.channel_info.save!
         @channel.destroy
 
         log.info("user #{@user.id} destroyed channel #{@channel.id}")
