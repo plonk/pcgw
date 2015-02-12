@@ -46,6 +46,7 @@ class Pcgw < Sinatra::Base
   configure :development do
     Logging.logger = Logger.new(STDERR)
     Slim::Engine.set_default_options pretty: true
+    Peercast.debug = true
   end
 
   configure :production do
