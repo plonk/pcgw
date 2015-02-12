@@ -1,7 +1,8 @@
 class Pcgw < Sinatra::Base
   before '/channels/:id/?*' do |id, resource|
     if resource == 'update'
-      @channel = Channel.find(id) rescue nil
+      # update は呼び出し元のページを JS で遷移させるので nil にするだけ。
+      @channel = Channel.find(id) rescue @channel = nil
     else
       @channel = Channel.find(id) rescue halt(404, erb(:channel_not_found))
     end
@@ -40,9 +41,10 @@ class Pcgw < Sinatra::Base
       @info = peercast.getChannelInfo(@channel.gnu_id)
       @status_class = status_semantic_class @status['status']
 
-      src = source_stream(@channel)
-      @source_kbps = (src['recvRate'] * 8 / 1000).round
+      src = @channel.source_stream
+      @source_kbps = src.recvRateKbps
       connections = @channel.connections.select { |c| c.type == "relay" }
+
       @connections = slim :connections, locals: { channel: @channel, connections: connections }
       js = erb :update
 
