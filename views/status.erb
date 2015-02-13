@@ -13,7 +13,7 @@
 
       <h1>
         <%= @info['info']['name'] %>
-        <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= h @link_url %>" data-text="<%= @data_text %>" data-lang="ja" data-size="large" data-count="none" data-hashtags="PeercastGateway">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <%= erb :tweet_button, locals: { link_url: @link_url, data_text: @data_text } %>
 
         <div class="btn-group" style="vertical-align: -0.07em;">
           <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
