@@ -1,0 +1,109 @@
+doctype html
+html lang="ja"
+  head
+    title
+      | Peercast Gateway &mdash; チャンネル &mdash; #{@info['info']['name']}
+    == erb :common_head
+  body
+    == erb :navbar
+    .container
+      h1
+        = @info['info']['name']
+        == erb :tweet_button, locals: { link_url: @link_url, data_text: @data_text }
+        .btn-group style="vertical-align: -0.07em;"
+          button.btn.btn-default.dropdown-toggle type="button" data-toggle="dropdown" aria-expanded="false"
+            |  更新の間隔 
+            span#refresh-interval
+            | 秒 
+            span.caret style="margin-left: 0.5em"
+            span.sr-only
+              | ドロップダウンをトグルします
+          ul.dropdown-menu[role="menu"]
+            li
+              a href="#" onclick="changeInterval(5)"
+                | 5秒
+            li
+              a href="#" onclick="changeInterval(10)"
+                | 10秒
+      p#error style="color: red"
+      table.table.head-keep
+        tr
+          th メディア URL
+          td.text-info
+            span#source.url
+              = @status['source']
+        tr
+          th 状態
+          td
+            span#status
+        tr
+          th リレー時間
+          td
+            span#uptime
+            | 秒
+        tr
+          th ビットレート
+          td
+            span#bitrate
+            | Kbps
+        tr
+          th リスナー/リレー
+          td
+            span#direct
+            |  / 
+            span#relay
+        tr
+          th 直下接続
+          td
+            #connections
+        tr
+          th ジャンル
+          td
+            span#genre
+        tr
+          th 詳細
+          td
+            span#desc
+        tr
+          th コメント
+          td
+            span#comment
+        tr
+          th コンタクト URL
+          td
+            a#contact
+        tr
+          th 掲載YP
+          td
+            = slim :yellow_page_links, locals: { yp_names: @info['yellowPages'].map { |y| y['name'] } }
+
+      div
+        form action="/channels/#{@channel.id}/stop" method="POST" role="form"
+          div.btn-group role="group"
+            button.btn.btn-warning type="submit" onclick="$(window).off('beforeunload')" 配信停止
+            a.btn.btn-default href="/channels/#{@channel.id}/edit" onclick="$(window).off('beforeunload')" 詳細変更
+            a.btn.btn-default href="/channels/#{@channel.id}/play" target="_blank"
+              span class="glyphicon glyphicon-new-window"
+              |  再生
+    javascript:
+      var g_interval;
+      function changeInterval(int) {
+        g_interval = int;
+        $("#refresh-interval").text(int);
+      }
+      $(function() {
+        changeInterval(5);
+        $.getScript('/channels/#{@channel.id}/update');
+        var recur = function() {
+          $.getScript('/channels/#{@channel.id}/update');
+          setTimeout(recur, g_interval * 1000);
+        };
+        setTimeout(recur, g_interval * 1000);
+      });
+
+      $(function() {
+        $(window).on('beforeunload', function () {
+          return 'まだチャンネルが配信中のようです。';
+        });
+      });
+

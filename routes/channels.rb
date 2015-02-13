@@ -21,7 +21,7 @@ class Pcgw < Sinatra::Base
       end
       @data_text = "【PeerCastで配信中！】#{@info['info']['name']}「#{@info['info']['desc']}」 #{@info['info']['url']} #{@yp_name}"
 
-      erb :status
+      slim :status
     rescue Jimson::Client::Error => e
       h "なんかエラーだって: #{e}"
     end
