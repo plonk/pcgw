@@ -27,6 +27,18 @@ class Pcgw < Sinatra::Base
     end
   end
 
+  # ソースストリーム接続のリスタート
+  get '/channels/:id/reset' do
+    halt 403, "permission denied" unless @channel.user == @user
+
+    src = @channel.connections.find { |c| c.type == "source" }
+    halt 500, "source connection not found" unless src
+
+    peercast.restartChannelConnection(@channel.gnu_id, src.connectionId)
+
+    redirect to "/channels/#{@channel.id}"
+  end
+
   get '/channels/:id/update' do
     unless @channel
       js = "$(window).off('beforeunload'); location.reload();"
