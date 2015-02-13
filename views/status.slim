@@ -75,7 +75,7 @@ html lang="ja"
         tr
           th 掲載YP
           td
-            = slim :yellow_page_links, locals: { yp_names: @info['yellowPages'].map { |y| y['name'] } }
+            == slim :yellow_page_links, locals: { yp_names: @info['yellowPages'].map { |y| y['name'] } }
 
       div
         form action="/channels/#{@channel.id}/stop" method="POST" role="form"
