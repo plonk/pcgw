@@ -36,7 +36,9 @@ html lang="ja"
           th 状態
           td
             span#status
-            a.btn.btn-default.btn-xs style="margin-left: 0.5em" href="/channels/#{@channel.id}/reset" onclick="$(window).off('beforeunload')" title="エンコーダーとの現在の接続を破棄し、待ち受け状態に戻します(FLV の場合)。" リセット
+            a.btn.btn-default.btn-xs style="margin-left: 0.5em" href="/channels/#{@channel.id}/reset" onclick="$(window).off('beforeunload')" title="エンコーダーとの現在の接続を破棄し、待ち受け状態に戻します(FLV の場合)。"
+              span.glyphicon.glyphicon-refresh
+              |  リセット
         tr
           th リレー時間
           td
