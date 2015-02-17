@@ -11,7 +11,10 @@ class Genre
       @minimum_bandwidth = $3
       @proper = $4
     else
-      fail ArgumentError, 'format error'
+      @namespace = ''
+      @hide_listener_count = false
+      @minimum_bandwidth = ''
+      @proper = genre_string
     end
   end
 
