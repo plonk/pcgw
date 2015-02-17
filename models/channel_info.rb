@@ -5,10 +5,7 @@ class ChannelInfo < ActiveRecord::Base
   belongs_to :user
 
   def summary
-    if desc.blank?
-      genre
-    else
-      desc
-    end
+    [desc, comment, Genre.new(genre).proper, '㊙']
+      .find { |field| not field.blank? }
   end
 end
