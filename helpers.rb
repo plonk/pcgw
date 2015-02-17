@@ -48,7 +48,7 @@ class Pcgw < Sinatra::Base
         "%d日%s %02d時%02d分" % [t.day, weekday, t.hour, t.min]
       when (1.month)...(1.year)
         "%02d月%02d日%s %02d時%02d分" % \
-        [t.year, t.month, t.day, weekday, t.hour, t.min]
+        [t.month, t.day, weekday, t.hour, t.min]
       else
         "%04d年%02d月%02d日%s %02d:%02d" % \
         [t.year, t.month, t.day, weekday, t.hour, t.min]
