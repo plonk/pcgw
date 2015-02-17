@@ -29,8 +29,10 @@ class Pcgw < Sinatra::Base
       halt 403, 'Administrator only' unless user.admin
     end
 
-    def render_date(t, ref = Time.now)
-      return 'n/a' unless t
+    def render_date(time, ref = Time.now)
+      return 'n/a' unless time
+
+      t = time.localtime
 
       weekday = [*'㈰㈪㈫㈬㈭㈮㈯'.each_char][t.wday]
       delta = ref - t
