@@ -136,6 +136,14 @@ class Pcgw < Sinatra::Base
     end
   end
 
+  get '/channels/:id/relay_tree' do
+    ary = peercast.getChannelRelayTree(@channel.gnu_id)
+    root_nodes = ary.map(&RelayTree.method(:new))
+    fertility = root_nodes.map { |r| r.fertility_count }.inject(0,:+)
+
+    slim :relay_tree, locals: { root_nodes: root_nodes, fertility: fertility }
+  end
+
   delete '/channels/:id/connections/:connection_id' do
     halt 403, "チャンネルを所有していません。" unless @channel.user == @user
 
@@ -165,4 +173,5 @@ class Pcgw < Sinatra::Base
     end
     erb :stop
   end
+
 end

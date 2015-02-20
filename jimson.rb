@@ -9,7 +9,6 @@ require_relative 'jp'
 require 'sinatra/cookies'
 require 'ostruct'
 require 'slim'
-require_relative 'helpers'
 require 'logger'
 require_relative 'logging'
 require_relative 'network_usage'
@@ -101,5 +100,6 @@ class Pcgw < Sinatra::Base
 
 end
 
+require_relative 'helpers/init'
 require_relative 'models/init'
 require_relative 'routes/init'
