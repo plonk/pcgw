@@ -64,13 +64,13 @@ class RelayTreeRenderer
 
   def edges(node)
     node.children.each do |t|
-      puts "%p -> %p" % [node.endpoint, t.endpoint]
+      puts "%p -> %p" % [node.id, t.id]
     end
   end
 
   def attributes(t)
-    puts "%p [style=filled, fillcolor=%p]" % \
-    [t.endpoint, light_shade(t.color)]
+    puts "%p [label=%p, style=filled, fillcolor=%p]" % \
+    [t.id, t.endpoint, light_shade(t.color)]
   end
 
   def puts(*args)

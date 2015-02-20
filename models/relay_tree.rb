@@ -22,6 +22,10 @@ class RelayTree < OpenStruct
     "#{anonymize(hostname)}:#{port}"
   end
 
+  def id
+    "#{address}:#{port}"
+  end
+
   def color
     case
     when isFirewalled
