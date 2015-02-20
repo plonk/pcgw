@@ -1,34 +1,41 @@
 # -*- coding: utf-8 -*-
 class Pcgw < Sinatra::Base
   helpers do
-    # ログインされていたら true
+    # ログインされていたら true。
     def logged_in?
       not session[:uid].blank?
     end
 
+    # 折り返しの制御の為に、日本語のくぎりに零幅空白を挿入する。
     def jp_words(str)
       zwsp = '&#8203;'
       Jp.words(str).join(zwsp)
     end
 
+    # インスタンス変数 @user に現在のユーザーを設定する。
     def get_user
       @user = User.find(session[:uid].to_i) if logged_in?
     end
 
+    # HTML エスケープ略記。
     def h(text)
       Rack::Utils.escape_html(text)
     end
 
+    # ユーザーの属性をバッジで表現する。
     def user_status_raw(user)
       words = []
       words << '<span class=badge>管理者</span>' if user.admin?
       words.join(' ')
     end
 
+    # user が管理者でなければ停止する。
     def must_be_admin!(user)
       halt 403, 'Administrator only' unless user.admin
     end
 
+    # 任意の時刻を文字列表現にする。
+    # 24 時間以内は現在からの相対表現で返す。
     def render_date(time, ref = Time.now)
       return 'n/a' unless time
 
@@ -57,6 +64,8 @@ class Pcgw < Sinatra::Base
       end
     end
 
+    # Peercast Station のチャンネル状態文字列に対応する
+    # bootstrap テキストセマンティッククラスを返す。
     def status_semantic_class(status)
       case status
       when 'Receiving'
@@ -70,10 +79,12 @@ class Pcgw < Sinatra::Base
 
     JS_ESCAPE_TABLE = {"\r" => '\r', "\n" => '\n', '"' => '\"' }
 
+    # str の JavaScript の文字列リテラル表現を返す。
     def javascript_string(str)
       '"' + str.gsub(/(\r|\n|")/m) { |c| JS_ESCAPE_TABLE[c] } + '"'
     end
 
+    # 帯域使用率に対応する bootstrap テキストセマンティッククラスを返す。
     def usage_rate_semantic_class(rate)
       case
       when rate < 1.0
