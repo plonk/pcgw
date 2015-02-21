@@ -18,6 +18,6 @@ html lang="ja"
         h2.text-success #{fertility}ノードが視聴接続を受け付けています
 
       div style="text-align: center"
-        == RelayTreeRenderer.render root_nodes
+        == Graphviz.dot RelayTreeRenderer.render root_nodes
 
     == erb :footer

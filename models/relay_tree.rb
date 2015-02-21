@@ -12,14 +12,18 @@ class RelayTree < OpenStruct
     super(hash)
   end
 
-  def hostname
-    Resolv.getname(address)
+  def hostname(lookup: true)
+    if lookup
+      Resolv.getname(address)
+    else
+      address
+    end
   rescue
     address
   end
 
-  def endpoint
-    "#{anonymize(hostname)}:#{port}"
+  def endpoint(lookup: true)
+    "#{hostname(lookup: lookup)}:#{port}"
   end
 
   def id
@@ -51,13 +55,6 @@ class RelayTree < OpenStruct
     children.each do |c|
       c.each(&block)
     end
-  end
-
-  private
-
-  def anonymize(name)
-    _, *xs = name.split('.')
-    ['*', *xs].join('.')
   end
 
 end
