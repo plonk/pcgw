@@ -103,10 +103,12 @@ class Pcgw < Sinatra::Base
     channel_info.terminated_at = Time.now
     channel_info.save!
 
+    # API の name キーを channel キーにする。
     key_map = { 'name' => 'channel' }
+    new_channel_info
+      .update!(Hash[info.map { |k,v| [key_map[k] || k, v] }])
 
-    new_channel_info.update!(Hash[info.map { |k,v| [key_map[k] || k, v] }])
-
+    # ここで古い channel_info から channel への参照が破棄される。
     @channel.channel_info = new_channel_info
 
     redirect to("/channels/#{@channel.id}")
