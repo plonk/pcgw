@@ -7,7 +7,7 @@ module ColorScheme
   def light_shade(basic_color_name)
     case basic_color_name
     when 'red'
-      'firebrick1'
+      'IndianRed1'
     when 'green'
       'darkolivegreen3'
     when 'blue'
