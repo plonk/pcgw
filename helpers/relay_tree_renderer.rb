@@ -35,6 +35,7 @@ class RelayTreeRenderer
 
   def render_dot
     puts 'digraph {'
+    puts 'node [fontsize = 10, fontname = "sans-serif"];'
 
     # 色などの属性値。
     puts '{'
