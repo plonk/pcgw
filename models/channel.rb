@@ -75,8 +75,13 @@ class Channel < ActiveRecord::Base
   end
 
   def destroy
-    channel_info.terminated_at = Time.now
-    channel_info.save!
+    info = self.channel_info
+
+    # チャンネル情報からチャンネルへの参照をクリアする
+    self.channel_info = nil
+
+    info.terminated_at = Time.now
+    info.save!
     super
   end
 
