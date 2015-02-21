@@ -34,36 +34,6 @@ class Pcgw < Sinatra::Base
       halt 403, 'Administrator only' unless user.admin
     end
 
-    # 任意の時刻を文字列表現にする。
-    # 24 時間以内は現在からの相対表現で返す。
-    def render_date(time, ref = Time.now)
-      return 'n/a' unless time
-
-      t = time.localtime
-
-      weekday = [*'㈰㈪㈫㈬㈭㈮㈯'.each_char][t.wday]
-      delta = ref - t
-
-      case delta
-      when 0...1
-        "たった今"
-      when 1...(1.minute)
-        "#{delta.to_i}秒前"
-      when (1.minute)...(1.hour)
-        "#{(delta / 60).to_i}分前"
-      when (1.hour)...(1.day)
-        "#{(delta / 3600).to_i}時間前"
-      when (1.day)...(1.month)
-        "%d日%s %02d時%02d分" % [t.day, weekday, t.hour, t.min]
-      when (1.month)...(1.year)
-        "%02d月%02d日%s %02d時%02d分" % \
-        [t.month, t.day, weekday, t.hour, t.min]
-      else
-        "%04d年%02d月%02d日%s %02d:%02d" % \
-        [t.year, t.month, t.day, weekday, t.hour, t.min]
-      end
-    end
-
     # Peercast Station のチャンネル状態文字列に対応する
     # bootstrap テキストセマンティッククラスを返す。
     def status_semantic_class(status)

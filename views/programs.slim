@@ -28,7 +28,10 @@ html
             td
               a href=info.url #{info.summary}
             td.hidden-xs
-              | #{render_date info.created_at}&thinsp;〜&thinsp;#{info.terminated_at ? render_date(info.terminated_at) : ''}
+              - if info.terminated_at
+                = TimeUtil.render_time_range(info.created_at.localtime, info.terminated_at.localtime)
+              - else
+                | #{TimeUtil.render_time(info.created_at.localtime)} 〜
             td
               - if @user && @user.admin?
                 form action="/programs/#{info.id}" method="POST"
