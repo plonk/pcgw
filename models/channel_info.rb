@@ -4,8 +4,12 @@ require 'active_record'
 class ChannelInfo < ActiveRecord::Base
   belongs_to :user
 
+  def genre_proper
+    Genre.new(genre).proper
+  end
+
   def summary
-    [desc, comment, Genre.new(genre).proper, '㊙']
+    [desc, comment, genre_proper, '㊙']
       .find { |field| not field.blank? }
   end
 end

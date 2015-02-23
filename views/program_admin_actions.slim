@@ -1,0 +1,5 @@
+/ program: ChannelInfo
+td
+  form action="/programs/#{program.id}" method="POST"
+    input type="hidden" name="_method" value="DELETE"
+    button.btn.btn-warning.btn-xs type="submit" 削除

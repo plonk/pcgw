@@ -88,7 +88,7 @@ class Pcgw < Sinatra::Base
     # index.txt
     pass if request.path_info == '/index.txt'
     # 配信履歴
-    pass if request.path_info == '/programs'
+    pass if request.path_info =~ %r{^/programs/?}
 
     # ログインされていなかったらログインさせる。
     redirect to('/auth/twitter') unless logged_in?

@@ -1,18 +1,14 @@
-- if user.channels.any?
-  p 配信中です。
-  table class="table"
+table class="table"
+  tr
+    th チャンネル名
+    th 内容
+    th アクション
+  - user.channels.each do |ch|
     tr
-      th チャンネル名
-      th 内容
-      th アクション
-    - user.channels.each do |ch|
-      tr
-        td #{ch.info['info']['name']}
-        td
-          a href=ch.info['info']['url']
-            = [ch.info['info']['desc'],ch.info['info']['genre']].reject(&:empty?).first
-        td
-          a.btn.btn-default.btn-xs href="/channels/#{ch.id}/play" style="display: inline-block"
-            | 再生
-- else
-  p 配信中ではありません。
+      td #{ch.info['info']['name']}
+      td
+        a href=ch.info['info']['url']
+          = [ch.info['info']['desc'],ch.info['info']['genre']].reject(&:empty?).first
+      td
+        a.btn.btn-default.btn-xs href="/channels/#{ch.id}/play" style="display: inline-block"
+          | 再生

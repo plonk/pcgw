@@ -66,6 +66,14 @@ class Pcgw < Sinatra::Base
       end
     end
 
+    def default_to(default_value, value)
+      if value.blank?
+        default_value
+      else
+        value
+      end
+    end
+
   end
 end
 

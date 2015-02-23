@@ -2,39 +2,41 @@
   <span style="color: #ffa922; font-weight: bold; font-size: 200%"><%= @channels.size %></span> <%= jp_words 'チャンネルが配信中' %>
 </h2>
 
-<table class=table>
-  <tr>
-    <th>チャンネル名</th>
-    <th class="hidden-xs">配信者</th>
-    <th>内容</th>
-    <th>リスナー</th>
-    <th class="hidden-xs">配信時間</th>
-    <th>YP</th>
-  </tr>
-  <% @channels.each do |ch| %>
-  <tr>
-    <td>
-      <a class="hidden-xs" href="/channels/<%= h ch.id %>/play">
-        <%= h ch.channel_info.channel %>
-      </a>
-      <a class="visible-xs" href="/channels/<%= h ch.id %>/play">
-        <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded"> <%= h ch.channel_info.channel %>
-      </a>
-    </td>
-    <td class="hidden-xs">
-      <a href="/profile/<%= ch.user.id %>">
-        <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded">
-        <%= h ch.user.name %>
-      </a>
-    </td>
-    <td>
-      <a href="<%= h ch.channel_info.url %>">
-        <%= h ch.channel_info.summary %>
-      </a>
-    </td>
-    <td><%= h ch.listener_count_display %></td>
-    <td class="hidden-xs"><%= h IndexTxt.uptime_fmt(ch.status['uptime']) %></td>
-    <td><%= slim :yellow_page_links, locals: { yp_names: ch.info['yellowPages'].map { |y| y['name'] } } %></td>
-  </tr>
-  <% end %>
-</table>
+<div class="panel panel-default">
+  <table class="table">
+    <tr>
+      <th>チャンネル</th>
+      <th class="hidden-xs">配信者</th>
+      <th>内容</th>
+      <th>リスナー</th>
+      <th class="hidden-xs">配信時間</th>
+      <th>YP</th>
+    </tr>
+    <% @channels.each do |ch| %>
+    <tr>
+      <td>
+        <a class="hidden-xs" href="/channels/<%= h ch.id %>/play">
+          <%= h ch.channel_info.channel %>
+        </a>
+        <a class="visible-xs" href="/channels/<%= h ch.id %>/play">
+          <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded"> <%= h ch.channel_info.channel %>
+        </a>
+      </td>
+      <td class="hidden-xs">
+        <a href="/profile/<%= ch.user.id %>">
+          <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded">
+          <%= h ch.user.name %>
+        </a>
+      </td>
+      <td>
+        <a href="<%= h ch.channel_info.url %>">
+          <%= h ch.channel_info.summary %>
+        </a>
+      </td>
+      <td><%= h ch.listener_count_display %></td>
+      <td class="hidden-xs"><%= h IndexTxt.uptime_fmt(ch.status['uptime']) %></td>
+      <td><%= slim :yellow_page_links, locals: { yp_names: ch.info['yellowPages'].map { |y| y['name'] } } %></td>
+    </tr>
+    <% end %>
+  </table>
+</div>

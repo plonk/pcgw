@@ -94,12 +94,22 @@ class Pcgw < Sinatra::Base
   get '/create' do
     halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
 
-    info = ChannelInfo.where(user: @user).order(created_at: :desc).limit(1)
-    if info.empty?
-      template = ChannelInfo.new(user: @user, channel: @user.name)
+    if params['template'].blank?
+      info = ChannelInfo.where(user: @user).order(created_at: :desc).limit(1)
+      if info.empty?
+        template = ChannelInfo.new(user: @user, channel: @user.name)
+      else
+        template, = info
+      end
     else
-      template, = info
+      begin
+        # 他のユーザーの ChannelInfo はテンプレートにしない。
+        template = ChannelInfo.where(user: @user).find(params['template'])
+      rescue ActiveRecord::RecordNotFound
+        halt 400, h('テンプレートが見付かりません。')
+      end
     end
+
     erb :create, locals: { template: template }
   end
 

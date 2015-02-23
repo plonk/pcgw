@@ -11,39 +11,58 @@
 
     <div class=container>
       <% if NO_NEW_CHANNEL %>
-        <p class="text-danger">メンテナンス中のため、現在チャンネルの作成はできません。</p>
+      <p class="text-danger">メンテナンス中のため、現在チャンネルの作成はできません。</p>
       <% end %>
 
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h1>
+            <img width="48" src="<%= @user.image %>" alt="<%= @user.name %>" class="img-rounded">
+            <%= @user.name %>
+          </h1>
+        </div>
 
-      <h1><img width="48" src="<%= @user.image %>" alt="<%= @user.name %>" class="img-rounded"> <%= @user.name %></h1>
-      <% if @channels.any? %>
-      <table class="table">
-        <tr><th>チャンネル名</th><th>アクション</th></tr>
-        <% @channels.each do |ch| %>
-        <tr>
-          <td><%= ch.info['info']['name'] %></td>
-          <td>
-            <%= slim :channel_controls, locals: { ch: ch } %>
-          </td>
-        </tr>
+        <% if not @channels.any? %>
+        <div class="panel-body">
+          <p>配信中ではありません。</p>
+          <p>
+            <a href="/create" class="btn btn-primary"><img src="/images/megaphone.png" width="32"> 配信する</a>
+            <a href="/doc/how-to-obs" class="btn btn-default" style="margin-left: 1em; ">手順 OBS編 &raquo;</a>
+            <a href="/doc/how-to-wme" class="btn btn-default" style="margin-left: 1em; ">手順 WME編 &raquo;</a>
+          </p>
+        </div>
         <% end %>
-      </table>
-      <form action="/stopall" method="POST" role="form">
-        <% @channels.each do |ch| %>
-        <input type=hidden name="channel_ids[]" value="<%= ch.id %>">
-        <% end %>
-        <button class="btn btn-warning">全て停止する</button>
-      </form>
-      <% else %>
-      <p>配信中ではありません。</p>
-      <p>
-        <a href="/create" class="btn btn-primary"><img src="/images/megaphone.png" width="32"> 配信する</a>
-        <a href="/doc/how-to-obs" class="btn btn-default" style="margin-left: 1em; ">手順 OBS編 &raquo;</a>
-        <a href="/doc/how-to-wme" class="btn btn-default" style="margin-left: 1em; ">手順 WME編 &raquo;</a>
-      </p>
-      <% end %>
 
-      <%= slim :recent_programs, {}, recent_programs: recent_programs %>
+        <% if @channels.any? %>
+        <table class="table">
+          <tr><th>チャンネル名</th><th>アクション</th></tr>
+          <% @channels.each do |ch| %>
+          <tr>
+            <td><%= ch.info['info']['name'] %></td>
+            <td>
+              <%= slim :channel_controls, locals: { ch: ch } %>
+            </td>
+          </tr>
+          <% end %>
+        </table>
+
+        <div class="panel-body">
+          <form action="/stopall" method="POST" role="form">
+            <% @channels.each do |ch| %>
+            <input type=hidden name="channel_ids[]" value="<%= ch.id %>">
+            <% end %>
+            <button class="btn btn-warning">全て停止する</button>
+          </form>
+        </div>
+
+        <% end %>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">最近の配信</div>
+        <%= slim :program_table, locals: { programs: recent_programs, actions: :program_owner_actions } %>
+      </div>
+
     </div>
 
     <%= erb :footer %>
