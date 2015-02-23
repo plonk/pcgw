@@ -14,24 +14,36 @@ table.table
     - if block_given?
       th アクション
 
-  - programs.each do |info|
+
+  - [nil, *programs].each_cons(2) do |prev, curr|
     tr
+      / 同じユーザーの上の項目と同じならば「〃」にする
+      - ditto = -> (field, &block) { (!prev || prev.user != curr.user || prev.send(field) != curr.send(field)) ? block.() : '〃' }
+      / ユーザー画像
       td style="text-align: right"
-        a href="/profile/#{info.user.id}"
-          img.img-rounded width="28" src=info.user.image alt=info.user.name
+        - if !prev || prev.user != curr.user
+          a href="/profile/#{curr.user.id}"
+            img.img-rounded width="28" src=curr.user.image alt=curr.user.name
+      / チャンネル名
       td
-        |  #{info.channel}
+        == ditto.(:channel) do
+          |  #{curr.channel}
       td.hidden-xs
-        = default_to('㊙', info.genre_proper)
+        == ditto.(:genre) do
+          = default_to('㊙', curr.genre_proper)
       td.hidden-xs
-        a href=info.url #{default_to('㊙', info.desc)}
+        a href=curr.url
+          == ditto.(:desc) do
+            = default_to('㊙', curr.desc)
       td.visible-xs
-        a href=info.url #{info.summary}
+        a href=curr.url
+          == ditto.(:summary) do
+            = curr.summary
       td
-        - if info.terminated_at
-          = TimeUtil.render_time_range(info.created_at.localtime, info.terminated_at.localtime)
+        - if curr.terminated_at
+          = TimeUtil.render_time_range(curr.created_at.localtime, curr.terminated_at.localtime)
         - else
-          | #{TimeUtil.render_time(info.created_at.localtime)} 〜
+          | #{TimeUtil.render_time(curr.created_at.localtime)} 〜
       - if block_given?
         td
-          == yield info
+          == yield curr
