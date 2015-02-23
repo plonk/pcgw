@@ -1,6 +1,0 @@
-p
-  | 現在の推定使用帯域 #{network_usage.total_kbps}Kbps は
-  | 基準使用帯域 #{network_usage.baseline_kbps}Kbps の
-  span style="font-size: 150%" class=usage_rate_semantic_class(network_usage.rate)
-    = (network_usage.rate * 100).round
-  | % です

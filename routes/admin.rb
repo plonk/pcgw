@@ -38,7 +38,7 @@ class Pcgw < Sinatra::Base
 
   get '/admin/?' do
     must_be_admin!(@user)
-    slim :admin, locals: { network_usage: NetworkUsage.new(peercast, 3700) }
+    slim :admin
   end
 
 end

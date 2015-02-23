@@ -11,7 +11,6 @@ require 'ostruct'
 require 'slim'
 require 'logger'
 require_relative 'logging'
-require_relative 'network_usage'
 
 # 初期化処理
 require_relative 'init'

@@ -12,8 +12,6 @@ html
     p
       | #{peercast.getVersionInfo['agentName']} は #{peercast.getStatus['uptime']} 秒間稼動しています。
 
-    == slim :network_usage, locals: { network_usage: network_usage }
-
     ul
       li
         a href="/users" ユーザー&nbsp;
