@@ -1,0 +1,51 @@
+doctype html
+html lang="ja"
+  head
+    title Peercast Gateway &mdash; ホーム
+    == erb :common_head
+
+  body
+
+    == erb :navbar
+
+    .container
+      - if NO_NEW_CHANNEL
+        p class="text-danger" メンテナンス中のため、現在チャンネルの作成はできません。
+
+      .panel.panel-default
+        .panel-heading
+          h1
+            img width="48" src=@user.image alt=@user.name class="img-rounded"
+            == @user.name
+
+        - if not @channels.any?
+          .panel-body
+            p 配信中ではありません。
+            p
+              a.btn.btn-primary href="/create"
+                img src="/images/megaphone.png" width="32" 配信する
+              a.btn.btn-default href="/doc/how-to-obs" style="margin-left: 1em" 手順 OBS編 &raquo;
+              a.btn.btn-default href="/doc/how-to-wme" style="margin-left: 1em" 手順 WME編 &raquo;
+
+        - if @channels.any?
+          table class="table"
+            tr
+              th チャンネル名
+            - @channels.each do |ch|
+              tr
+                td
+                  = ch.info['info']['name']
+                td
+                  == slim :channel_controls, locals: { ch: ch }
+
+          .panel-body
+            form action="/stopall" method="POST" role="form"
+              - @channels.each do |ch|
+                input type="hidden" name="channel_ids[]" value=ch.id
+              button class="btn btn-warning" 全て停止する
+
+      .panel.panel-default
+        .panel-heading 最近の配信
+        == slim :program_table, locals: { programs: recent_programs, actions: :program_owner_actions }
+
+    == erb :footer
