@@ -1,6 +1,8 @@
-/ actions: アクションボタンを収めた TD 要素を生成するパーシャル。
-/          program 引数を受け取る。
-
+/ programs: ChannelInfo のコレクション。
+/
+/ ブロックが与えられた場合は、アクションカラムを生成する。ブロックには
+/ 対象の番組情報がその都度渡され、ブロックを評価した値はアクションカラ
+/ ムの TD の inner HTML とされる。
 table.table
   tr
     th
@@ -9,7 +11,7 @@ table.table
     th.hidden-xs 詳細
     th.visible-xs 内容
     th 時間
-    - if actions
+    - if block_given?
       th アクション
 
   - programs.each do |info|
@@ -30,5 +32,6 @@ table.table
           = TimeUtil.render_time_range(info.created_at.localtime, info.terminated_at.localtime)
         - else
           | #{TimeUtil.render_time(info.created_at.localtime)} 〜
-      - if actions
-        == slim actions, locals: { program: info }
+      - if block_given?
+        td
+          == yield info

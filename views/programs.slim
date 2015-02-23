@@ -14,8 +14,13 @@ html
 
       == slim :paginator, locals: { pagination: pagination, base_path: base_path }
 
-      - actions = @user && @user.admin? ? :program_admin_actions : nil
-      == slim :program_table, locals: { programs: programs, actions: actions }
+      - if @user && @user.admin?
+        == slim :program_table, locals: { programs: programs } do |program|
+          form action="/programs/#{program.id}" method="POST"
+            input type="hidden" name="_method" value="DELETE"
+            button.btn.btn-warning.btn-xs type="submit" 削除
+      - else
+        == slim :program_table, locals: { programs: programs }
 
       == slim :paginator, locals: { pagination: pagination, base_path: base_path }
 

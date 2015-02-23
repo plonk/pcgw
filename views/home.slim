@@ -46,6 +46,6 @@ html lang="ja"
 
       .panel.panel-default
         .panel-heading 最近の配信
-        == slim :program_table, locals: { programs: recent_programs, actions: :program_owner_actions }
-
+        == slim :program_table, locals: { programs: recent_programs } do |program|
+          a.btn.btn-xs.btn-default href="/create?template=#{program.id}" title="フォームにこの情報を入力します。" 続きを配信 &raquo;
     == erb :footer

@@ -19,7 +19,7 @@ html lang="ja"
 
       .panel.panel-default
         .panel-heading 最近の配信
-        == slim :program_table, locals: { programs: recent_programs, actions: nil }
+        == slim :program_table, locals: { programs: recent_programs }
 
       a.btn.btn-default href="/programs" もっと見る&thinsp;&raquo;
 
