@@ -11,6 +11,7 @@ Sinatra で書かれています。
 * PeerCast Station (http://www.pecastation.org/)
 * mirror (https://github.com/plonk/mirror)
 * stream_proxy (https://github.com/plonk/stream_proxy)
+* Graphviz
 
 ## インストール (書きかけ)
 
