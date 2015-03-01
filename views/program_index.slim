@@ -1,0 +1,20 @@
+doctype html
+html lang="ja"
+  head
+    title Peercast Gateway
+    == erb :common_head
+
+  body
+    == erb :navbar
+
+    .container
+      .panel.panel-default
+        .panel-heading 配信履歴
+
+        .list-group
+          - months.each do |(year, month), count|
+            a.list-group-item href="/programs/#{year}/#{month}"
+              | #{year}年#{month}月 
+              span.badge #{count}
+
+    == erb :footer

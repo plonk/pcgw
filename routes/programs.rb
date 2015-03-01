@@ -1,8 +1,39 @@
 # 配信履歴。「番組情報」
 
+require_relative '../calendar'
+
 class Pcgw < Sinatra::Base
+  # それぞれの要素の数を数える。
+  def frequencies(ary)
+    itself = -> (x) { x }
+    ary.group_by(&itself).map { |key, ary| [key, ary.size] }.to_h
+  end
+
   get '/programs/?' do
-    redirect to "/programs/before/#{Time.now.to_i}/pages/1"
+    programs = ChannelInfo.all
+    months = frequencies(programs.map { |p| c = p.created_at; [c.year, c.month] }).sort_by(&:first)
+    slim :program_index, locals: { months: months }
+  end
+
+  def validate_date(year, month = 1, day = 1)
+    Time.new(year, month, day)
+    true
+  rescue
+    false
+  end
+
+  get '/programs/:year/:month' do
+    year  = params['year'].to_i
+    month = params['month'].to_i
+    halt 400, "date not in range" unless validate_date(year, month)
+
+    start = Time.new(year, month)
+    next_month = month == 12 ? Time.new(year + 1, 1) : Time.new(year, month + 1)
+    programs = ChannelInfo.where('created_at >= ? AND created_at < ?', start, next_month)
+
+    calendar = Calendar.new(year, month)
+
+    slim :program_month, locals: { calendar: calendar, programs: programs }
   end
 
   get '/programs/before/:start/pages/:num' do

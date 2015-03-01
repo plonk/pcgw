@@ -1,0 +1,27 @@
+doctype html
+html lang="ja"
+  head
+    title #{calendar.year}年#{calendar.month}月 | 配信履歴 | Peercast Gateway
+    == erb :common_head
+
+  body
+    == erb :navbar
+
+    .container
+      .panel.panel-default
+        .panel-heading #{calendar.year}年#{calendar.month}月
+
+        == slim :month_calendar, locals: { calendar: calendar, programs: programs }
+
+      .panel.panel-default
+        .panel-heading #{calendar.year}年#{calendar.month}月
+
+        - if @user && @user.admin?
+          == slim :program_table, locals: { programs: programs } do |program|
+            form action="/programs/#{program.id}" method="POST"
+              input type="hidden" name="_method" value="DELETE"
+              button.btn.btn-warning.btn-xs type="submit" 削除
+        - else
+          == slim :program_table, locals: { programs: programs }
+
+    == erb :footer
