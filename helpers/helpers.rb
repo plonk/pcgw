@@ -54,18 +54,6 @@ class Pcgw < Sinatra::Base
       '"' + str.gsub(/(\r|\n|")/m) { |c| JS_ESCAPE_TABLE[c] } + '"'
     end
 
-    # 帯域使用率に対応する bootstrap テキストセマンティッククラスを返す。
-    def usage_rate_semantic_class(rate)
-      case
-      when rate < 1.0
-        'text-success'
-      when rate < 2.0
-        'text-warning'
-      else
-        'text-danger'
-      end
-    end
-
     def default_to(default_value, value)
       if value.blank?
         default_value
