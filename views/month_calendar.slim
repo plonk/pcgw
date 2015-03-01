@@ -7,6 +7,6 @@ table.table.table-bordered.calendar
         td style="position: relative"
           - if day
             | #{day} 
-            - count = programs.select { |p| p.created_at.day == day }.count
+            - count = programs.select { |p| p.created_at.localtime.day == day }.count
             - if count != 0
               span.badge style="position: absolute; top: 60%; left: 70%;" #{count}
