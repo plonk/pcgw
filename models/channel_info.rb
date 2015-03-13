@@ -12,4 +12,13 @@ class ChannelInfo < ActiveRecord::Base
     [desc, comment, genre_proper, '㊙']
       .find { |field| not field.blank? }
   end
+
+  def time_range
+    if terminated_at
+      created_at..terminated_at
+    else
+      created_at..created_at
+    end
+  end
+
 end
