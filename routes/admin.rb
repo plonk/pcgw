@@ -1,3 +1,5 @@
+require 'twitter'
+
 class Pcgw < Sinatra::Base
   before '/users/?*' do
     must_be_admin!(@user)
@@ -27,6 +29,18 @@ class Pcgw < Sinatra::Base
   get '/users/:id' do |id|
     @content_user = User.find(id)
     erb :user
+  end
+
+  get '/users/:id/update' do |id|
+    content_user = User.find(id)
+    client = Twitter::REST::Client.new do |config|
+      config.consumer_key = ENV['CONSUMER_KEY']
+      config.consumer_secret = ENV['CONSUMER_SECRET']
+    end
+    twitter_user = client.user(content_user.twitter_id)
+    content_user.image = twitter_user.profile_image_uri(:normal).to_s
+    content_user.save!
+    redirect to("/users/#{id}")
   end
 
   # ユーザーを削除
