@@ -20,6 +20,12 @@ html lang="ja"
               | ドロップダウンをトグルします
           ul.dropdown-menu[role="menu"]
             li
+              a href="#" onclick="changeInterval(1)"
+                | 1秒
+            li
+              a href="#" onclick="changeInterval(3)"
+                | 3秒
+            li
               a href="#" onclick="changeInterval(5)"
                 | 5秒
             li
@@ -99,7 +105,7 @@ html lang="ja"
         $("#refresh-interval").text(int);
       }
       $(function() {
-        changeInterval(5);
+        changeInterval(3);
         $.getScript('/channels/#{@channel.id}/update');
         var recur = function() {
           $.getScript('/channels/#{@channel.id}/update');
