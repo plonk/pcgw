@@ -83,22 +83,25 @@ class Pcgw < Sinatra::Base
     end
   end
 
-  # チャンネル情報の更新
-  post '/channels/:id' do
-    # チャンネル所有チェック
-    halt 403, 'permission denied' if @channel.user != @user
-
-    info = params.slice('name', 'url', 'genre', 'desc', 'comment')
-    track = {
+  def empty_track
+    return {
       name:    '',
       creator: '',
       genre:   '',
       album:   '',
       url:     ''
     }
+  end
+
+  # チャンネル情報の更新
+  post '/channels/:id' do
+    # チャンネル所有チェック
+    halt 403, 'permission denied' if @channel.user != @user
+
+    info = params.slice('name', 'url', 'genre', 'desc', 'comment')
     peercast.setChannelInfo(channelId: @channel.gnu_id,
                             info:      info,
-                            track:     track)
+                            track:     empty_track)
     channel_info = @channel.channel_info
     new_channel_info = channel_info.dup
 
