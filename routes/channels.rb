@@ -93,8 +93,15 @@ class Pcgw < Sinatra::Base
     }
   end
 
+  def map_keys(hash, key_map)
+    hash.map { |k,v| [key_map[k] || k, v] }.to_h
+  end
+
   # チャンネル情報の更新
   post '/channels/:id' do
+    # API の name キーは ChannelInfo の channel にマップされる。
+    key_map = { 'name' => 'channel' }
+
     # チャンネル所有チェック
     halt 403, 'permission denied' if @channel.user != @user
 
@@ -102,19 +109,22 @@ class Pcgw < Sinatra::Base
     peercast.setChannelInfo(channelId: @channel.gnu_id,
                             info:      info,
                             track:     empty_track)
-    channel_info = @channel.channel_info
-    new_channel_info = channel_info.dup
 
-    channel_info.terminated_at = Time.now
-    channel_info.save!
+    # 内容が変更された場合は新しい番組枠を作る
+    if info['desc'] != @channel.channel_info.desc
+      channel_info = @channel.channel_info
+      new_channel_info = channel_info.dup
 
-    # API の name キーを channel キーにする。
-    key_map = { 'name' => 'channel' }
-    new_channel_info
-      .update!(Hash[info.map { |k,v| [key_map[k] || k, v] }])
+      channel_info.terminated_at = Time.now
+      channel_info.save!
 
-    # ここで古い channel_info から channel への参照が破棄される。
-    @channel.channel_info = new_channel_info
+      new_channel_info.update!(map_keys(info, key_map))
+
+      # ここで古い channel_info から channel への参照が破棄される。
+      @channel.channel_info = new_channel_info
+    else
+      @channel.channel_info.update!(map_keys(info, key_map))
+    end
 
     redirect to("/channels/#{@channel.id}")
   end
