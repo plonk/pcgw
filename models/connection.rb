@@ -16,7 +16,7 @@ class Connection
 
   def remoteHostname
     remoteEndPoint =~ /\A(\d+.\d+.\d+.\d+):(\d+)\z/
-    Resolv.gethostname($1)
+    Resolv.getname($1)
   rescue Resolv::ResolvError
     $1
   end
