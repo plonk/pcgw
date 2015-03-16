@@ -1,7 +1,7 @@
 table.connections
   - connections.each do |conn|
     tr
-      td #{conn.remoteEndPoint} #{conn.labels}
+      td #{conn.remoteHostname}
       td #{conn.sendRateKbps} Kbps
       td
         form action="/channels/#{channel.id}/connections/#{conn.connectionId}" method="POST"

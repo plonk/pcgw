@@ -1,5 +1,6 @@
 require 'active_support'
 require 'active_support/core_ext'
+require 'resolv'
 
 class Connection
   KEYS = [:connectionId, :type, :status, :sendRate, :recvRate,
@@ -11,6 +12,13 @@ class Connection
     hash.slice(*KEYS.map(&:to_s)).each do |key, val|
       self.send("#{key}=", val)
     end
+  end
+
+  def remoteHostname
+    remoteEndPoint =~ /\A(\d+.\d+.\d+.\d+):(\d+)\z/
+    Resolv.gethostname($1)
+  rescue Resolv::ResolvError
+    $1
   end
 
   def recvRateKbps

@@ -39,7 +39,9 @@ class Pcgw < Sinatra::Base
     redirect to "/channels/#{@channel.id}"
   end
 
+  # Ajax エンドポイント
   get '/channels/:id/update' do
+    # チャンネルが存在しない場合はページ自体のリロードを促す
     unless @channel
       js = "$(window).off('beforeunload'); location.reload();"
       return [200,
