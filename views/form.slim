@@ -1,3 +1,7 @@
+/ チャンネル作成フォームパーシャル
+/ template: ChannelInfo
+/ @message: エラーメッセージ
+
 p style="color: red"
   = @message
 
@@ -49,7 +53,7 @@ form action="/broadcast" method="POST" role="form"
           a.btn.btn-default.btn-xs href=yp.terms target="_blank"
             span.glyphicon.glyphicon-new-window
             | &nbsp;利用規約
-    - unless pcgw_env == 'production'
+    - if @user.admin
       div class="radio"
         label.text-warning
           input required="required" type="radio" name="yp" value="" checked=template.yp.blank?
