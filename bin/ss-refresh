@@ -35,7 +35,7 @@ class ScreenShotRefresh
     log.debug "executing #{cmd.inspect}"
 
     pid = spawn(cmd)
-    Timeout.timeout(10) do
+    Timeout.timeout(30) do
       Process.waitpid(pid)
       log.info "exit status #{$?}"
     end
@@ -54,7 +54,7 @@ class ScreenShotRefresh
 
   def run
     n = Channel.all.to_a.count do |ch|
-      capture(ch, "#{screenshot_dir}/#{ch.gnu_id}.png")
+      capture(ch, "#{screenshot_dir}/#{ch.gnu_id}.jpg")
     end
     log.info("took #{n} shots of #{Channel.all.count} channels")
 
