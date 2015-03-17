@@ -192,9 +192,9 @@ class Pcgw < Sinatra::Base
   end
 
   get '/channels/:id/screenshot' do
-    path = "screenshots/#{@channel.gnu_id}.png"
+    path = "screenshots/#{@channel.gnu_id}.jpg"
     if File.exist? path
-      return [200, { 'Content-Type' => 'image/png' }, File.read(path)]
+      return [200, { 'Content-Type' => 'image/jpeg' }, File.read(path)]
     else
       redirect to '/images/blank_screen.png'
     end
