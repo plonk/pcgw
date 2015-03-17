@@ -25,8 +25,8 @@ class ScreenShotRefresh
 
   def command(channel, output)
     case channel.channel_info.stream_type
-    when 'FLV' then "ffmpeg -i http://#{PEERCAST_STATION_GLOBAL_HOSTNAME}:7144/stream/#{channel.gnu_id} -y -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr -vframes 1 #{Shellwords.escape(output)}"
-    when 'WMV' then "ffmpeg -i mmsh://#{PEERCAST_STATION_GLOBAL_HOSTNAME}:7144/stream/#{channel.gnu_id} -y -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr -vframes 1 #{Shellwords.escape(output)}"
+    when 'FLV' then "ffmpeg -i http://#{PEERCAST_STATION_PRIVATE_IP}:7144/stream/#{channel.gnu_id} -y -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr -vframes 1 #{Shellwords.escape(output)}"
+    when 'WMV' then "ffmpeg -i mmsh://#{PEERCAST_STATION_PRIVATE_IP}:7144/stream/#{channel.gnu_id} -y -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr -vframes 1 #{Shellwords.escape(output)}"
     else "" end
   end
 
