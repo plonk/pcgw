@@ -1,0 +1,66 @@
+#!/usr/bin/ruby
+APP_DIR = File.dirname File.dirname File.absolute_path(__FILE__)
+Dir.chdir(APP_DIR)
+
+require_relative '../init'
+require_relative '../models/init'
+require_relative '../logging'
+
+require_relative '../peercast'
+
+def peercast
+  $peercast ||= Peercast.new(PEERCAST_STATION_PRIVATE_IP, 7144)
+end
+
+Logging.logger = Logger.new(STDOUT)
+
+require 'shellwords'
+require 'timeout'
+
+class ScreenShotRefresh
+  include Logging
+
+  def initialize
+  end
+
+  def command(channel, output)
+    case channel.channel_info.stream_type
+    when 'FLV' then "ffmpeg -i http://#{PEERCAST_STATION_GLOBAL_HOSTNAME}:7144/stream/#{channel.gnu_id} -y -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr -vframes 1 #{Shellwords.escape(output)}"
+    when 'WMV' then "ffmpeg -i mmsh://#{PEERCAST_STATION_GLOBAL_HOSTNAME}:7144/stream/#{channel.gnu_id} -y -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr -vframes 1 #{Shellwords.escape(output)}"
+    else "" end
+  end
+
+  def capture(channel, output)
+    cmd = command(channel, output)
+    log.debug "executing #{cmd.inspect}"
+
+    pid = spawn(cmd)
+    Timeout.timeout(10) do
+      Process.waitpid(pid)
+      log.info "exit status #{$?}"
+    end
+    true
+  rescue Timeout::Error
+    Process.kill('SIGTERM', pid)
+    # 子供の死を看取る
+    Process.waitpid(pid)
+    log.error('timed out')
+    false
+  end
+
+  def screenshot_dir
+    APP_DIR + '/screenshots'
+  end
+
+  def run
+    n = Channel.all.to_a.count do |ch|
+      capture(ch, "#{screenshot_dir}/#{ch.gnu_id}.png")
+    end
+    log.info("took #{n} shots of #{Channel.all.count} channels")
+
+  end
+
+end
+
+app = ScreenShotRefresh.new
+app.run

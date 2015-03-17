@@ -191,4 +191,13 @@ class Pcgw < Sinatra::Base
     erb :stop
   end
 
+  get '/channels/:id/screenshot' do
+    path = "screenshots/#{@channel.gnu_id}.png"
+    if File.exist? path
+      return [200, { 'Content-Type' => 'image/png' }, File.read(path)]
+    else
+      redirect to '/images/blank_screen.png'
+    end
+  end
+
 end
