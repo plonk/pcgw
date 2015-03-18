@@ -5,7 +5,9 @@ table class="table"
     th アクション
   - user.channels.each do |ch|
     tr
-      td #{ch.info['info']['name']}
+      td
+        img.img-rounded src="/channels/#{ch.id}/screenshot" height="28"
+        |  #{ch.info['info']['name']}
       td
         a href=ch.info['info']['url']
           = [ch.info['info']['desc'],ch.info['info']['genre']].reject(&:empty?).first

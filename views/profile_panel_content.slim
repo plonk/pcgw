@@ -1,0 +1,9 @@
+/ .panel-heading と .panel-body を提供するパーシャル。
+/ user: User
+.panel-heading
+  h1
+    / いずれ Twitter と同じに 200x200 にしたい
+    img.img-rounded width="48" src=user.image alt=user.name 
+    |  #{user.name} 
+    small
+      == slim :broadcast_status, locals: { user: user }

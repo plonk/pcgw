@@ -13,20 +13,7 @@ html lang="ja"
         p class="text-danger" メンテナンス中のため、現在チャンネルの作成はできません。
 
       .panel.panel-default
-        .panel-heading
-          h1
-            img width="48" src=@user.image alt=@user.name class="img-rounded"
-            == @user.name
-
-        - if not @channels.any?
-          .panel-body
-            p 配信中ではありません。
-            p
-              a.btn.btn-primary href="/create"
-                img src="/images/megaphone.png" width="32"
-                | 配信する
-              a.btn.btn-default href="/doc/how-to-obs" style="margin-left: 1em" 手順 OBS編 &raquo;
-              a.btn.btn-default href="/doc/how-to-wme" style="margin-left: 1em" 手順 WME編 &raquo;
+        == slim :profile_panel_content, locals: { user: @user }
 
         - if @channels.any?
           table class="table"
@@ -35,7 +22,8 @@ html lang="ja"
             - @channels.each do |ch|
               tr
                 td
-                  = ch.info['info']['name']
+                  img.img-rounded src="/channels/#{ch.id}/screenshot" height="28"
+                  |  #{ch.info['info']['name']}
                 td
                   == slim :channel_controls, locals: { ch: ch }
 

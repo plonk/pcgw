@@ -8,13 +8,10 @@ html
 
   .container
     .panel.panel-default
-      .panel-heading
-        h1
-          img.img-rounded width="48" src=user.image alt=user.name  #{user.name}
+      == slim :profile_panel_content, locals: { user: user }
+
       - if user.channels.any?
         == slim :profile_onair, locals: { user: user }
-      - else
-        .panel-body 配信中ではありません。
 
     .panel.panel-default
       .panel-heading 最近の配信
