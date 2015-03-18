@@ -15,12 +15,9 @@
     <% @channels.each do |ch| %>
     <tr>
       <td>
-        <a class="hidden-xs" href="/channels/<%= h ch.id %>/play">
-          <img height="32" src="/channels/<%= h ch.id %>/screenshot">
+        <img class="img-rounded" height="28" src="/channels/<%= h ch.id %>/screenshot">
+        <a href="/channels/<%= h ch.id %>/play">
           <%= h ch.channel_info.channel %>
-        </a>
-        <a class="visible-xs" href="/channels/<%= h ch.id %>/play">
-          <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded"> <%= h ch.channel_info.channel %>
         </a>
       </td>
       <td class="hidden-xs">
