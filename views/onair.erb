@@ -15,14 +15,16 @@
     <% @channels.each do |ch| %>
     <tr>
       <td>
-        <img class="img-rounded" height="28" src="/channels/<%= h ch.id %>/screenshot">
+        <div style="display: inline-block; text-align: center; width: 50px; margin-right: 0.8em">
+          <img class="img-rounded" height="28" src="/channels/<%= h ch.id %>/screenshot">
+        </div>
         <a href="/channels/<%= h ch.id %>/play">
           <%= h ch.channel_info.channel %>
         </a>
       </td>
       <td class="hidden-xs">
         <a href="/profile/<%= ch.user.id %>">
-          <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded">
+          <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded" style="margin-right: 0.8em">
           <%= h ch.user.name %>
         </a>
       </td>
