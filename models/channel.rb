@@ -28,9 +28,9 @@ class Channel < ActiveRecord::Base
     # WMV の場合
     case info['info']['contentType']
     when 'WMV'
-      "http://#{PROXY_HOSTNAME}:8888/pls/#{gnu_id}.asx"
+      "http://#{PROXY_HOSTNAME}:7144/pls/#{gnu_id}.asx"
     when 'FLV'
-      "http://#{PROXY_HOSTNAME}:8888/pls/#{gnu_id}.m3u"
+      "http://#{PROXY_HOSTNAME}:7144/pls/#{gnu_id}.m3u"
     else
       ''
     end
@@ -39,9 +39,9 @@ class Channel < ActiveRecord::Base
   def stream_url
     case info['info']['contentType']
     when 'WMV'
-      "mmsh://#{PROXY_HOSTNAME}:8888/stream/#{gnu_id}.wmv"
+      "mmsh://#{PROXY_HOSTNAME}:7144/stream/#{gnu_id}.wmv"
     when 'FLV'
-      "http://#{PROXY_HOSTNAME}:8888/stream/#{gnu_id}.flv"
+      "http://#{PROXY_HOSTNAME}:7144/stream/#{gnu_id}.flv"
     else
       ''
     end
