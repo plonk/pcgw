@@ -3,7 +3,8 @@ require 'lockfile'
 class BroadcastRequest
   attr_reader :info
 
-  def initialize(ch_info, yellow_pages)
+  def initialize(servent, ch_info, yellow_pages)
+    @servent = servent
     @info = ch_info
     @yellow_pages = yellow_pages
   end
@@ -80,7 +81,7 @@ class BroadcastRequest
 
   def source_uri_rtmp(user)
     port = 9000 + user.id
-    "rtmp://#{PEERCAST_STATION_GLOBAL_HOSTNAME}:#{port}/live/livestream"
+    "rtmp://#{@servent.hostname}:#{port}/live/livestream"
   end
 
   def source_uri_http(user)
@@ -110,7 +111,7 @@ class Pcgw < Sinatra::Base
       end
     end
 
-    erb :create, locals: { template: template }
+    erb :create, locals: { template: template, servents: Servent.all }
   end
 
   def broadcast_check_params!
@@ -118,7 +119,7 @@ class Pcgw < Sinatra::Base
     fail 'ストリームタイプが選択されていません' if params['stream_type'].blank?
   end
 
-  def ascertain_new!(req)
+  def ascertain_new!(peercast, req)
     if peercast.getChannels.any? { |ch|
         ch['info']['name']     == req.info.channel &&
         ch['info']['genre']    == req.genre        &&
@@ -137,18 +138,21 @@ class Pcgw < Sinatra::Base
 
       broadcast_check_params!
 
-      request = BroadcastRequest.new(channel_info, @yellow_pages)
+      servent = Servent.request_one
+      raise '利用可能な配信サーバーがありません。' unless servent
+      request = BroadcastRequest.new(servent, channel_info, @yellow_pages)
 
       # PeerCast Station に同じ ID のチャンネルが立たないことを
       # 保証するためにロックファイルを使用する
       chid = nil
       Lockfile('tmp/lock.file') do
-        ascertain_new!(request)
-        chid = peercast.broadcastChannel(request.to_h)
+        ascertain_new!(servent.api, request)
+        chid = servent.api.broadcastChannel(request.to_h)
       end
 
       ch = @user.channels.build(gnu_id: chid)
       ch.channel_info = channel_info
+      ch.servent = servent
       ch.save!
 
       log.info("user #{@user.id} created channel #{ch.id}")
@@ -157,7 +161,7 @@ class Pcgw < Sinatra::Base
     rescue StandardError => e
       # 必要なフィールドがなかった場合などフォームを再表示する
       @message = e.message
-      erb :create, locals: { template: channel_info }
+      erb :create, locals: { template: channel_info, servents: Servent.all }
     end
   end
 

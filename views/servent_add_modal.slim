@@ -1,0 +1,46 @@
+.modal.fade#addModal tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close type="button" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+        h4.modal-title#addModalLabel 新しいサーバント
+      .modal-body
+        form#add action="/servents" method="POST" role="form"
+
+          .form-group
+            label for="name" 名前
+            input class="form-control" type="text" name="name" required=true
+
+          .form-group
+            label for="desc" 説明
+            input class="form-control" type="text" name="desc"
+
+          div class="form-group"
+            label for="hostname" ホスト名
+            input class="form-control" type="text" name="hostname" required=true placeholder="hostname.domainname"
+
+          div class="form-group"
+            label for="port" ポート番号
+            input class="form-control" type="number" name="port" min="1" max="65535" value="7144"
+
+          div class="form-group"
+            label for="auth_id" 認証ID
+            input class="form-control" type="text" name="auth_id"
+
+          div class="form-group"
+            label for="passwd" パスワード
+            / 覚えられるようなやつじゃないから * 化しない。
+            input class="form-control" type="text" name="passwd"
+
+          div class="form-group"
+            label for="max_channels" 最大CH数
+            input class="form-control" type="number" name="max_channels" min="0" max="20" value="0"
+
+          div class="form-group"
+            label for="priority" 優先度
+            input class="form-control" name="priority" type="number" value="0"
+      .modal-footer
+        button.btn.btn-default type="button" data-dismiss="modal" キャンセル
+        button.btn.btn-primary form="add" type="submit" class="btn btn-primary" OK
+
