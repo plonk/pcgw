@@ -1,6 +1,19 @@
+create_table "servents", force: true do |t|
+  t.string "name", default: ""
+  t.string "desc", default: ""
+  t.string "hostname"
+  t.integer "port"
+  t.string "auth_id"
+  t.string "passwd"
+  t.integer "priority"
+  t.integer "max_channels", default: 0
+  t.boolean "enabled", default: false
+end
+
 create_table "channels", force: true do |t|
   t.string  "gnu_id"
-  t.references :user, index: true
+  t.belongs_to :user, index: true
+  t.belongs_to :servent, index: true
 end
 
 create_table "users", force: true do |t|
@@ -22,6 +35,5 @@ create_table "channel_infos", force: true do |t|
   t.string  "stream_type"
   t.string  "yp"
   t.timestamps
-  # t.boolean "on_air"
   t.datetime "terminated_at"
 end

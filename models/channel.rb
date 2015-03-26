@@ -4,6 +4,8 @@ require_relative 'genre'
 
 class Channel < ActiveRecord::Base
   belongs_to :user
+  belongs_to :servent
+
   # info は JSON API、channel_info は ActiveRecord
   has_one :channel_info
 
@@ -18,7 +20,7 @@ class Channel < ActiveRecord::Base
   end
 
   def set_status_info
-    dict = peercast.getChannels.find { |ch| ch['channelId'] == gnu_id }
+    dict = servent.api.getChannels.find { |ch| ch['channelId'] == gnu_id }
     raise 'channel not found' unless dict
     @status = dict['status']
     @info = { 'info' => dict['info'], 'track' => dict['track'], 'yellowPages' => dict['yellowPages'] }
@@ -48,7 +50,7 @@ class Channel < ActiveRecord::Base
   end
 
   def connections
-    @connections ||= peercast.getChannelConnections(gnu_id).map(&Connection.method(:new))
+    @connections ||= servent.api.getChannelConnections(gnu_id).map(&Connection.method(:new))
   end
 
   def listener_count_display
@@ -80,8 +82,11 @@ class Channel < ActiveRecord::Base
     # チャンネル情報からチャンネルへの参照をクリアする
     self.channel_info = nil
 
-    info.terminated_at = Time.now
-    info.save!
+    # 万一 ChannelInfo が無かった場合に消せなくならないようにしている。
+    if info
+      info.terminated_at = Time.now
+      info.save!
+    end
     super
   end
 

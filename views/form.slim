@@ -1,6 +1,8 @@
 / チャンネル作成フォームパーシャル
 / template: ChannelInfo
+/ servents: Servent の Relation
 / @message: エラーメッセージ
+/ TODO: フラッシュに変える
 
 p style="color: red"
   = @message
@@ -59,8 +61,21 @@ form action="/broadcast" method="POST" role="form"
           input required="required" type="radio" name="yp" value="" checked=template.yp.blank?
           | 掲載しない
 
+  div class="form-group"
+    label for="servent" 配信サーバー
+    .radio
+      label.text-success
+        input required="required" type="radio" name="servent" value="-1" checked=true
+        strong おまかせ
+    - servents.each do |serv|
+      .radio
+        label
+          input required="required" type="radio" name="servent" value=serv.id
+          | #{serv.hostname}:#{serv.port}
+
   button type="submit" class="btn btn-primary" 開始
 
+/ フォームの二重送信を防止する。
 javascript:
   jQuery.fn.preventDoubleSumission = function() {
     $(this).on('submit', function(e) {

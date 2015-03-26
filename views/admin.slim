@@ -9,19 +9,23 @@ html
   .container
     h1 管理
 
-    p
-      | #{peercast.getVersionInfo['agentName']} は #{peercast.getStatus['uptime']} 秒間稼動しています。
+    - Servent.all.each do |serv|
+      p
+        | #{serv.hostname}:#{serv.port}の#{serv.api.getVersionInfo['agentName']} は #{serv.api.getStatus['uptime']} 秒間稼動しています。
 
     ul
       li
         a href="/users" ユーザー&nbsp;
-        span.badge #{User.all.count}
+        span.badge #{User.count}
       li
         a href="/channels" 配信中チャンネル&nbsp;
-        span.badge #{Channel.all.count}
+        span.badge #{Channel.count}
       li
         a href="/programs" 配信履歴&nbsp;
-        span.badge #{ChannelInfo.all.count}
+        span.badge #{ChannelInfo.count}
+      li
+        a href="/servents" サーバント&nbsp;
+        span.badge #{Servent.count}
 
 
   == erb :footer

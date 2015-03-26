@@ -10,8 +10,8 @@ class Pcgw < Sinatra::Base
 
   get '/channels/:id' do
     begin
-      @status = peercast.getChannelStatus(@channel.gnu_id)
-      @info = peercast.getChannelInfo(@channel.gnu_id)
+      @status = @channel.servent.api.getChannelStatus(@channel.gnu_id)
+      @info = @channel.servent.api.getChannelInfo(@channel.gnu_id)
 
       if @channel.info['yellowPages'].any?
         @link_url = @yellow_pages.find { |y| y.name == @channel.info['yellowPages'].first['name'] }.top
@@ -34,7 +34,7 @@ class Pcgw < Sinatra::Base
     src = @channel.connections.find { |c| c.type == "source" }
     halt 500, "source connection not found" unless src
 
-    peercast.restartChannelConnection(@channel.gnu_id, src.connectionId)
+    @channel.servent.api.restartChannelConnection(@channel.gnu_id, src.connectionId)
 
     redirect to "/channels/#{@channel.id}"
   end
@@ -106,9 +106,9 @@ class Pcgw < Sinatra::Base
     halt 403, 'permission denied' if @channel.user != @user
 
     info = params.slice('name', 'url', 'genre', 'desc', 'comment')
-    peercast.setChannelInfo(channelId: @channel.gnu_id,
-                            info:      info,
-                            track:     empty_track)
+    @channel.servent.api.setChannelInfo(channelId: @channel.gnu_id,
+                                        info:      info,
+                                        track:     empty_track)
 
     # 内容が変更された場合は新しい番組枠を作る
     if info['desc'] != @channel.channel_info.desc
@@ -139,7 +139,7 @@ class Pcgw < Sinatra::Base
       if @user.admin? || @channel.user == @user
         @channel_infos = [@channel.info]
 
-        peercast.stopChannel(@channel.gnu_id)
+        @channel.servent.api.stopChannel(@channel.gnu_id)
         @channel.destroy
 
         log.info("user #{@user.id} destroyed channel #{@channel.id}")
@@ -154,7 +154,7 @@ class Pcgw < Sinatra::Base
   end
 
   get '/channels/:id/relay_tree' do
-    ary = peercast.getChannelRelayTree(@channel.gnu_id)
+    ary = @channel.servent.api.getChannelRelayTree(@channel.gnu_id)
     root_nodes = ary.map(&RelayTree.method(:new))
     fertility = root_nodes.map { |r| r.fertility_count }.inject(0,:+)
 
@@ -164,7 +164,7 @@ class Pcgw < Sinatra::Base
   delete '/channels/:id/connections/:connection_id' do
     halt 403, "チャンネルを所有していません。" unless @channel.user == @user
 
-    success = peercast.stopChannelConnection(@channel.gnu_id, params['connection_id'])
+    success = @channel.servent.api.stopChannelConnection(@channel.gnu_id, params['connection_id'])
     if success
       redirect back
     else
@@ -183,7 +183,7 @@ class Pcgw < Sinatra::Base
     channels = @user.channels.select { |ch| ids.include?(ch.id) }
     channels.each do |ch|
       @channel_infos << ch.info
-      peercast.stopChannel(ch.gnu_id)
+      ch.servent.api.stopChannel(ch.gnu_id)
       ch.destroy
 
       log.info("user #{@user.id} destroyed channel #{ch.id}")

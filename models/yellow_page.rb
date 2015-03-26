@@ -15,14 +15,14 @@ class YellowPage
                        'http://temp.orz.hm/yp/favicon.ico',
                        'pcp://temp.orz.hm/']]
       return yellow_pages.map do |name, prefix, terms, top, icon, pcp|
-        YellowPage.new('name'=>name, 'prefix'=>prefix, 'terms'=>terms, 'top'=>top, 'icon'=>icon)
+        YellowPage.new('name'=>name, 'prefix'=>prefix, 'terms'=>terms, 'top'=>top, 'icon'=>icon, 'uri'=>pcp)
       end
     end
 
   end
 
   attr_reader :name
-  attr_reader :prefix, :terms, :top, :icon
+  attr_reader :prefix, :terms, :top, :icon, :uri
 
   def initialize(hash)
     @name = hash['name']
@@ -30,33 +30,7 @@ class YellowPage
     @terms = hash['terms']
     @top = hash['top']
     @icon = hash['icon']
-  end
-
-  def set_extras
-    hash = peercast.getYellowPages.find { |yp| yp['name'] == @name }
-    raise "yellow page #{@name} not found on peercast station" unless hash
-
-    @id = hash['yellowPageId']
     @uri = hash['uri']
-    @protocol = hash['protocol']
-    @channels = hash['channels']
-  end
-
-  def id
-    set_extras; @id
-  end
-
-  def uri
-    set_extras; @uri
-  end
-
-  def protocol
-    set_extras; @protocol
-  end
-
-  # TODO: オブジェクト化したほうがいいかも
-  def channels
-    set_extras; @channels
   end
 
   def prefixed?(genre)

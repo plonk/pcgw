@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 require 'jimson'
 require 'sinatra/base'
-require_relative 'peercast'
 require 'active_support/core_ext'
 require 'omniauth-twitter'
 require 'active_record'
@@ -14,10 +13,7 @@ require_relative 'logging'
 
 # 初期化処理
 require_relative 'init'
-
-def peercast
-  $peercast ||= Peercast.new(PEERCAST_STATION_PRIVATE_IP, 7144)
-end
+require 'rack-flash'
 
 # Peercast Gateway アプリケーションクラス
 class Pcgw < Sinatra::Base
@@ -31,6 +27,7 @@ class Pcgw < Sinatra::Base
 
   configure do
     use Rack::Session::Cookie, expire_after: 30.days.to_i, secret: ENV['CONSUMER_SECRET']
+    use Rack::Flash
 
     set :cookie_options do
       { expires: Time.now + 30.days.to_i }
@@ -44,7 +41,6 @@ class Pcgw < Sinatra::Base
   configure :development do
     Logging.logger = Logger.new(STDERR)
     Slim::Engine.set_default_options pretty: true
-    Peercast.debug = true
   end
 
   configure :production do
@@ -60,8 +56,8 @@ class Pcgw < Sinatra::Base
     rescue RestClient::ResourceNotFound
       halt 500, 'PeerCast Station は API による操作を受け付けていません。'
     end
-    live_chids = peercast.getChannels.map { |ch| ch['channelId'] }
     Channel.all.each do |ch|
+      live_chids = ch.servent.api.getChannels.map { |ch| ch['channelId'] }
       unless live_chids.include? ch.gnu_id
         ch.destroy
         log.error("stale channel entry #{ch.id}(#{ch.gnu_id}) deleted")
