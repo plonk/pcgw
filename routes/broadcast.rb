@@ -10,7 +10,15 @@ class BroadcastRequest
   end
 
   def ypid
-    yp ? yp.id : nil
+    if yp
+      pecastYP = @servent.api.getYellowPages.find { |y| y['name'] == yp.name }
+      unless pecastYP
+        raise "YP not found. servent #{@servent.name} is not properly set up."
+      end
+      pecastYP['yellowPageId']
+    else
+      nil
+    end
   end
 
   def genre
