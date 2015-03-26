@@ -82,8 +82,11 @@ class Channel < ActiveRecord::Base
     # チャンネル情報からチャンネルへの参照をクリアする
     self.channel_info = nil
 
-    info.terminated_at = Time.now
-    info.save!
+    # 万一 ChannelInfo が無かった場合に消せなくならないようにしている。
+    if info
+      info.terminated_at = Time.now
+      info.save!
+    end
     super
   end
 
