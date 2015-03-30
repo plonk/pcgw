@@ -26,7 +26,7 @@ class Pcgw < Sinatra::Base
     end
     redirect back
   end
-  SERVENT_ROW_FIELDS = ['hostname', 'port', 'auth_id', 'passwd', 'max_channels', 'priority', 'enabled']      
+  SERVENT_ROW_FIELDS = ['hostname', 'port', 'max_channels', 'priority', 'enabled']      
 
   post '/servents' do
     args = params.slice('name', 'desc', 'hostname', 'port', 'auth_id', 'passwd', 'max_channels', 'priority')
