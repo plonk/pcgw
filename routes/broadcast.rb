@@ -146,7 +146,13 @@ class Pcgw < Sinatra::Base
 
       broadcast_check_params!
 
-      servent = Servent.request_one
+      serv_id = params['servent'].to_i
+      case serv_id
+      when -1
+        servent = Servent.request_one
+      else
+        servent = Servent.find(servent) rescue nil
+      end
       raise '利用可能な配信サーバーがありません。' unless servent
       request = BroadcastRequest.new(servent, channel_info, @yellow_pages)
 
