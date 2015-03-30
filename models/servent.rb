@@ -52,8 +52,13 @@ class Servent < ActiveRecord::Base
 
   class << self
     def request_one
-      Servent.order(priority: :asc).to_a.find { |s| s.vacancies > 0 }
+      enabled.to_a.find { |s| s.vacancies > 0 }
     end
+
+    def enabled
+      Servent.where(enabled: true).order(priority: :asc)
+    end
+
   end
 
 end

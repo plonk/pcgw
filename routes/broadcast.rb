@@ -101,7 +101,7 @@ end
 
 class Pcgw < Sinatra::Base
   get '/create' do
-    halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
+    halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL || Servent.enabled.empty?
 
     if params['template'].blank?
       info = ChannelInfo.where(user: @user).order(created_at: :desc).limit(1)
@@ -119,7 +119,7 @@ class Pcgw < Sinatra::Base
       end
     end
 
-    erb :create, locals: { template: template, servents: Servent.all }
+    erb :create, locals: { template: template, servents: Servent.enabled }
   end
 
   def broadcast_check_params!
@@ -169,7 +169,7 @@ class Pcgw < Sinatra::Base
     rescue StandardError => e
       # 必要なフィールドがなかった場合などフォームを再表示する
       @message = e.message
-      erb :create, locals: { template: channel_info, servents: Servent.all }
+      erb :create, locals: { template: channel_info, servents: Servent.enabled }
     end
   end
 
