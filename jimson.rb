@@ -10,6 +10,7 @@ require 'ostruct'
 require 'slim'
 require 'logger'
 require_relative 'logging'
+require_relative 'peercast'
 
 # 初期化処理
 require_relative 'init'
@@ -41,6 +42,7 @@ class Pcgw < Sinatra::Base
   configure :development do
     Logging.logger = Logger.new(STDERR)
     Slim::Engine.set_default_options pretty: true
+    set :show_exceptions, :after_handler
   end
 
   configure :production do
@@ -93,6 +95,20 @@ class Pcgw < Sinatra::Base
 
   after do
     ActiveRecord::Base.connection.close
+  end
+
+  error Peercast::Unauthorized do
+    e = env['sinatra.error']
+    servent = Servent.where(hostname: e.host, port: e.port).first
+    if servent
+      servent.enabled = false
+      servent.save
+      msg = "servent id #{servent.id} (#{servent.name}) disabled (unauthorized)"
+      log.error(msg)
+      msg
+    else
+      "unknown servent returned unauthorized error???"
+    end
   end
 
 end

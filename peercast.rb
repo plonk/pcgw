@@ -1,12 +1,24 @@
 require 'jimson'
 
 class Peercast
+  class Unauthorized < StandardError
+    attr_accessor :host, :port
+
+    def initialize(host, port)
+      @host, @port = host, port
+    end
+  end
+
   class << self
     attr_accessor :debug
     Peercast.debug = false
   end
 
-  def initialize(host, port, opts)
+  attr_reader :host, :port
+
+  def initialize(host, port, opts = {})
+    @host = host
+    @port = port
     @helper = Jimson::ClientHelper.new("http://#{host}:#{port}/api/1", opts)
   end
 
@@ -22,6 +34,8 @@ class Peercast
     end
     STDERR.puts("%s: %d msec elapsed" % [name, span*1000]) if Peercast.debug
     value
+  rescue RestClient::Unauthorized => e
+    raise Unauthorized.new(host, port), e.message
   end
 
   private
