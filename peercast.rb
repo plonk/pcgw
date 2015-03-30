@@ -6,8 +6,8 @@ class Peercast
     Peercast.debug = false
   end
 
-  def initialize(host, port)
-    @helper = Jimson::ClientHelper.new("http://#{host}:#{port}/api/1")
+  def initialize(host, port, opts)
+    @helper = Jimson::ClientHelper.new("http://#{host}:#{port}/api/1", opts)
   end
 
   def method_missing(*_args, &block)

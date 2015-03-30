@@ -15,7 +15,8 @@ class Servent < ActiveRecord::Base
   end
 
   def api
-    Peercast.new(hostname, port)
+    opts = auth_required? ? { 'authorization' => create_basic_authorization_header(auth_id, passwd) } : {}
+    Peercast.new(hostname, port, opts)
   end
 
   # 空き枠の数
@@ -40,6 +41,13 @@ class Servent < ActiveRecord::Base
       api.addYellowPage('pcp', name, requirement.find { |y| y.name == name }.uri)
     end
 
+  end
+
+  private
+
+  def create_basic_authorization_header(id, pwd)
+    coded = Base64.strict_encode64("#{id}:#{pwd}")
+    "BASIC #{coded}"
   end
 
   class << self
