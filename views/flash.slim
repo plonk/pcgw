@@ -1,7 +1,7 @@
 / :notice や :error ではなく、Bootstrap の contextual class に合わせる。
 - [:success, :info, :warning, :danger].each do |klass|
   - if flash[klass]
-    .alert.alert-dismissible.alert-success
+    .alert.alert-dismissible class="alert-#{klass}"
       = env['x-rack.flash'][klass]
       button.close type="button" data-dismiss="alert" aria-label="Close"
         span aria-hidden="true" &times;
