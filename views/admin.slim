@@ -9,10 +9,6 @@ html
   .container
     h1 管理
 
-    - Servent.all.each do |serv|
-      p
-        | #{serv.hostname}:#{serv.port}の#{serv.api.getVersionInfo['agentName']} は #{serv.api.getStatus['uptime']} 秒間稼動しています。
-
     ul
       li
         a href="/users" ユーザー&nbsp;
