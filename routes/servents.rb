@@ -22,7 +22,7 @@ class Pcgw < Sinatra::Base
       end
       flash[:success] = "変更は保存されました。"
     rescue => e
-      flash[:danger] = '変更の保存に失敗しました。#{e.message}'
+      flash[:danger] = "変更の保存に失敗しました。#{e.message}"
     end
     redirect back
   end
@@ -42,7 +42,7 @@ class Pcgw < Sinatra::Base
       serv.update!(args)
       flash[:success] = '変更が保存されました。'
     rescue => e
-      flash[:danger] = '変更の保存に失敗しました。#{e.message}'
+      flash[:danger] = "変更の保存に失敗しました。#{e.message}"
     end
     redirect back
   end
