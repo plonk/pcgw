@@ -12,15 +12,19 @@ class Pcgw < Sinatra::Base
   end
 
   patch '/servents/all' do
-    Servent.transaction do
-      params["id"].each do |id|
-        args = {"enabled"=>false}.merge SERVENT_ROW_FIELDS.map { |key| [key, params["#{key}#{id}"]] }.to_h
-        servent = Servent.find(id)
-        servent.update!(args)
+    begin
+      Servent.transaction do
+        params["id"].each do |id|
+          args = {"enabled"=>false}.merge SERVENT_ROW_FIELDS.map { |key| [key, params["#{key}#{id}"]] }.to_h
+          servent = Servent.find(id)
+          servent.update!(args)
+        end
       end
+      flash[:success] = "変更は保存されました。"
+    rescue => e
+      flash[:danger] = '変更の保存に失敗しました。#{e.message}'
     end
-    flash[:info] = "変更は保存されました。"
-    redirect to '/servents'
+    redirect back
   end
   SERVENT_ROW_FIELDS = ['hostname', 'port', 'auth_id', 'passwd', 'max_channels', 'priority', 'enabled']      
 
@@ -34,12 +38,13 @@ class Pcgw < Sinatra::Base
   patch '/servents/:id' do
     serv = Servent.find(params['id'])
     args = {'enabled'=>false}.merge params.slice('name', 'desc', 'hostname', 'port', 'auth_id', 'passwd', 'max_channels', 'priority', 'enabled')
-    if serv.update(args)
+    begin
+      serv.update!(args)
       flash[:success] = '変更が保存されました。'
-      redirect back
-    else
-      flash[:danger] = '変更の保存に失敗しました。'
+    rescue => e
+      flash[:danger] = '変更の保存に失敗しました。#{e.message}'
     end
+    redirect back
   end
 
   delete '/servents/:id' do
