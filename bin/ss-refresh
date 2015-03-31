@@ -55,7 +55,7 @@ class ScreenShotRefresh
       fn = "#{screenshot_dir}/#{ch.gnu_id}.jpg"
       success = capture(ch, fn)
       if success
-        system('convert -resize 10000x28 -strip #{fn} #{fn}')
+        system("convert -resize 10000x28 -strip #{fn} #{fn}")
       end
       success
     end
