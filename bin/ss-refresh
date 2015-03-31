@@ -13,6 +13,8 @@ Logging.logger = Logger.new('log/pcgw.log', 'daily')
 require 'shellwords'
 require 'timeout'
 
+Signal.trap(:TERM) { puts 'TERM trapped' }
+
 class ScreenShotRefresh
   include Logging
 
@@ -37,7 +39,7 @@ class ScreenShotRefresh
     end
     true
   rescue Timeout::Error
-    Process.kill('SIGTERM', pid)
+    Process.kill('-SIGTERM', Process.getpgid(pid))
     # 子供の死を看取る
     Process.waitpid(pid)
     log.error('timed out')
