@@ -8,10 +8,6 @@
 
     <%= erb :navbar %>
 
-    <%
-       settings = peercast.getSettings
-     %>
-
     <div class=container>
       <div class="page-header">
         <h1>よくある質問</h1>
@@ -21,13 +17,17 @@
       <p>はい。配信者が peercast や PeerCast Station をインストールする必要はありません。</p>
 
       <h2><%= jp_words "直下ノードへのリレーは何本出ますか？" %></h1>
-      <p>
-        現在、
-        <% if settings['maxUpstreamRatePerChannel'] != 0 %>
-          合計が <%= settings['maxUpstreamRatePerChannel'] %>Kbps を超えない範囲で
-        <% end %>
-        <% if settings['maxRelaysPerChannel'] == 0 %>際限なく<% else %><%= settings['maxRelaysPerChannel'] %>本まで<% end %>出ます。
-      </p>
+      <% Servent.enabled.each do |servent| %>
+        <% settings = servent.api.getSettings %>
+        <p>
+          <%= h servent.name %>は
+          現在、
+          <% if settings['maxUpstreamRatePerChannel'] != 0 %>
+            合計が <%= settings['maxUpstreamRatePerChannel'] %>Kbps を超えない範囲で
+          <% end %>
+          <% if settings['maxRelaysPerChannel'] == 0 %>際限なく<% else %><%= settings['maxRelaysPerChannel'] %>本まで<% end %>出ます。
+        </p>
+      <% end %>
 
     </div>
 
