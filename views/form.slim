@@ -71,7 +71,7 @@ form action="/broadcast" method="POST" role="form"
       .radio
         label
           input required="required" type="radio" name="servent" value=serv.id
-          | #{serv.hostname}:#{serv.port}
+          | #{serv.name} (#{serv.hostname}:#{serv.port})
 
   button type="submit" class="btn btn-primary" 開始
 
