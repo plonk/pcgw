@@ -1,16 +1,12 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
+# スクリーンショット更新スクリプト
+
 APP_DIR = File.dirname File.dirname File.absolute_path(__FILE__)
 Dir.chdir(APP_DIR)
 
 require_relative '../init'
 require_relative '../models/init'
 require_relative '../logging'
-
-require_relative '../peercast'
-
-def peercast
-  $peercast ||= Peercast.new(PEERCAST_STATION_PRIVATE_IP, 7144)
-end
 
 Logging.logger = Logger.new(STDOUT)
 
@@ -25,8 +21,8 @@ class ScreenShotRefresh
 
   def command(channel, output)
     case channel.channel_info.stream_type
-    when 'FLV' then "ffmpeg -i http://#{PEERCAST_STATION_PRIVATE_IP}:7144/stream/#{channel.gnu_id} -y -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr -vframes 1 #{Shellwords.escape(output)}"
-    when 'WMV' then "ffmpeg -i mmsh://#{PEERCAST_STATION_PRIVATE_IP}:7144/stream/#{channel.gnu_id} -y -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr -vframes 1 #{Shellwords.escape(output)}"
+    when 'FLV' then "ffmpeg -i http://#{channel.servent.hostname}:#{channel.servent.port}/stream/#{channel.gnu_id} -y -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr -vframes 1 #{Shellwords.escape(output)}"
+    when 'WMV' then "ffmpeg -i mmsh://#{channel.servent.hostname}:#{channel.servent.port}/stream/#{channel.gnu_id} -y -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr -vframes 1 #{Shellwords.escape(output)}"
     else "" end
   end
 
