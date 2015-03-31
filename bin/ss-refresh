@@ -52,7 +52,12 @@ class ScreenShotRefresh
 
   def run
     n = Channel.all.to_a.count do |ch|
-      capture(ch, "#{screenshot_dir}/#{ch.gnu_id}.jpg")
+      fn = "#{screenshot_dir}/#{ch.gnu_id}.jpg"
+      success = capture(ch, fn)
+      if success
+        system('convert -resize 10000x28 -strip #{fn} #{fn}')
+      end
+      success
     end
     log.info("took #{n} shots of #{Channel.all.count} channels")
 

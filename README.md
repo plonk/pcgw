@@ -12,6 +12,7 @@ Sinatra で書かれています。
 * mirror (https://github.com/plonk/mirror)
 * stream_proxy (https://github.com/plonk/stream_proxy)
 * Graphviz
+* ImageMagick
 
 ## インストール (書きかけ)
 
