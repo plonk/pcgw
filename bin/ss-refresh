@@ -43,6 +43,7 @@ class ScreenShotRefresh
     # 2 回送る。
     2.times do
       Process.kill('-SIGTERM', Process.getpgid(pid))
+      sleep 0.1
     end
     # 子供の死を看取る
     Process.waitpid(pid)
