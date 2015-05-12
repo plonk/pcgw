@@ -1,12 +1,14 @@
 require 'lockfile'
 
+# チャンネル作成要求を表わすクラス。
 class BroadcastRequest
   attr_reader :info
 
-  def initialize(servent, ch_info, yellow_pages)
+  def initialize(servent, ch_info, yellow_pages, client_ip)
     @servent = servent
     @info = ch_info
     @yellow_pages = yellow_pages
+    @client_ip = client_ip
   end
 
   def ypid
@@ -39,6 +41,7 @@ class BroadcastRequest
     end
   end
 
+  # broadcastChannel RPC への引数をビルドする。
   def to_h
     args = {
       yellowPageId:  ypid,
@@ -53,7 +56,7 @@ class BroadcastRequest
       },
       track: {
         name:    '',
-        creator: '',
+        creator: "#{@client_ip} via Peercast Gateway",
         genre:   '',
         album:   '',
         url:     ''
@@ -154,14 +157,14 @@ class Pcgw < Sinatra::Base
         servent = Servent.find(serv_id) rescue nil
       end
       raise '利用可能な配信サーバーがありません。' unless servent
-      request = BroadcastRequest.new(servent, channel_info, @yellow_pages)
+      breq = BroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip)
 
       # PeerCast Station に同じ ID のチャンネルが立たないことを
       # 保証するためにロックファイルを使用する
       chid = nil
       Lockfile('tmp/lock.file') do
-        ascertain_new!(servent.api, request)
-        chid = servent.api.broadcastChannel(request.to_h)
+        ascertain_new!(servent.api, breq)
+        chid = servent.api.broadcastChannel(breq.to_h)
       end
 
       ch = @user.channels.build(gnu_id: chid)
