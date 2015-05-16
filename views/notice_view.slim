@@ -1,0 +1,32 @@
+/ notice: Notice
+doctype html
+html lang="ja"
+  head
+    title #{notice.title} | Peercast Gateway
+    == erb :common_head
+  body
+    == erb :navbar
+
+    .container
+      - if @user.admin?
+        div
+          a.btn.btn-primary href="/notices/#{notice.id}/edit" 編集
+          form action="/notices/#{notice.id}" method="POST" style="display: inline;"
+            input type="hidden" name="_method" value="delete"
+            button.btn.btn-warning 削除
+
+      .page-header
+        h1
+          = notice.title
+
+      p
+        == notice.render_body
+
+      p style="text-align: right; color: #999; font-size: smaller"
+        | 作成: 
+        = notice.created_at.localtime.strftime('%Y年%m月%d日 %H:%M')
+        br
+        | 最終更新: 
+        = notice.updated_at.localtime.strftime('%Y年%m月%d日 %H:%M')
+
+    == erb :footer

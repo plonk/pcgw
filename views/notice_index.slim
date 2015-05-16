@@ -1,0 +1,23 @@
+/ notices: Notice のコレクション
+doctype html
+html lang="ja"
+  head
+    title お知らせ | Peercast Gateway
+    == erb :common_head
+  body
+    == erb :navbar
+
+    .container
+      - if notices.empty?
+        p 今のところお知らせはありません。
+      - if @user.admin?
+        p
+          a.btn.btn-primary href="/notices/new" 新規作成
+      ul
+        - notices.each do |n|
+          li
+            = n.created_at.localtime.strftime('%Y年%m月%d日')
+            |  
+            a href="/notices/#{n.id}" #{n.title}
+
+    == erb :footer

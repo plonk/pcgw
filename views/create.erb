@@ -11,7 +11,9 @@
     <div class=container>
       <h1>チャンネル作成</h1>
 
-      <%= slim :create_help %>
+      <% unless @user.last_broadcast %>
+        <%= slim :create_help %>
+      <% end %>
 
       <%= slim :form, locals: { template: template, servents: servents } %>
     </div>

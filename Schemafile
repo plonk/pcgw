@@ -22,6 +22,7 @@ create_table "users", force: true do |t|
   t.integer "twitter_id"
   t.boolean "admin",      default: false
   t.boolean "suspended",  default: false
+  t.datetime "last_broadcast"
 end
 
 create_table "channel_infos", force: true do |t|
@@ -36,4 +37,10 @@ create_table "channel_infos", force: true do |t|
   t.string  "yp"
   t.timestamps
   t.datetime "terminated_at"
+end
+
+create_table "notices", force: true do |t|
+  t.text :body
+  t.string :title
+  t.timestamps
 end

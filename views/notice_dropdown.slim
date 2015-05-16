@@ -1,0 +1,18 @@
+/ 例外的にビューからモデルを引っ張る。
+- notices = Notice.where('created_at > ?', @user.last_broadcast || Time.at(0)).limit(3)
+li class="dropdown"
+  a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="padding: 8px" title="お知らせ"
+    - if notices.empty?
+      span class="glyphicon glyphicon-bell" style="font-size: 28px"
+    - else
+      span class="glyphicon glyphicon-bell" style="font-size: 28px; color: #ffa922"
+
+  ul.dropdown-menu role="menu"
+    - unless notices.empty?
+      - notices.each do |n|
+        li
+          a href="/notices/#{n.id}" 「#{n.title}」
+      li.divider
+    li
+      a href="/notices" すべてのお知らせを表示
+
