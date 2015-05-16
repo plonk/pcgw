@@ -59,6 +59,10 @@ class Servent < ActiveRecord::Base
       Servent.where(enabled: true).order(priority: :asc)
     end
 
+    def total_capacity
+      enabled.map { |s| s.max_channels }.inject(0, :+)
+    end
+
   end
 
 end

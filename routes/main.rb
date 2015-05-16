@@ -3,7 +3,8 @@ class Pcgw < Sinatra::Base
   get '/' do
     @channels = Channel.all
     programs = ChannelInfo.all.order(created_at: :desc).limit(10)
-    slim :top, locals: { recent_programs: programs }
+    max_channels = Servent.total_capacity
+    slim :top, locals: { recent_programs: programs, max_channels: max_channels }
   end
 
   # ホーム

@@ -1,3 +1,5 @@
+/ max_channels: Integer
+/ recent_programs:
 doctype html
 html lang="ja"
   head
@@ -15,7 +17,7 @@ html lang="ja"
       - unless @user
         == erb :jumbotron
 
-      == erb :onair
+      == erb :onair, locals: { max_channels: max_channels }
 
       .panel.panel-default
         .panel-heading 最近の配信
