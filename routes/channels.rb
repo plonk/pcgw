@@ -83,16 +83,6 @@ class Pcgw < Sinatra::Base
     end
   end
 
-  def empty_track
-    return {
-      name:    '',
-      creator: '',
-      genre:   '',
-      album:   '',
-      url:     ''
-    }
-  end
-
   def map_keys(hash, key_map)
     hash.map { |k,v| [key_map[k] || k, v] }.to_h
   end
@@ -108,7 +98,7 @@ class Pcgw < Sinatra::Base
     info = params.slice('name', 'url', 'genre', 'desc', 'comment')
     @channel.servent.api.setChannelInfo(channelId: @channel.gnu_id,
                                         info:      info,
-                                        track:     empty_track)
+                                        track:     @channel.info['track'])
 
     # 内容が変更された場合は新しい番組枠を作る
     if info['desc'] != @channel.channel_info.desc
