@@ -3,11 +3,11 @@ task :setup do
 end
 
 task :migrate do
-  system("ridgepole -c config.yml --apply")
+  system("bundle exec ridgepole -c config.yml --apply")
 end
 
 task :dryrun do
-  system("ridgepole -c config.yml --apply --dry-run")
+  system("bundle exec ridgepole -c config.yml --apply --dry-run")
 end
 
 task :console do
