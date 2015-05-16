@@ -22,7 +22,13 @@ class Pcgw < Sinatra::Base
   get '/notices/:id/edit' do |id|
     must_be_admin!(@user)
 
-    slim :notice_form, locals: { notice: Notice.find(id) }
+    slim :notice_edit, locals: { notice: Notice.find(id) }
+  end
+
+  patch '/notices/:id' do |id|
+    notice = Notice.find(id)
+    notice.update! params.slice('body', 'title')
+    redirect to "/notices/#{notice.id}"
   end
 
   post '/notices/?' do
