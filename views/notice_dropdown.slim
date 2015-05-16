@@ -1,5 +1,5 @@
 / 例外的にビューからモデルを引っ張る。
-- notices = Notice.where('created_at > ?', @user.last_broadcast || Time.at(0)).limit(3)
+- notices = Notice.where('created_at > ?', @user.last_broadcast || Time.at(0)).order(created_at: :desc).limit(3)
 li class="dropdown"
   a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="padding: 8px" title="お知らせ"
     - if notices.empty?
