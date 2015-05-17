@@ -22,6 +22,9 @@
             ユーザー名
           </th>
           <th>
+            最終ログオン
+          </th>
+          <th>
             備考
           </th>
         </tr>
@@ -36,6 +39,9 @@
               <a href="/users/<%= h user.id %>">
                 <%= h user.name %>
               </a>
+            </td>
+            <td>
+              <%= user.logged_on_at ? user.logged_on_at.localtime.strftime('%Y/%m/%d %H:%M') : 'n/a' %>
             </td>
             <td>
               <%= user_status_raw(user) %>
