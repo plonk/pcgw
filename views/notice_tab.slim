@@ -1,9 +1,10 @@
 / 例外的にビューからモデルを引っ張る。
 - notices = Notice.where('created_at > ?', @user.notice_checked_at || Time.at(0))
-li class="dropdown"
-  a href="/notices/" style="padding: 8px" title="お知らせ"
+li
+  a href="/notices/" style="padding: 10px" title="お知らせ"
     - if notices.empty?
-      span.glyphicon.glyphicon-bell style="font-size: 28px"
+      span.glyphicon.glyphicon-bell style="font-size: 24px"
     - else
-      span.glyphicon.glyphicon-bell style="font-size: 28px; color: #ffa922"
+      span.glyphicon.glyphicon-bell style="font-size: 24px; color: #ffa922"
       span.badge style="position: absolute; top: 50%; left: 55%;  font-size: 8pt" #{notices.count}
+    span style="font-weight: bold; vertical-align: 25%"  お知らせ

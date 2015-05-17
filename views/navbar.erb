@@ -1,5 +1,6 @@
 <nav class="navbar navbar-static-top navbar-default" role="navigation">
   <div class="container">
+
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed"
               data-toggle="collapse" data-target="#navbar-collapse-1">
@@ -9,16 +10,20 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">Peercast Gateway</a>
+      <a class="navbar-brand" title="Peercast Gateway" href="/">Peercast Gateway</a>
     </div>
-
 
     <div class="collapse navbar-collapse" id="navbar-collapse-1">
 
+      <ul class="nav navbar-nav navbar-left">
+        <% if @user %>
+          <%= slim :home_tab %>
+          <%= slim :notice_tab %>
+        <% end %>
+      </ul>
+
       <ul class="nav navbar-nav navbar-right">
         <% if @user %>
-
-        <%= slim :notice_tab %>
 
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="padding: 8px">
