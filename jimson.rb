@@ -90,8 +90,14 @@ class Pcgw < Sinatra::Base
     # 配信のスクリーンショット
     pass if request.path_info =~ %r{^/channels/\d+/screenshot$}
 
-    # ログインされていなかったらログインさせる。
-    redirect to('/auth/twitter') unless logged_in?
+    if logged_in?
+      # 最終ログオン時刻を更新する。
+      @user.logged_on_at = Time.now
+      @user.save
+    else
+      # ログインされていなかったらログインさせる。
+      redirect to('/auth/twitter')
+    end
   end
 
   after do

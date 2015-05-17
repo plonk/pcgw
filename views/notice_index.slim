@@ -8,11 +8,15 @@ html lang="ja"
     == erb :navbar
 
     .container
+      .page-header
+        h1 お知らせ
+
       - if notices.empty?
         p 今のところお知らせはありません。
       - if @user.admin?
         p
           a.btn.btn-primary href="/notices/new" 新規作成
+
       ul
         - notices.each do |n|
           li

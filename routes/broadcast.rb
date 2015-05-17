@@ -173,8 +173,6 @@ class Pcgw < Sinatra::Base
       ch.save!
 
       log.info("user #{@user.id} created channel #{ch.id}")
-      @user.last_broadcast = Time.now
-      @user.save!
 
       redirect to("/channels/#{ch.id}")
     rescue StandardError => e

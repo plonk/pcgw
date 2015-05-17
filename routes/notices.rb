@@ -1,5 +1,7 @@
 class Pcgw < Sinatra::Base
   get '/notices/?' do
+    @user.notice_checked_at = Time.now
+    @user.save
     slim :notice_index, locals: { notices: Notice.all.order(created_at: :desc) }
   end
 

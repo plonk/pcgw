@@ -22,7 +22,8 @@ create_table "users", force: true do |t|
   t.integer "twitter_id"
   t.boolean "admin",      default: false
   t.boolean "suspended",  default: false
-  t.datetime "last_broadcast"
+  t.datetime "notice_checked_at"
+  t.datetime "logged_on_at"
 end
 
 create_table "channel_infos", force: true do |t|
