@@ -1,27 +1,18 @@
-doctype html
-html
-  head
-    title 管理 | Peercast Gateway
-    == erb :common_head
-  body
-    == erb :navbar
+- content_for :title do
+  | 管理
 
-  .container
-    h1 管理
+h1 管理
 
-    ul
-      li
-        a href="/users" ユーザー&nbsp;
-        span.badge #{User.count}
-      li
-        a href="/channels" 配信中チャンネル&nbsp;
-        span.badge #{Channel.count}
-      li
-        a href="/programs" 配信履歴&nbsp;
-        span.badge #{ChannelInfo.count}
-      li
-        a href="/servents" サーバント&nbsp;
-        span.badge #{Servent.count}
-
-
-  == erb :footer
+ul
+  li
+    a href="/users" ユーザー&nbsp;
+    span.badge #{User.count}
+  li
+    a href="/channels" 配信中チャンネル&nbsp;
+    span.badge #{Channel.count}
+  li
+    a href="/programs" 配信履歴&nbsp;
+    span.badge #{ChannelInfo.count}
+  li
+    a href="/servents" サーバント&nbsp;
+    span.badge #{Servent.count}

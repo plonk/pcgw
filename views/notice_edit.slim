@@ -1,27 +1,18 @@
 / notice: Notice
-doctype html
-html lang="ja"
-  head
-    title お知らせ作成 | Peercast Gateway
-    == erb :common_head
-  body
-    == erb :navbar
+- content_for :title do
+  | お知らせ編集
 
-    .container
+form action="/notices/#{notice.id}" method="POST"
+  input type="hidden" name="_method" value="PATCH"
 
-      form action="/notices/#{notice.id}" method="POST"
-        input type="hidden" name="_method" value="PATCH"
+  .form-group
+    label for="title" タイトル
+    input.form-control name="title" type="text" value=notice.title
 
-        .form-group
-          label for="title" タイトル
-          input.form-control name="title" type="text" value=notice.title
+  .form-group
+    label for="body" 本文
+    textarea.form-control name="body"
+      = notice.body
 
-        .form-group
-          label for="body" 本文
-          textarea.form-control name="body"
-            = notice.body
-
-        .form-group
-          button.btn.btn-primary type="submit" 送信
-
-    == erb :footer
+  .form-group
+    button.btn.btn-primary type="submit" 送信

@@ -1,27 +1,19 @@
 / programs: 表示する ChannelInfo のコレクション。
 / pagination: ページめくり情報。
 / base_path: 配信履歴のある時点でのスナップショットを表わすパス。
-doctype html
-html
-  head
-    title 配信履歴 | Peercast Gateway
-    == erb :common_head
-  body
-    == erb :navbar
+- content_for :title do
+  | 配信履歴
 
-    .container
-      h1 配信履歴
+h1 配信履歴
 
-      == slim :paginator, locals: { pagination: pagination, base_path: base_path }
+== slim :paginator, locals: { pagination: pagination, base_path: base_path }
 
-      - if @user && @user.admin?
-        == slim :program_table, locals: { programs: programs } do |program|
-          form action="/programs/#{program.id}" method="POST"
-            input type="hidden" name="_method" value="DELETE"
-            button.btn.btn-warning.btn-xs type="submit" 削除
-      - else
-        == slim :program_table, locals: { programs: programs }
+- if @user && @user.admin?
+  == slim :program_table, locals: { programs: programs } do |program|
+    form action="/programs/#{program.id}" method="POST"
+      input type="hidden" name="_method" value="DELETE"
+      button.btn.btn-warning.btn-xs type="submit" 削除
+- else
+  == slim :program_table, locals: { programs: programs }
 
-      == slim :paginator, locals: { pagination: pagination, base_path: base_path }
-
-      == erb :footer
+== slim :paginator, locals: { pagination: pagination, base_path: base_path }

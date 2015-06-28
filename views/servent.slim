@@ -1,66 +1,57 @@
-
 / servent: Servent
 
-doctype html
-html lang="ja"
-  head
-    title サーバント #{servent.hostname}:#{servent.port} | 管理 | Peercast Gateway
-    == erb :common_head
-  body
-    == erb :navbar
+- content_for :title do
+  | 管理 / サーバント #{servent.hostname}:#{servent.port}
 
-    .container
-      == slim :flash
+== slim :flash
 
-      p
-        a.btn.btn-default href="/servents" &laquo; サーバント一覧
-          
-      .panel.panel-default
-        .panel-heading サーバント
+p
+  a.btn.btn-default href="/servents" &laquo; サーバント一覧
 
-        .panel-body
-          form action="/servents/#{servent.id}" method="POST" role="form"
-            input type="hidden" name="_method" value="PATCH"
+.panel.panel-default
+  .panel-heading サーバント
 
-            .form-group
-              label for="name" 名前
-              input class="form-control" type="text" name="name" required=true value=servent.name
+  .panel-body
+    form action="/servents/#{servent.id}" method="POST" role="form"
+      input type="hidden" name="_method" value="PATCH"
 
-            .form-group
-              label for="desc" 説明
-              input class="form-control" type="text" name="desc" value=servent.desc
+      .form-group
+        label for="name" 名前
+        input class="form-control" type="text" name="name" required=true value=servent.name
 
-            .form-group
-              label for="hostname" ホスト名
-              input class="form-control" type="text" name="hostname" required=true placeholder="hostname.domainname" value=servent.hostname
+      .form-group
+        label for="desc" 説明
+        input class="form-control" type="text" name="desc" value=servent.desc
 
-            .form-group
-              label for="port" ポート番号
-              input class="form-control" type="number" name="port" min="1" max="65535" value=servent.port
+      .form-group
+        label for="hostname" ホスト名
+        input class="form-control" type="text" name="hostname" required=true placeholder="hostname.domainname" value=servent.hostname
 
-            .form-group
-              label for="auth_id" 認証ID
-              input class="form-control" type="text" name="auth_id" value=servent.auth_id
+      .form-group
+        label for="port" ポート番号
+        input class="form-control" type="number" name="port" min="1" max="65535" value=servent.port
 
-            .form-group
-              label for="passwd" パスワード
-              / 覚えられるようなやつじゃないから * 化しない。
-              input class="form-control" type="text" name="passwd" value=servent.passwd
+      .form-group
+        label for="auth_id" 認証ID
+        input class="form-control" type="text" name="auth_id" value=servent.auth_id
 
-            .form-group
-              label for="max_channels" 最大CH数
-              input class="form-control" type="number" name="max_channels" min="0" max="20" value=servent.max_channels
+      .form-group
+        label for="passwd" パスワード
+        / 覚えられるようなやつじゃないから * 化しない。
+        input class="form-control" type="text" name="passwd" value=servent.passwd
 
-            .form-group
-              label for="priority" 優先度
-              input class="form-control" name="priority" type="number" value=servent.priority
+      .form-group
+        label for="max_channels" 最大CH数
+        input class="form-control" type="number" name="max_channels" min="0" max="20" value=servent.max_channels
 
-            .form-group
-              .checkbox-inline
-                input name="enabled" type="checkbox" value="true" checked=servent.enabled
-                label for="enabled" 有効
+      .form-group
+        label for="priority" 優先度
+        input class="form-control" name="priority" type="number" value=servent.priority
 
-            .form-group
-              button.btn.btn-primary type="submit" 保存
+      .form-group
+        .checkbox-inline
+          input name="enabled" type="checkbox" value="true" checked=servent.enabled
+          label for="enabled" 有効
 
-    == erb :footer
+      .form-group
+        button.btn.btn-primary type="submit" 保存

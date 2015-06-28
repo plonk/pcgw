@@ -1,23 +1,16 @@
 / fertility: Integer
 / root_nodes: RelayTree の Array
-doctype html
-html lang="ja"
-  head
-    title
-      | Peercast Gateway | #{@channel.channel_info.channel} | リレーツリー
-    == erb :common_head
-  body
-    == erb :navbar
-    .container
-      - if fertility==0
-        h2.text-danger 視聴接続を受け付けているノードはありません
-        p.text-danger リレーが詰まっています。
-      - elsif fertility==1
-        h2.text-warning 1つのノードが視聴接続を受け付けています
-      - else
-        h2.text-success #{fertility}ノードが視聴接続を受け付けています
 
-      div style="text-align: center"
-        == Graphviz.dot RelayTreeRenderer.render root_nodes
+- content_for :title do
+  | リレーツリー / #{@channel.channel_info.channel}
 
-    == erb :footer
+- if fertility==0
+  h2.text-danger 視聴接続を受け付けているノードはありません
+  p.text-danger リレーが詰まっています。
+- elsif fertility==1
+  h2.text-warning 1つのノードが視聴接続を受け付けています
+- else
+  h2.text-success #{fertility}ノードが視聴接続を受け付けています
+
+div style="text-align: center"
+  == Graphviz.dot RelayTreeRenderer.render root_nodes

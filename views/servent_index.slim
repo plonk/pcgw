@@ -1,69 +1,62 @@
 / servents:
 
-doctype html
-html lang="ja"
-  head
-    title サーバント一覧 | 管理 | Peercast Gateway
-    == erb :common_head
-  body
-    == erb :navbar
+- content_for :title do
+  | 管理 / サーバント一覧
 
-    .container
-      == slim :flash
+== slim :flash
 
-      p
-        button type="button" class="btn btn-default" data-toggle="modal" data-target="#addModal"
-          span.glyphicon.glyphicon-plus &thinsp;追加
+p
+  button type="button" class="btn btn-default" data-toggle="modal" data-target="#addModal"
+    span.glyphicon.glyphicon-plus &thinsp;追加
 
-      .panel.panel-default
-        .panel-heading
-          #{servents.count} サーバント
+.panel.panel-default
+  .panel-heading
+    #{servents.count} サーバント
 
-        / テーブルで使うフォームを生成する。
-        - servents.each do |serv|
-          form id="delete#{serv.id}" action="/servents/#{serv.id}" method="POST"
-            input type="hidden" name="_method" value="DELETE"
+  / テーブルで使うフォームを生成する。
+  - servents.each do |serv|
+    form id="delete#{serv.id}" action="/servents/#{serv.id}" method="POST"
+      input type="hidden" name="_method" value="DELETE"
 
-        form id="save" action="/servents/all" method="POST"
-          input type="hidden" name="_method" value="PATCH"
+  form id="save" action="/servents/all" method="POST"
+    input type="hidden" name="_method" value="PATCH"
 
-        table.table
-          tr
-            th 名前
-            th エンドポイント
-            th 稼働率
-            th 優先度
-            th 有効
-            th アクション
-          - servents.each do |serv|
-            tr
-              td
-                = serv.name
-              td
-                input type="hidden" name="id[]" form="save" value=serv.id
-                .form-inline
-                  input.form-control name="hostname#{serv.id}" form="save" style="width: 10em" type="text" value=serv.hostname
-                  |  : 
-                  input.form-control name="port#{serv.id}" form="save" style="width: 6em" type="number" value=serv.port
-              td
-                .form-inline
-                  | #{serv.channels.count} / 
-                  input.form-control name="max_channels#{serv.id}" form="save" style="width: 6em" type="number" min="0" value=serv.max_channels
-              td
-                input.form-control name="priority#{serv.id}" form="save" style="width: 6em" type="number" value=serv.priority
-              td
-                input name="enabled#{serv.id}" form="save" type="checkbox" value="true" checked=serv.enabled
-              td
-                .btn-group.btn-group-xs role="group"
-                  a.btn.btn-default href="/servents/#{serv.id}" 開く
-                  button.btn.btn-danger type="submit" form="delete#{serv.id}" 削除
+  table.table
+    tr
+      th 名前
+      th エンドポイント
+      th 稼働率
+      th 優先度
+      th 有効
+      th アクション
+    - servents.each do |serv|
+      tr
+        td
+          = serv.name
+        td
+          input type="hidden" name="id[]" form="save" value=serv.id
+          .form-inline
+            input.form-control name="hostname#{serv.id}" form="save" style="width: 10em" type="text" value=serv.hostname
+            |  : 
+            input.form-control name="port#{serv.id}" form="save" style="width: 6em" type="number" value=serv.port
+        td
+          .form-inline
+            | #{serv.channels.count} / 
+            input.form-control name="max_channels#{serv.id}" form="save" style="width: 6em" type="number" min="0" value=serv.max_channels
+        td
+          input.form-control name="priority#{serv.id}" form="save" style="width: 6em" type="number" value=serv.priority
+        td
+          input name="enabled#{serv.id}" form="save" type="checkbox" value="true" checked=serv.enabled
+        td
+          .btn-group.btn-group-xs role="group"
+            a.btn.btn-default href="/servents/#{serv.id}" 開く
+            button.btn.btn-danger type="submit" form="delete#{serv.id}" 削除
 
-      p
-        button type="submit" class="btn btn-primary" form="save"
-          span.glyphicon.glyphicon-floppy-disk &thinsp;変更を保存
-        |  
-        a href="/servents" class="btn btn-default"
-          span.glyphicon.glyphicon-floppy-open &thinsp;元に戻す
+p
+  button type="submit" class="btn btn-primary" form="save"
+    span.glyphicon.glyphicon-floppy-disk &thinsp;変更を保存
+  |  
+  a href="/servents" class="btn btn-default"
+    span.glyphicon.glyphicon-floppy-open &thinsp;元に戻す
 
-      == slim :servent_add_modal
-    == erb :footer
+== slim :servent_add_modal

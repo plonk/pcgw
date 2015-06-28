@@ -1,0 +1,17 @@
+doctype html
+html lang="ja"
+  head
+    title
+      | Peercast Gateway
+      - if content_for? :title
+        |  / 
+        == yield_content(:title)
+    == erb :common_head
+    == yield_content(:head)
+  body
+    == erb :navbar
+
+    .container
+      == yield
+
+    == erb :footer

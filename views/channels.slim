@@ -1,34 +1,26 @@
-doctype html
-html
-  head
-    title Peercast Gateway
-    == erb :common_head
-  body
-    == erb :navbar
+- content_for :title do
+  | 配信中のチャンネル
 
-  .container
-    h1 配信中のチャンネル
+h1 配信中のチャンネル
 
-    table.table
-      tr
-        th チャンネル名
-        th 状態
-        th ID
-        - if @user.admin?
-          th アクション
+table.table
+  tr
+    th チャンネル名
+    th 状態
+    th ID
+    - if @user.admin?
+      th アクション
 
-      - channels.each do |ch|
-        tr
-          td
-            a href="/profile/#{ch.user.id}"
-              img.img-rounded width="28" src=ch.user.image alt=ch.user.name
-            = ch.info['info']['name']
-          td
-            = ch.status['status']
-          td
-            = ch.gnu_id
-          - if @user.admin?
-            td
-              == slim :channel_controls, locals: { ch: ch }
-
-    == erb :footer
+  - channels.each do |ch|
+    tr
+      td
+        a href="/profile/#{ch.user.id}"
+          img.img-rounded width="28" src=ch.user.image alt=ch.user.name
+        = ch.info['info']['name']
+      td
+        = ch.status['status']
+      td
+        = ch.gnu_id
+      - if @user.admin?
+        td
+          == slim :channel_controls, locals: { ch: ch }
