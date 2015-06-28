@@ -17,3 +17,7 @@ end
 task :dbconsole do
   system("sqlite3 ./db/pcgw.db")
 end
+
+task :run do
+   system("rerun -i '**/*.{slim,erb}' bundle exec rackup")
+end
