@@ -60,7 +60,7 @@ class Pcgw < Sinatra::Base
       connections = @channel.connections.select { |c| c.type == "relay" }
 
       @connections = slim :connections, locals: { channel: @channel, connections: connections }
-      js = erb :update
+      js = erb :update, layout: false
 
       [200,
        { 'Content-Type' => 'text/javascript', 'Content-Length' => js.bytesize.to_s },

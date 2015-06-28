@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 require 'jimson'
 require 'sinatra/base'
+require 'sinatra/content_for'
 require 'active_support/core_ext'
 require 'omniauth-twitter'
 require 'active_record'
@@ -21,6 +22,7 @@ class Pcgw < Sinatra::Base
   include Logging
 
   helpers Sinatra::Cookies
+  helpers Sinatra::ContentFor
   # delete や patch などのメソッドが使えるようにする
   use Rack::MethodOverride
 

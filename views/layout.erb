@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang=ja>
+  <head>
+    <title>Peercast Gateway <%= yield_content(:title).blank? ? '' : "/ " + yield_content(:title) %></title>
+    <%= erb :common_head %>
+    <%= yield_content(:head) %>
+  </head>
+  <body>
+    <%= erb :navbar %>
+
+    <div class=container>
+      <%= yield %>
+    </div>
+
+    <%= erb :footer %>
+  </body>
+</html>

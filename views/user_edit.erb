@@ -1,60 +1,44 @@
-<!doctype html>
-<html lang=ja>
-  <head>
-    <title>Peercast Gateway &mdash; <%= h @content_user.name %></title>
-    <%= erb :common_head %>
-    <style>
-      input { vertical-align: baseline !important  }
-    </style>
-  </head>
-  <body>
-    <%= erb :navbar %>
+<% content_for :title do %><%= h @content_user.name %><% end %>
 
-    <div class=container>
-      <form action="/users/<%= @content_user.id %>" method="POST">
-        <input type=hidden name="_method" value="PATCH">
+<form action="/users/<%= @content_user.id %>" method="POST">
+  <input type=hidden name="_method" value="PATCH">
 
-        <table class="table">
-          <tr>
-            <th>ID</th>
-            <td><input class="form-control" readonly type="text" name="id" value="<%= h @content_user.id %>"></td>
-          </tr>
+  <table class="table">
+    <tr>
+      <th>ID</th>
+      <td><input class="form-control" readonly type="text" name="id" value="<%= h @content_user.id %>"></td>
+    </tr>
 
-          <tr>
-            <th>名前</th>
-            <td><input class="form-control" type="text" name="name" value="<%= h @content_user.name %>"></td>
-          </tr>
+    <tr>
+      <th>名前</th>
+      <td><input class="form-control" type="text" name="name" value="<%= h @content_user.name %>"></td>
+    </tr>
 
-          <tr>
-            <th>Twitter ID</th>
-            <td><input class="form-control" type="text" name="twitter_id" value="<%= h @content_user.twitter_id %>"></td>
-          </tr>
+    <tr>
+      <th>Twitter ID</th>
+      <td><input class="form-control" type="text" name="twitter_id" value="<%= h @content_user.twitter_id %>"></td>
+    </tr>
 
-          <tr>
-            <th>画像URL</th>
-            <td><input class="form-control" type="text" name="image" value="<%= h @content_user.image %>"></td>
-          </tr>
+    <tr>
+      <th>画像URL</th>
+      <td><input class="form-control" type="text" name="image" value="<%= h @content_user.image %>"></td>
+    </tr>
 
-          <tr>
-            <th>管理者</th>
-            <td>
-              <input class="form-control" type="checkbox" name="admin" value="true" <%= @content_user.admin && 'checked' %>>
-            </td>
-          </tr>
+    <tr>
+      <th>管理者</th>
+      <td>
+        <input class="form-control" type="checkbox" name="admin" value="true" <%= @content_user.admin && 'checked' %>>
+      </td>
+    </tr>
 
-          <tr>
-            <th>一時停止中</th>
-            <td><input class="form-control" type="checkbox" name="suspended" value="true" <%= @content_user.suspended && 'checked' %>></td>
-          </tr>
-        </table>
+    <tr>
+      <th>一時停止中</th>
+      <td><input class="form-control" type="checkbox" name="suspended" value="true" <%= @content_user.suspended && 'checked' %>></td>
+    </tr>
+  </table>
 
-        <div>
-          <a href="/users/<%= h @content_user.id %>" class="btn btn-primary">戻る</a>
-          <button type="submit" class="btn btn-warning">変更を保存</button>
-        </div>
-      </form>
-    </div>
-
-    <%= erb :footer %>
-  </body>
-</html>
+  <div>
+    <a href="/users/<%= h @content_user.id %>" class="btn btn-primary">戻る</a>
+    <button type="submit" class="btn btn-warning">変更を保存</button>
+  </div>
+</form>

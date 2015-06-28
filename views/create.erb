@@ -1,23 +1,7 @@
-<!doctype html>
-<html lang=ja>
-  <head>
-    <title>Peercast Gateway &mdash; チャンネル作成</title>
-    <%= erb :common_head %>
-  </head>
+<h1>チャンネル作成</h1>
 
-  <body>
-    <%= erb :navbar %>
+<% if @user.never_broadcast? %>
+  <%= slim :create_help %>
+<% end %>
 
-    <div class=container>
-      <h1>チャンネル作成</h1>
-
-      <% if @user.never_broadcast? %>
-        <%= slim :create_help %>
-      <% end %>
-
-      <%= slim :form, locals: { template: template, servents: servents } %>
-    </div>
-
-    <%= erb :footer %>
-  </body>
-</html>
+<%= slim :form, locals: { template: template, servents: servents } %>

@@ -1,18 +1,4 @@
-<!doctype html>
-<html lang=ja>
-  <head>
-    <title>Peercast Gateway &dash; ユーザーを削除しました</title>
-    <%= erb :common_head %>
-  </head>
-  <body>
-    <%= erb :navbar %>
-
-    <div class=container>
-      <h1>ユーザーを削除しました</h1>
-      <p class="text-success">ユーザーID <%= h @content_user.id %>を削除しました。</p>
-      <a href="/users" class="btn btn-primary">OK</a>
-    </div>
-
-    <%= erb :footer %>
-  </body>
-</html>
+<% content_for :title do %>ユーザーを削除しました<% end %>
+<h1>ユーザーを削除しました</h1>
+<p class="text-success">ユーザーID <%= h @content_user.id %>を削除しました。</p>
+<a href="/users" class="btn btn-primary">OK</a>

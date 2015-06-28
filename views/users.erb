@@ -1,56 +1,29 @@
-<!doctype html>
-<html lang=ja>
-  <head>
-    <title>Peercast Gateway &mdash; ユーザー</title>
-    <%= erb :common_head %>
-  </head>
-  <body>
-    <%= erb :navbar %>
+<% content_for :title do %>利用者一覧<% end %>
 
-    <div class=container>
+<h1>利用者一覧</h1>
 
-      <h1>ユーザー</h1>
+<p><%=h @users.size %>&thinsp;人</p>
 
-      <p><%=h @users.size %>&thinsp;人</p>
+<table class="table">
+  <tr> <th>ID</th> <th>ユーザー名</th> <th>最終ログオン</th> <th>備考</th> </tr>
 
-      <table class="table">
-        <tr>
-          <th>
-            ID
-          </th>
-          <th>
-            ユーザー名
-          </th>
-          <th>
-            最終ログオン
-          </th>
-          <th>
-            備考
-          </th>
-        </tr>
-
-        <% @users.each do |user| %>
-          <tr>
-            <td><%= h user.id %></td>
-            <td>
-              <img width="24" src="<%= user.image %>"
-                   alt="<%= user.name %>"
-                   class="img-rounded">
-              <a href="/users/<%= h user.id %>">
-                <%= h user.name %>
-              </a>
-            </td>
-            <td>
-              <%= user.logged_on_at ? user.logged_on_at.localtime.strftime('%Y/%m/%d %H:%M') : 'n/a' %>
-            </td>
-            <td>
-              <%= user_status_raw(user) %>
-            </td>
-          </tr>
-        <% end %>
-      </table>
-    </div>
-
-    <%= erb :footer %>
-  </body>
-</html>
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= h user.id %></td>
+      <td>
+        <img width="24" src="<%= user.image %>"
+             alt="<%= user.name %>"
+             class="img-rounded">
+        <a href="/users/<%= h user.id %>">
+          <%= h user.name %>
+        </a>
+      </td>
+      <td>
+        <%= user.logged_on_at ? user.logged_on_at.localtime.strftime('%Y/%m/%d %H:%M') : 'n/a' %>
+      </td>
+      <td>
+        <%= user_status_raw(user) %>
+      </td>
+    </tr>
+  <% end %>
+</table>
