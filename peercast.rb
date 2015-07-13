@@ -1,11 +1,11 @@
 require 'jimson'
 
 class Peercast
-  class Unauthorized < StandardError
-    attr_accessor :host, :port
+  class Unavailable < StandardError
+    attr_accessor :host, :port, :message
 
-    def initialize(host, port)
-      @host, @port = host, port
+    def initialize(host, port, message)
+      @host, @port, @message = host, port, message
     end
   end
 
@@ -34,8 +34,8 @@ class Peercast
     end
     STDERR.puts("%s: %d msec elapsed" % [name, span*1000]) if Peercast.debug
     value
-  rescue RestClient::Unauthorized => e
-    raise Unauthorized.new(host, port), e.message
+  rescue Errno::ECONNREFUSED, RestClient::Unauthorized => e
+    raise Unavailable.new(host, port, e.message)
   end
 
   private

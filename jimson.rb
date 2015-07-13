@@ -106,18 +106,16 @@ class Pcgw < Sinatra::Base
     ActiveRecord::Base.connection.close
   end
 
-  error Peercast::Unauthorized do
+  error Peercast::Unavailable do
     e = env['sinatra.error']
     servent = Servent.where(hostname: e.host, port: e.port).first
-    if servent
-      servent.enabled = false
-      servent.save
-      msg = "servent id #{servent.id} (#{servent.name}) disabled (unauthorized)"
-      log.error(msg)
-      msg
-    else
-      "unknown servent returned unauthorized error???"
-    end
+    halt 'servent missing' unless servent
+
+    msg = "servent id #{servent.id} (#{servent.name}) connection error (#{e.message})"
+    log.error(msg)
+    @message = msg
+
+    [500, {}, erb(:error)]
   end
 
 end
