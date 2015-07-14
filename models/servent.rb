@@ -16,6 +16,8 @@ class Servent < ActiveRecord::Base
 
   def api
     opts = auth_required? ? { 'authorization' => create_basic_authorization_header(auth_id, passwd) } : {}
+    # PecaST 1.9 で入った Cross Site Request Foregeries 対策に適応する
+    opts['x-requested-with'] = 'XMLHttpRequest'
     Peercast.new(hostname, port, opts)
   end
 
