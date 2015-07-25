@@ -10,7 +10,7 @@ class Pcgw < Sinatra::Base
 
       log.info("user #{user.id} logged in")
 
-      redirect '/home'
+      redirect env['omniauth.origin']
     else
       user = User.new(name:       env['omniauth.auth']['info']['name'],
                       image:      env['omniauth.auth']['info']['image'],

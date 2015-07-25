@@ -98,7 +98,7 @@ class Pcgw < Sinatra::Base
       @user.save
     else
       # ログインされていなかったらログインさせる。
-      redirect to('/auth/twitter')
+      redirect to("/auth/twitter?origin=#{env['REQUEST_URI']}")
     end
   end
 
