@@ -29,7 +29,7 @@ class Pcgw < Sinatra::Base
 
   # ソースストリーム接続のリスタート
   get '/channels/:id/reset' do
-    halt 403, "permission denied" unless @channel.user == @user
+    halt 403, "permission denied" unless @channel.user == @user or @user.admin?
 
     src = @channel.connections.find { |c| c.type == "source" }
     halt 500, "source connection not found" unless src
