@@ -11,10 +11,10 @@
 
 == erb :onair, locals: { max_channels: max_channels }
 
+== erb :associate
+
 .panel.panel-default
   .panel-heading 最近の配信
   == slim :program_table, locals: { programs: recent_programs }
 
 a.btn.btn-default href="/programs" もっと見る&thinsp;&raquo;
-
-== erb :associate
