@@ -15,8 +15,8 @@ table.table
       th アクション
 
 
-  - [nil, *programs].each_cons(2) do |prev, curr|
-    tr
+  - [nil, *programs].each_cons(2).with_index(1) do |(prev, curr), index|
+    tr id="prog#{index}"
       / 同じユーザーの上の項目と同じならば「〃」にする
       - ditto = -> (field, &block) { (!prev || prev.user != curr.user || prev.send(field) != curr.send(field)) ? block.() : '〃' }
       / ユーザー画像
