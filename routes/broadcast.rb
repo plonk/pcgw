@@ -154,7 +154,14 @@ class Pcgw < Sinatra::Base
       when -1
         servent = Servent.request_one
       else
-        servent = Servent.find(serv_id) rescue nil
+        begin
+          servent = Servent.find(serv_id)
+        rescue
+          raise '指定のサーバーが見付かりません。'
+        end
+        unless servent.enabled && servent.vacancies > 0
+          raise '指定のサーバーは利用不可です。'
+        end
       end
       raise '利用可能な配信サーバーがありません。' unless servent
       breq = BroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip)
