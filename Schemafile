@@ -14,6 +14,7 @@ create_table "channels", force: true do |t|
   t.string  "gnu_id"
   t.belongs_to :user, index: true
   t.belongs_to :servent, index: true
+  t.datetime "last_active_at"
 end
 
 create_table "users", force: true do |t|

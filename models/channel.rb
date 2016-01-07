@@ -9,6 +9,9 @@ class Channel < ActiveRecord::Base
   # info は JSON API、channel_info は ActiveRecord
   has_one :channel_info
 
+  class ChannelNotFoundError < StandardError
+  end
+
   def status
     set_status_info unless @status
     @status
@@ -21,9 +24,22 @@ class Channel < ActiveRecord::Base
 
   def set_status_info
     dict = servent.api.getChannels.find { |ch| ch['channelId'] == gnu_id }
-    raise 'channel not found' unless dict
+    raise ChannelNotFoundError unless dict
     @status = dict['status']
+    if @status['status'] == "Receiving"
+      self.last_active_at = Time.now
+      save
+    end
     @info = { 'info' => dict['info'], 'track' => dict['track'], 'yellowPages' => dict['yellowPages'] }
+  end
+
+  def inactive_for
+    set_status_info unless @info
+    if !last_active_at
+      @status['uptime'].to_f
+    else
+      Time.now - last_active_at
+    end
   end
 
   def playlist_url
@@ -68,7 +84,7 @@ class Channel < ActiveRecord::Base
   def exist?
     status
     true
-  rescue Jimson::Client::Error
+  rescue Jimson::Client::Error, ChannelNotFoundError
     false
   end
 

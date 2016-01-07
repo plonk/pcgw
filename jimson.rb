@@ -61,11 +61,15 @@ class Pcgw < Sinatra::Base
     rescue RestClient::ResourceNotFound
       halt 500, 'PeerCast Station は API による操作を受け付けていません。'
     end
+    # チャンネルがサーバントで生きているか確認。
     Channel.all.each do |ch|
-      live_chids = ch.servent.api.getChannels.map { |ch| ch['channelId'] }
-      unless live_chids.include? ch.gnu_id
+      if !ch.exist?
         ch.destroy
         log.error("stale channel entry #{ch.id}(#{ch.gnu_id}) deleted")
+      elsif ch.inactive_for >= 30.minutes
+        ch.servent.api.stopChannel(ch.gnu_id)
+        ch.destroy
+        log.info("channel #{ch.id}(#{ch.gnu_id}) destroyed for inactivity")
       end
     end
     get_user
