@@ -54,6 +54,9 @@ class Pcgw < Sinatra::Base
   end
 
   before do
+    # SQLiteに同期をOSに任せるように指定する。
+    ActiveRecord::Base.connection.execute('PRAGMA synchronous=OFF')
+
     begin
       @yellow_pages = YellowPage.all
     rescue RestClient::Unauthorized
