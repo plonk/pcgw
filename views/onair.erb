@@ -3,41 +3,51 @@
   <span style="color: #ffa922; font-weight: bold; font-size: 200%"><%= @channels.size %></span> / <%= max_channels %> <%= jp_words 'チャンネルが配信中' %>
 </h2>
 
-<div class="panel panel-default">
-  <table class="table">
-    <tr>
-      <th>チャンネル</th>
-      <th class="hidden-xs">配信者</th>
-      <th>内容</th>
-      <th>リスナー</th>
-      <th class="hidden-xs">配信時間</th>
-      <th>YP</th>
-    </tr>
-    <% @channels.each do |ch| %>
-    <tr>
-      <td>
-        <div style="display: inline-block; text-align: center; width: 50px; margin-right: 0.8em">
-          <img class="img-rounded" height="28" src="/channels/<%= h ch.id %>/screenshot">
-        </div>
+<div class="row">
+  <% @channels.each do |ch| %>
+  <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+    <div class="thumbnail" style="padding: 0px; max-width: 300px; margin-left: auto; margin-right: auto">
+      <div style="display: inline-block; text-align: center; width: 100%; margin-right: 0.8em; position: relative">
         <a href="/channels/<%= h ch.id %>/play">
-          <%= h ch.channel_info.channel %>
-        </a>
-      </td>
-      <td class="hidden-xs">
-        <a href="/profile/<%= ch.user.id %>">
-          <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded" style="margin-right: 0.8em">
-          <%= h ch.user.name %>
-        </a>
-      </td>
-      <td>
-        <a href="<%= h ch.channel_info.url %>">
-          <%= h ch.channel_info.summary %>
-        </a>
-      </td>
-      <td><%= h ch.listener_count_display %></td>
-      <td class="hidden-xs"><%= h IndexTxt.uptime_fmt(ch.status['uptime']) %></td>
-      <td><%= slim :yellow_page_links, locals: { yp_names: ch.info['yellowPages'].map { |y| y['name'] } } %></td>
-    </tr>
-    <% end %>
-  </table>
+	  <img style="width: 100%; border-top-left-radius: 4px; border-top-right-radius: 4px" src="/channels/<%= h ch.id %>/screenshot">
+	  <span style="font-size: 36px; position: absolute; top: calc(50% - 18px); left: calc(50% - 18px)">
+	    <span class="glyphicon glyphicon-play"></span>
+	  </span>
+	</a>
+
+      </div>
+
+      <div class="caption">
+	<p style="position: relative">
+	  <a href="/profile/<%= ch.user.id %>">
+	    <b>
+	      <img width="28" src="<%= ch.user.image %>" alt="<%= ch.user.name %>" class="img-rounded" style="margin-right: 5px">
+	      <%= h ch.channel_info.channel %>
+	      <!-- h ch.user.name -->
+
+	    </b>
+	  </a>
+
+	  <small style="position: absolute; right: 0px; text-align: left">
+	    <span class="glyphicon glyphicon-time"></span>
+	    <%= h IndexTxt.uptime_fmt(ch.status['uptime']) %>
+	  </small>
+	</p>
+
+	<p><%= h ch.channel_info.summary %></p>
+
+	<p>
+	  <span style="margin-right: 20px">
+	    <span class="glyphicon glyphicon-user"></span>
+	    <%= h ch.listener_count_display %>
+	  </span>
+	  <span style="margin-right: 20px">
+	    <span class="glyphicon glyphicon-book"></span>
+	    <%= slim :yellow_page_links, locals: { yp_names: ch.info['yellowPages'].map { |y| y['name'] } } %>
+	  </span>
+	</p>
+      </div>
+    </div>
+  </div>
+  <% end %>
 </div>
