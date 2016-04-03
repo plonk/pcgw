@@ -33,13 +33,21 @@
           == ditto.(:genre) do
             = default_to('㊙', curr.genre_proper)
         td.hidden-xs
-          a href=curr.url
+          - if curr.url.empty?
             == ditto.(:desc) do
               = default_to('㊙', curr.desc)
+          - else
+            a href=curr.url
+              == ditto.(:desc) do
+                = default_to('㊙', curr.desc)
         td.visible-xs
-          a href=curr.url
+          - if curr.url.empty?
             == ditto.(:summary) do
               = curr.summary
+          - else
+            a href=curr.url
+              == ditto.(:summary) do
+                = curr.summary
         td
           - if curr.terminated_at
             = TimeUtil.render_time_range(curr.created_at.localtime, curr.terminated_at.localtime)
@@ -48,3 +56,4 @@
         - if block_given?
           td
             == yield curr
+                    
