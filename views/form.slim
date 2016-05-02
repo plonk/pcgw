@@ -9,42 +9,42 @@ p style="color: red"
 
 form action="/broadcast" method="POST" role="form"
 
-  div class="form-group"
+  .form-group
     label for="channel" チャンネル名
     input class="form-control" type="text" name="channel" required=true value=template.channel
 
-  div class="form-group"
+  .form-group
     label for="genre" ジャンル
     input class="form-control" type="text" name="genre" value=template.genre
 
-  div class="form-group"
+  .form-group
     label for="desc" 詳細
     input class="form-control" type="text" name="desc" value=template.desc
 
-  div class="form-group"
+  .form-group
     label for="comment" コメント
     input class="form-control" type="text" name="comment" value=template.comment
 
-  div class="form-group"
+  .form-group
     label for="url" コンタクト&thinsp;URL
     input class="form-control" name="url" type="url" value=template.url
 
-  div class="form-group"
+  .form-group
     label for="type" ストリームタイプ
-    div class="radio"
+    .radio
       label title="Flash Video (Open Broadcaster Software などはこちら)"
         input type="radio" name="stream_type" value="FLV" required=true checked=(template.stream_type == 'FLV')
         | FLV
 
-    div class="radio"
+    .radio
       label title="Windows Media Video (Windows Media Encoder や Expression Encoder はこちら)"
         input type="radio" name="stream_type" value="WMV" checked=(template.stream_type == 'WMV')
         | WMV
 
-  div class="form-group"
+  .form-group
     label for="yp" 掲載YP
     - @yellow_pages.each do |yp|
-      div class="radio"
+      .radio
         label
           input required="required" type="radio" name="yp" value="#{yp.name}" checked=(template.yp == yp.name)
           img src=yp.icon
@@ -56,12 +56,12 @@ form action="/broadcast" method="POST" role="form"
             span.glyphicon.glyphicon-new-window
             | &nbsp;利用規約
     - if @user.admin
-      div class="radio"
+      .radio
         label.text-warning
           input required="required" type="radio" name="yp" value="" checked=template.yp.blank?
           | 掲載しない
 
-  div class="form-group"
+  .form-group
     label for="servent" 配信サーバー
     .radio
       label.text-success
