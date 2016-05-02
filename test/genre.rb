@@ -6,6 +6,14 @@ describe Genre, 'コマンドを含む文字列で初期化された時' do
     expect(genre.proper).to eq('Game')
   end
 
+  it 'コマンドを含まないジャンルを理解する' do
+    genre = Genre.new('Game')
+    expect(genre.proper).to eq('Game')
+    expect(genre.minimum_bandwidth).to eq('')
+    expect(genre.hide_listener_count?).to eq(false)
+    expect(genre.namespace).to eq ''
+  end
+
   it 'リスナー数非表示のコマンドを理解する' do
     g1 = Genre.new('sp?Game')
     expect(g1.hide_listener_count?).to eq true
@@ -14,7 +22,7 @@ describe Genre, 'コマンドを含む文字列で初期化された時' do
     expect(g2.hide_listener_count?).to eq false
   end
 
-  it '聴衆限定のコマンドを理解する' do
+  it '視聴回線制約のコマンドを理解する' do
     g1 = Genre.new('sp@Game')
     expect(g1.minimum_bandwidth).to eq '@'
 
