@@ -9,8 +9,12 @@ class ChannelInfo < ActiveRecord::Base
   end
 
   def summary
-    [desc, comment, genre_proper, '㊙']
-      .find { |field| not field.blank? }
+    if !desc.blank? && !comment.blank?
+      "#{desc}。#{comment}"
+    else
+      [desc, comment, genre_proper, '㊙']
+        .find { |field| not field.blank? }
+    end
   end
 
   def time_range
