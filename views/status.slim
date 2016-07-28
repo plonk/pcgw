@@ -103,16 +103,22 @@ javascript:
   }
   $(function() {
     changeInterval(3);
-    $.getScript('/channels/#{@channel.id}/update');
+    var timeoutSec = 10;
+    var audio = new Audio("/alert.wav");
     var recur = function() {
-      $.getScript('/channels/#{@channel.id}/update');
-      setTimeout(recur, g_interval * 1000);
+      $.ajax({
+        url: '/channels/#{@channel.id}/update',
+        dataType: "script",
+        success: function (script, textStatus, jqxhr) {
+          setTimeout(recur, g_interval * 1000);
+        },
+        error: function (jqxhr, textStatus, exception) {
+          audio.play();
+          alert(timeoutSec+"秒以内にサーバーから応答を受け取ることができませんでした。\nインターネットに接続していない可能性があります。");
+          setTimeout(recur, g_interval * 1000);
+        },
+        timeout: timeoutSec * 1000,
+      });
     };
-    setTimeout(recur, g_interval * 1000);
-  });
-
-  $(function() {
-    $(window).on('beforeunload', function () {
-      return 'まだチャンネルが配信中のようです。';
-    });
+    recur();
   });
