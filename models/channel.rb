@@ -84,7 +84,7 @@ class Channel < ActiveRecord::Base
   def exist?
     status
     true
-  rescue Jimson::Client::Error, ChannelNotFoundError
+  rescue ChannelNotFoundError
     false
   end
 
