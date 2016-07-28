@@ -110,9 +110,3 @@ javascript:
     };
     setTimeout(recur, g_interval * 1000);
   });
-
-  $(function() {
-    $(window).on('beforeunload', function () {
-      return 'まだチャンネルが配信中のようです。';
-    });
-  });
