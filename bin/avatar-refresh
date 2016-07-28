@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+# Twitterプロフィール画像更新スクリプト
+
+require 'twitter'
+require 'uri'
+
+APP_DIR = File.dirname File.dirname File.absolute_path(__FILE__)
+Dir.chdir(APP_DIR)
+
+require_relative '../init'
+require_relative '../models/init'
+require_relative '../logging'
+
+Logging.logger = Logger.new('log/pcgw.log', 'daily')
+
+def alive?(url_string)
+  url = URI(url_string)
+  Net::HTTP.start(url.hostname, 80) { |http|
+    response = http.head(url.path)
+    return response.code == '200'
+  }
+end
+
+client = Twitter::REST::Client.new do |config|
+  config.consumer_key = ENV['CONSUMER_KEY']
+  config.consumer_secret = ENV['CONSUMER_SECRET']
+end
+
+Logging.logger.info "プロフィール画像の更新処理を始めます。"
+User.all.each do |user|
+  if alive?(user.image)
+    Logging.logger.info "ユーザー #{user.id}(#{user.name}) のプロフィール画像は最新です。"
+  else
+    begin
+      twitter_user = client.user(user.twitter_id)
+    rescue Twitter::Error::NotFound
+      Logging.logger.info "ユーザー #{user.id}(#{user.name}) の Twitter アカウントがありません。"
+      next
+    end
+    Logging.logger.info "ユーザー #{user.id}(#{user.name}) の画像URLを更新します。"
+    Logging.logger.info "#{user.image} → "
+    user.image = twitter_user.profile_image_url(:normal).to_s
+    Logging.logger.info "#{user.image}"
+    user.save!
+  end
+end
+Logging.logger.info "プロフィール画像の更新処理が終わりました。"
