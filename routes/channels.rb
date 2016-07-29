@@ -17,7 +17,7 @@ class Pcgw < Sinatra::Base
         @link_url = @yellow_pages.find { |y| y.name == @channel.info['yellowPages'].first['name'] }.top
         @yp_name = "【#{@channel.info['yellowPages'].first['name']}】"
       else
-        @link_url = 'http://pcgw.sun.ddns.vc/'
+        @link_url = 'http://pcgw.pgw.jp/'
       end
       @data_text = "【PeerCastで配信中！】#{@info['info']['name']}「#{@info['info']['desc']}」 #{@info['info']['url']} #{@yp_name}"
 
