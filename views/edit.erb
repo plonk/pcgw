@@ -1,3 +1,6 @@
+<script src="/genre_info.js"></script>
+<script src="/genre_info_view.js"></script>
+
 <form action="/channels/<%= @channel_id %>" method="POST" role="form">
 
   <div class="form-group">
@@ -7,7 +10,32 @@
 
   <div class="form-group">
     <label for=genre>ジャンル</label>
-    <input class="form-control" type=text name="genre" value="<%= h @info['genre'] %>">
+    <input class="form-control" type=text name="genre" value="<%= h @info['genre'] %>" id="genre-input-text">
+  </div>
+
+  <div class="form-group" style="text-align: right">
+    <div class="form-inline">
+      視聴回線制限 <select class="form-control" id="genre-input-menu">
+        <option title="視聴に制限を設けません。" value="0">
+          なし
+        </option>
+        <option title="YPのポートチェックをクリアしている人だけが視聴できます。" value="1">
+          ポート解放
+        </option>
+        <option title="YPの帯域チェックで、配信ビットレート以上の上り帯域が確認されている人だけが視聴できます。" value="2">
+          配信ビットレート以上の帯域
+        </option>
+        <option title="YPの帯域チェックで、2〜3Mbps の十分に高速な上り帯域が確認されている人だけが視聴できます。" value="3">
+          高速回線
+        </option>
+      </select>
+      <div class="checkbox">
+        <label><input id="genre-input-hide-status" type="checkbox" />リスナー数を隠す</label>
+      </div>
+      <div class="checkbox">
+        <label><input id="genre-input-no-statistics" type="checkbox" />YPに配信履歴を記録しない</label>
+      </div>
+    </div>
   </div>
 
   <div class="form-group">

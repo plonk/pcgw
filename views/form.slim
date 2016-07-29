@@ -7,6 +7,9 @@
 p style="color: red"
   = @message
 
+script src="/genre_info.js"
+script src="/genre_info_view.js"
+
 form action="/broadcast" method="POST" role="form"
 
   .form-group
@@ -15,7 +18,24 @@ form action="/broadcast" method="POST" role="form"
 
   .form-group
     label for="genre" ジャンル
-    input class="form-control" type="text" name="genre" value=template.genre
+    input class="form-control" type="text" name="genre" value=template.genre id="genre-input-text"
+
+  .form-group style="text-align: right"
+    .form-inline
+      | 視聴回線制限 
+      select.form-control#genre-input-menu
+        option value="0" title="視聴に制限を設けません。" なし
+        option value="1" title="YPのポートチェックをクリアしている人だけが視聴できます。" ポート解放
+        option value="2" title="YPの帯域チェックで、配信ビットレート以上の上り帯域が確認されている人だけが視聴できます。" 配信ビットレート以上の帯域
+        option value="3" title="YPの帯域チェックで、2〜3Mbps の十分に高速な上り帯域が確認されている人だけが視聴できます。" 高速回線
+      .checkbox
+        label
+          input#genre-input-hide-status type="checkbox"
+          | リスナー数を隠す
+      .checkbox
+        label
+          input#genre-input-no-statistics type="checkbox"
+          | YPに配信履歴を記録しない
 
   .form-group
     label for="desc" 詳細
@@ -61,17 +81,20 @@ form action="/broadcast" method="POST" role="form"
           input required="required" type="radio" name="yp" value="" checked=template.yp.blank?
           | 掲載しない
 
-  .form-group
-    label for="servent" 配信サーバー
-    .radio
-      label.text-success
-        input required="required" type="radio" name="servent" value="-1" checked=true
-        strong おまかせ
-    - servents.each do |serv|
+  - if servents.size == 1
+    input type="hidden" name="servent" value="-1"
+  - else
+    .form-group
+      label for="servent" 配信サーバー
       .radio
-        label
-          input required="required" type="radio" name="servent" value=serv.id
-          | #{serv.name} (#{serv.hostname}:#{serv.port})
+        label.text-success
+          input required="required" type="radio" name="servent" value="-1" checked=true
+          strong おまかせ
+      - servents.each do |serv|
+        .radio
+          label
+            input required="required" type="radio" name="servent" value=serv.id
+            | #{serv.name} (#{serv.hostname}:#{serv.port})
 
   button type="submit" class="btn btn-primary" 開始
 
