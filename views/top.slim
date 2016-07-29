@@ -1,11 +1,7 @@
 / max_channels: Integer
 / recent_programs:
-/ current_limit: Integer
-/ maxed: true/false
 - content_for :head do
   meta name="description" content="ポート０環境でもピアキャストで配信しましょう。エンコーダー以外要りません。FLV・WMV 両対応。"
-  style
-    | body { margin-bottom: 50vh }
 
 - if NO_NEW_CHANNEL
   p.text-danger メンテナンス中のため、現在チャンネルの作成はできません。
@@ -17,15 +13,6 @@
 
 .panel.panel-default
   .panel-heading 最近の配信
-  - if @user
-    == slim :program_table, locals: { programs: recent_programs } do |program|
-      - if @user == program.user
-        a.btn.btn-xs.btn-default href="/create?template=#{program.id}" title="フォームにこの情報を入力します。" 続きを配信 &raquo;
-  - else
-    == slim :program_table, locals: { programs: recent_programs }
+  == slim :program_table, locals: { programs: recent_programs }
 
-- if maxed
-  a.btn.btn-default href="/programs" 月別履歴
-- else
-  a.btn.btn-default href="/?limit=#{current_limit+10}#prog#{current_limit+1}" もっと見る&thinsp;&raquo;
-
+a.btn.btn-default href="/programs" もっと見る&thinsp;&raquo;

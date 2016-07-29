@@ -15,9 +15,8 @@
       - if block_given?
         th アクション
 
-
-    - [nil, *programs].each_cons(2).with_index(1) do |(prev, curr), index|
-      tr id="prog#{index}"
+    - [nil, *programs].each_cons(2) do |prev, curr|
+      tr
         / 同じユーザーの上の項目と同じならば「〃」にする
         - ditto = -> (field, &block) { (!prev || prev.user != curr.user || prev.send(field) != curr.send(field)) ? block.() : '〃' }
         / ユーザー画像
@@ -41,18 +40,14 @@
               == ditto.(:desc) do
                 = default_to('㊙', curr.desc)
         td.visible-xs
-          - if curr.url.empty?
+          a href=curr.url
             == ditto.(:summary) do
               = curr.summary
-          - else
-            a href=curr.url
-              == ditto.(:summary) do
-                = curr.summary
         td
           - if curr.terminated_at
             = TimeUtil.render_time_range(curr.created_at.localtime, curr.terminated_at.localtime)
           - else
             | #{TimeUtil.render_time(curr.created_at.localtime)} 〜
-        - if block_given?
-          td
+        td
+          - if block_given?
             == yield curr
