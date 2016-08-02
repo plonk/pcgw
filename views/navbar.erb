@@ -10,7 +10,13 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" title="Peercast Gateway" href="/">Peercast Gateway</a>
+      <a class="navbar-brand" title="Peercast Gateway" href="/">
+        Peercast Gateway
+        <% if ENV['PCGW_ENV'] == "development" %>
+        <br>
+        <small class="text-danger" style="float: right; position: relative; transform: translate(3px, -6px)">development</small>
+        <% end %>
+      </a>
     </div>
 
     <div class="collapse navbar-collapse" id="navbar-collapse-1">
