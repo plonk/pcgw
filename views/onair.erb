@@ -1,12 +1,12 @@
 <!-- max_channels: Integer -->
 <div class="panel panel-default">
   <div class="panel-heading">
-    <span style="color: #ffa922; font-weight: bold; font-size: 200%"><%= @channels.size %></span> / <%= max_channels %> <%= jp_words 'チャンネルが配信中' %>
+    <span style="color: #ffa922; font-weight: bold; font-size: 200%"><%= @all_channels.size %></span> / <%= max_channels %> <%= jp_words 'チャンネルが配信中' %>
   </div>
 
-  <% if @channels.any? %>
+  <% if @all_channels.any? %>
   <div class="panel-body">
-    <% @channels.each do |ch| %>
+    <% @all_channels.each do |ch| %>
     <%= erb :card, locals: { channel: ch } %>
     <% end %>
   </div>
