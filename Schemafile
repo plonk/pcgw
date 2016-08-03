@@ -41,6 +41,12 @@ create_table "channel_infos", force: true do |t|
   t.datetime "terminated_at"
 end
 
+create_table "screen_shots", force: true do |t|
+  t.belongs_to :channel_info, index: true
+  t.string "filename"
+  t.datetime "created_at"
+end
+
 create_table "notices", force: true do |t|
   t.text :body
   t.string :title

@@ -9,4 +9,8 @@ require_relative 'notices'
 require_relative 'profile'
 require_relative 'programs'
 require_relative 'servents'
+require_relative 'screen_shots'
 # require_relative 'index_txt'
+if ENV['PCGW_ENV'] == 'development'
+  require_relative 'debug'
+end

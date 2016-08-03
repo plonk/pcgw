@@ -55,12 +55,24 @@ class ScreenShotRefresh
     APP_DIR + '/screenshots'
   end
 
+  def random_128bit
+    32.times.map { rand(16).to_s(16).upcase }.join
+  end
+
+
   def run
     n = Channel.all.to_a.count do |ch|
-      fn = "#{screenshot_dir}/#{ch.gnu_id}.jpg"
-      success = capture(ch, fn)
+      while true
+        filename = "#{random_128bit}.jpg"
+        path = "#{screenshot_dir}/#{filename}"
+        break unless File.exist? path
+      end
+
+      success = capture(ch, path)
       if success
-        system("convert -resize 300x10000 -strip #{fn} #{fn}")
+        system("convert -resize 300x10000 -strip #{path} #{path}")
+        screen_shot = ch.channel_info.screen_shots.build(filename: filename)
+        screen_shot.save!
       end
       success
     end

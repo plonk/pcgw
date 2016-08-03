@@ -3,6 +3,15 @@ require 'active_record'
 # チャンネルの作成履歴
 class ChannelInfo < ActiveRecord::Base
   belongs_to :user
+  has_many :screen_shots, dependent: :destroy
+
+  def primary_screen_shot
+    if screen_shots.empty?
+      nil
+    else
+      screen_shots.order(created_at: :desc)[0]
+    end
+  end
 
   def genre_proper
     Genre.new(genre).proper
