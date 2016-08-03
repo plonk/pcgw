@@ -19,5 +19,5 @@ task :dbconsole do
 end
 
 task :run do
-   system("rerun -i '**/*.{slim,erb}' bundle exec rackup")
+   system("rerun -i '**/*.{slim,erb,js,css}' bundle exec rackup")
 end
