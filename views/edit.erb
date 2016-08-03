@@ -1,3 +1,5 @@
+<script src="/bbs_checker.js"></script>
+
 <form action="/channels/<%= @channel_id %>" method="POST" role="form">
 
   <div class="form-group">
@@ -22,7 +24,8 @@
 
   <div class="form-group">
     <label for=url>コンタクトURL</label>
-    <input class="form-control" type=text name="url" value="<%= h @info['url'] %>">
+    <span id="bbs-checker-indicator" style="float: right"></span>
+    <input class="form-control" id="bbs-checker-input" type=text name="url" value="<%= h @info['url'] %>">
   </div>
 
   <p><button type=submit class="btn btn-primary btn-block">変更を保存</button>

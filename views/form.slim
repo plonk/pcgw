@@ -7,6 +7,8 @@
 p style="color: red"
   = @message
 
+script src="/bbs_checker.js"
+
 form action="/broadcast" method="POST" role="form"
 
   .form-group
@@ -26,8 +28,10 @@ form action="/broadcast" method="POST" role="form"
     input class="form-control" type="text" name="comment" value=template.comment
 
   .form-group
-    label for="url" コンタクト&thinsp;URL
-    input class="form-control" name="url" type="url" value=template.url
+    label for="url"
+      | コンタクト&thinsp;URL
+    span#bbs-checker-indicator style="float: right"
+    input.form-control#bbs-checker-input name="url" type="url" value=template.url
 
   .form-group
     label for="type" ストリームタイプ
