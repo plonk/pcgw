@@ -39,4 +39,9 @@ module TimeUtil
     date_conv(Time.now, time).last
   end
   module_function :render_time
+
+  def render_date(t)
+    "#{t.month}月#{t.day}日"
+  end
+  module_function :render_date
 end
