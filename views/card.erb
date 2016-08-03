@@ -2,7 +2,7 @@
 <div class="thumbnail thumbnail-channel" style="display: inline-block">
   <div style="display: inline-block; text-align: center; width: 100%; position: relative">
     <a href="/channels/<%= h channel.id %>/play" class="thumbnail-channel-play-button">
-      <img src="/programs/<%= h channel.channel_info.id %>/screen_shot">
+      <img src="<%= h channel.channel_info.primary_screen_shot.path %>">
       <span class="glyphicon glyphicon-play"></span>
     </a>
 
