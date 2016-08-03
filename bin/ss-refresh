@@ -36,8 +36,11 @@ class ScreenShotRefresh
     Timeout.timeout(30) do
       Process.waitpid(pid)
       log.info "exit status #{$?}"
+      if $? != 0
+	return false
+      end
     end
-    true
+    return true
   rescue Timeout::Error
     # ffmpeg がダウンロードを開始すると 1 回の SIGTERM では死なないので
     # 2 回送る。
@@ -48,7 +51,7 @@ class ScreenShotRefresh
     # 子供の死を看取る
     Process.waitpid(pid)
     log.error('timed out')
-    false
+    return false
   end
 
   def screenshot_dir
