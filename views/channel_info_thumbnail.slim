@@ -1,7 +1,6 @@
 / program: ChannelInfo
 div
-  - ss_path = (program.primary_screen_shot ?  "/screen_shots/#{program.primary_screen_shot.filename}" : "/images/blank_screen.png")
-  img class="img-rounded" src=ss_path style="width: 100px"
+  img class="img-rounded" src=program.primary_screen_shot.path style="width: 100px"
 
   div style="display: inline-block; margin-left: 5px; vertical-align: top; width: calc(100% - 110px)"
     div style="display: inline-block"

@@ -7,7 +7,7 @@ class ChannelInfo < ActiveRecord::Base
 
   def primary_screen_shot
     if screen_shots.empty?
-      nil
+      ScreenShot.new
     else
       screen_shots.order(created_at: :desc)[0]
     end
