@@ -1,0 +1,9 @@
+.panel.panel-default
+  .panel-heading
+    | マイチャンネル
+
+  - if channels.any?
+    .list-group
+      - channels.each do |ch|
+        a.list-group-item href="/channels/#{ch.id}"
+          == slim :horizontal_thumbnail, locals: { channel: ch }

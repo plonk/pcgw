@@ -1,6 +1,8 @@
 - content_for :title do
   | チャンネル / #{@info['info']['name']}
 
+script src="/reloader.js"
+
 .row
   .col-md-8
     h1
@@ -103,8 +105,7 @@
               |  再生
   
   .col-md-4.hidden-sm.hidden-xs
-    - if @user.channels.any?
-      == slim :channel_switcher, locals: { channels: @user.channels }
+    .reloader data-url="/includes/channel_switcher" data-interval=60
 
 javascript:
   var g_interval;

@@ -4,22 +4,12 @@
 - if NO_NEW_CHANNEL
   p class="text-danger" メンテナンス中のため、現在チャンネルの作成はできません。
 
+script src="/reloader.js"
+
 .col-md-8
-  .panel.panel-default
-    .panel-heading
-      | マイチャンネル
+  .reloader data-url="/includes/my_channels" data-interval=60
 
-    - if @channels.any?
-      .list-group
-        - @channels.each do |ch|
-          a.list-group-item href="/channels/#{ch.id}"
-              == slim :horizontal_thumbnail, locals: { channel: ch }
+  .reloader data-url="/includes/my_history" data-interval=60
 
-  .panel.panel-default
-    .panel-heading 前回までの出来事
-    .list-group
-      - recent_programs.each do |program|
-        a.list-group-item href="/programs/#{program.id}"
-          == slim :channel_info_thumbnail, locals: { program: program }
 .col-md-4
-  == erb :onair, locals: { max_channels: max_channels }
+  .reloader data-url="/includes/onair" data-interval=60
