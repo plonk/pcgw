@@ -1,7 +1,15 @@
-<h1>チャンネル作成</h1>
+<div class="row">
+  <div class="col-md-8">
+    <h1>チャンネル作成</h1>
 
-<% if @user.never_broadcast? %>
-  <%= slim :create_help %>
-<% end %>
+    <% if @user.never_broadcast? %>
+    <%= slim :create_help %>
+    <% end %>
 
-<%= slim :form, locals: { template: template, servents: servents } %>
+    <%= slim :form, locals: { template: template, servents: servents } %>
+  </div>
+
+  <div class="hidden-xs hidden-sm col-md-4">
+    <%= slim :select_template, locals: { recent_programs: recent_programs } %>
+  </div>
+</div>

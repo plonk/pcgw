@@ -11,7 +11,7 @@ class Pcgw < Sinatra::Base
   get '/home' do
     @channels = @user.channels
     programs = ChannelInfo.where(user: @user).order(created_at: :desc).limit(10)
-    slim :home, locals: { recent_programs: programs }
+    slim :home, locals: { recent_programs: programs, max_channels: Servent.total_capacity }
   end
 
 end

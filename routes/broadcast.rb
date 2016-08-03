@@ -122,7 +122,9 @@ class Pcgw < Sinatra::Base
       end
     end
 
-    erb :create, locals: { template: template, servents: Servent.enabled }
+    programs = ChannelInfo.where(user: @user).order(created_at: :desc).limit(10)
+
+    erb :create, locals: { template: template, servents: Servent.enabled, recent_programs: programs }
   end
 
   def broadcast_check_params!

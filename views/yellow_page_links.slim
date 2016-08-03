@@ -1,4 +1,8 @@
-- yp_names.each do |name|
-  - yp = @yellow_pages.find { |y| y.name == name }
-  a href=yp.top
-    img src=yp.icon alt=yp.name title=yp.name style="width: 16px; height: 16px; display: inline"
+- if yp_names.empty?
+  | &#x1F6AB;
+- else
+  - yp_names.each do |name|
+    - yp = @yellow_pages.find { |y| y.name == name }
+    a href=yp.top
+      img src=yp.icon alt=yp.name title=yp.name style="width: 16px; height: 16px; display: inline"
+   

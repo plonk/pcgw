@@ -20,7 +20,7 @@ class Pcgw < Sinatra::Base
     false
   end
 
-  get '/programs/:year/:month' do
+  get '/programs/by-date/:year/:month' do
     year  = params['year'].to_i
     month = params['month'].to_i
     halt 400, "date not in range" unless validate_date(year, month)
@@ -62,12 +62,44 @@ class Pcgw < Sinatra::Base
     }
   end
 
+  get '/programs/:id' do |id|
+    program = ChannelInfo.find(id) rescue halt(404, 'entry not found')
+
+    slim :program, locals: { program: program }
+  end
+
+  get '/programs/:id/screen_shot' do |id|
+    program = ChannelInfo.find(id) rescue halt(404, 'entry not found')
+    screen_shot = program.primary_screen_shot
+    if screen_shot
+      return [200, { 'Content-Type' => 'image/jpeg' }, File.read("screenshots/#{screen_shot.filename}")]
+    else
+      redirect to '/images/blank_screen.png'
+    end
+    
+  end
+
+  get '/programs/:id/screen_shots' do |id|
+    program = ChannelInfo.find(id) rescue halt(404, 'entry not found')
+    if get_user != program.user
+      halt 403
+    end
+    slim :screen_shots, locals: { program: program }
+  end
+
   delete '/programs/:id' do |id|
     must_be_admin!(@user)
 
     info = ChannelInfo.find(id) rescue halt(404, 'entry not found')
+    unless info.terminated_at?
+      halt(403, "cannot delete active channel info")
+    end
     if info.destroy
-      redirect back
+      if params[:redirect_path].blank?
+        redirect back
+      else
+        redirect to(params[:redirect_path])
+      end
     else
       '失敗しました。'
     end

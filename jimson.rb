@@ -87,7 +87,14 @@ class Pcgw < Sinatra::Base
 
     # 以下のページはログインしていなくてもアクセスできる。
     # トップページ
-    pass if request.path_info == '/'
+    if request.path_info == '/'
+      if logged_in?
+        redirect to("/home") 
+      else
+        pass
+      end
+    end
+    pass if request.path_info == '/welcome'
     # ヘルプ
     pass if request.path_info =~ %r{^/doc($|/)}
     # プロフィール

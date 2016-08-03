@@ -17,3 +17,23 @@ table.connections { border-collapse: separate; border-spacing: 1em 3px}
 table.calendar td { text-align: center; font-size: 30pt }
 
 table.table tr td { min-height: 44px; vertical-align: middle; }
+
+.thumbnail-channel-play-button .glyphicon-play {
+    font-size: 36px; 
+    position: absolute; 
+    left: calc(50% - 0.4em);
+    top: calc(50% - 0.4em); 
+}
+
+.thumbnail-channel-play-button img {
+    width: 100%;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.thumbnail-channel{
+    padding: 0px; 
+    max-width: 300px; 
+    margin-left: auto;
+    margin-right: auto;
+}

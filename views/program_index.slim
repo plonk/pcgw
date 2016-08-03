@@ -8,6 +8,6 @@
 
   .list-group
     - months.each do |(year, month), count|
-      a.list-group-item href="/programs/#{year}/#{month}"
+      a.list-group-item href="/programs/by-date/#{year}/#{month}"
         | #{year}年#{month}月 
         span.badge #{count}

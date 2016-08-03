@@ -1,0 +1,22 @@
+/ program: ChannelInfo
+
+- content_for :title do
+  | プログラム #{}
+
+div
+  img class="img-rounded" src="/images/blank_screen.png" style="width: 100px"
+
+  div style="display: inline-block; margin-left: 5px; vertical-align: top"
+    div style="display: inline-block"
+      b
+        = program.channel
+      br
+      = program.summary
+hr
+.form-group
+  a.btn.btn-block.btn-default href="/create?template=#{program.id}" 続きを配信 &raquo;
+.form-group
+  form action="/programs/#{program.id}" method="POST"
+    input type="hidden" name="_method" value="DELETE"
+    input type="hidden" name="redirect_path" value="/home"
+    button.btn.btn-warning.btn-block type="submit" 削除

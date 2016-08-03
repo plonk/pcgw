@@ -1,0 +1,11 @@
+.panel.panel-default
+  .panel-heading マイチャンネル
+  .list-group
+    - channels.each do |channel|
+      - program = channel.channel_info
+      a.list-group-item href="/channels/#{channel.id}"
+        - ss_path = (program.primary_screen_shot ?  "/screen_shots/#{program.primary_screen_shot.filename}" : "/images/blank_screen.png")
+        img class="img-rounded" src=ss_path style="width: 50px"
+        div style="display: inline-block; margin-left: 5px; vertical-align: middle;"
+          div style="display: inline-block"
+            = program.channel

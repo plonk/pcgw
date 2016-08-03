@@ -1,0 +1,14 @@
+.panel.panel-default
+  .panel-heading 以前の配信詳細を読み込む
+  .list-group
+    - recent_programs.each do |program|
+      a.list-group-item href="/create?template=#{program.id}"
+        div style="display: inline-block; margin-left: 5px; vertical-align: top;"
+          div style="display: inline-block"
+            b
+              = program.channel
+            small.text-muted
+              | ・
+              = TimeUtil.render_date(program.created_at.localtime)
+            br
+            = program.summary
