@@ -18,8 +18,3 @@ div
         span.glyphicon.glyphicon-user
         |  
         = channel.listener_count_display
-      |  
-      span
-        span.glyphicon.glyphicon-book
-        |  
-        == slim :yellow_page_links, locals: { yp_names: channel.info['yellowPages'].map { |y| y['name'] } }
