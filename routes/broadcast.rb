@@ -187,7 +187,8 @@ class Pcgw < Sinatra::Base
     rescue StandardError => e
       # 必要なフィールドがなかった場合などフォームを再表示する
       @message = e.message
-      erb :create, locals: { template: channel_info, servents: Servent.enabled }
+      programs = ChannelInfo.where(user: @user).order(created_at: :desc).limit(10)
+      erb :create, locals: { template: channel_info, servents: Servent.enabled, recent_programs: programs }
     end
   end
 
