@@ -7,9 +7,7 @@
   - if user.channels.any?
     == slim :profile_onair, locals: { user: user }
 
-.panel.panel-default
-  .panel-heading 最近の配信
-  == slim :program_table, locals: { programs: recent_programs }
+== slim :my_history, locals: { recent_programs: recent_programs }
 
 div
   a href=back class="btn btn-primary" 戻る
