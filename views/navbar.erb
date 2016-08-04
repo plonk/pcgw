@@ -36,9 +36,9 @@
             <img width="34" src="<%= @user.image %>" alt="<%= @user.name %>" class="img-rounded">
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="/home">
+            <li><a href="/profile/<%= h @user.id %>">
                 <strong><%= h @user.name %></strong><br>
-                <small class="metadata">ホームを表示</small></a></li>
+                <small class="metadata">プロフィールを表示</small></a></li>
             <li class=divider></li>
             <% if @user.admin? %>
             <li><a href="/admin"><span class="text-warning">管理</span></a></li>
