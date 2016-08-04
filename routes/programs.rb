@@ -82,7 +82,7 @@ class Pcgw < Sinatra::Base
   get '/programs/:id/screen_shots' do |id|
     program = ChannelInfo.find(id) rescue halt(404, 'entry not found')
     if get_user != program.user
-      halt 403
+      must_be_admin! @user
     end
     slim :screen_shots, locals: { program: program }
   end
