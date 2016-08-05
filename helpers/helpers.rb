@@ -70,7 +70,7 @@ class Pcgw < Sinatra::Base
                    when 'ttps' then 'https'
 		   else $1
                    end
-          "<a href=\"#{scheme}://#{$2}\">#{Rack::Utils.escape_html(phrase)}</a>"
+          "<a href=\"#{scheme}://#{$2}\">#{phrase}</a>"
         else
           phrase
         end
