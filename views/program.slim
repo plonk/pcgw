@@ -19,8 +19,9 @@ div
           = program.url
 
 hr
-.form-group
-  a.btn.btn-block.btn-default href="/create?template=#{program.id}" 続きを配信 &raquo;
+- if @user == program.user
+  .form-group
+    a.btn.btn-block.btn-default href="/create?template=#{program.id}" 続きを配信 &raquo;
 .form-group
   form action="/programs/#{program.id}" method="POST"
     input type="hidden" name="_method" value="DELETE"
