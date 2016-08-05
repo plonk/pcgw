@@ -11,16 +11,14 @@
         = TimeUtil.render_date(program.created_at.localtime)
 - digest.groups.each do |group|
   - if group.posts.empty?
-    / div style="margin-bottom: 20px; display: inline-block"
-      / img src=group.screen_shot.path style="display: block; margin-right:10px; border-radius: 10px; border: solid 10px #555" width="200"
   - else
-    div style="margin-bottom: 20px; overflow: hidden"
+    div style="margin-bottom: 0px; overflow: hidden"
       div style="float: left"
-        img src=group.screen_shot.path style="display: block; margin-right:10px; border-radius: 10px; border: solid 10px #555"
+        img src=group.screen_shot.path style="display: block; margin-top: 0px; margin-right:10px; margin-bottom: 20px; border-radius: 10px; border: solid 10px #555"
 
-      div style="padding-top: 10px"
-        - group.posts.map { |post| Sanitize.fragment(post.body) }.each.with_index do |text, i|
-          div class="#{i==0?'lead':''}" style="overflow: hidden; margin-bottom: 1em; border-left: solid 5px #ccc; padding: 10px"
+      div style="padding-top: 0px; overflow: hidden"
+        - group.posts.map { |post| auto_link(Sanitize.fragment(post.body)) }.each.with_index do |text, i|
+          div class="#{i==0?'lead':''}" style="margin-bottom: 14px; border-left: solid 5px #ccc; padding: 10px"
             == text
 
 p.text-muted

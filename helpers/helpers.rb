@@ -62,6 +62,21 @@ class Pcgw < Sinatra::Base
       end
     end
 
+    def auto_link(text)
+      text.gsub(/(?:[!#$&-;=\?-\[\]_a-z~]|%[0-9a-fA-F]{2})+/) { |phrase|
+        if phrase =~ /^(h?ttps?):\/\/(.*)/ then
+          scheme = case $1
+                   when 'ttp' then 'http'
+                   when 'ttps' then 'https'
+                   end
+          "<a href=\"#{scheme}://#{$2}\">#{Rack::Utils.escape_html(phrase)}</a>"
+        else
+          phrase
+        end
+      }
+    end
+
+
   end
 end
 
