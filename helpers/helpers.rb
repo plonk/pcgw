@@ -68,6 +68,7 @@ class Pcgw < Sinatra::Base
           scheme = case $1
                    when 'ttp' then 'http'
                    when 'ttps' then 'https'
+		   else $1
                    end
           "<a href=\"#{scheme}://#{$2}\">#{Rack::Utils.escape_html(phrase)}</a>"
         else
