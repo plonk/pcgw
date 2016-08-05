@@ -6,7 +6,7 @@ table class="table"
   - user.channels.each do |ch|
     tr
       td
-        img.img-rounded src=ch.channel_info.primary_screen_shot height="28"
+        img.img-rounded src=ch.channel_info.primary_screen_shot.path height="28"
         |  #{ch.info['info']['name']}
       td
         a href=ch.info['info']['url']
