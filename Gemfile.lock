@@ -20,6 +20,7 @@ GEM
     blankslate (3.1.3)
     buftok (0.2.0)
     builder (3.2.2)
+    crass (1.0.2)
     domain_name (0.5.25)
       unf (>= 0.0.5, < 1.0.0)
     equalizer (0.0.10)
@@ -46,10 +47,16 @@ GEM
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
     mime-types (1.25.1)
+    mini_portile2 (2.1.0)
     minitest (5.8.1)
     multi_json (1.7.9)
     multipart-post (2.0.0)
     naught (1.1.0)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
+    nokogumbo (1.4.9)
+      nokogiri
     oauth (0.4.7)
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
@@ -60,6 +67,7 @@ GEM
     omniauth-twitter (1.2.1)
       json (~> 1.3)
       omniauth-oauth (~> 1.1)
+    pkg-config (1.1.7)
     rack (1.4.7)
     rack-flash3 (1.0.5)
       rack
@@ -71,6 +79,10 @@ GEM
       mime-types (~> 1.16)
     ridgepole (0.5.2)
       activerecord (< 4.2.0)
+    sanitize (4.1.0)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.4.4)
+      nokogumbo (~> 1.4.1)
     simple_oauth (0.3.1)
     sinatra (1.4.6)
       rack (~> 1.4)
@@ -119,8 +131,12 @@ DEPENDENCIES
   rack (~> 1.4.5)
   rack-flash3
   ridgepole
+  sanitize
   sinatra
   sinatra-contrib
   slim
   sqlite3
   twitter
+
+BUNDLED WITH
+   1.11.2

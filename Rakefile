@@ -11,7 +11,7 @@ task :dryrun do
 end
 
 task :console do
-  system("pry -r./models/init -e \"ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'db/pcgw.db')\"")
+  system("pry -r./models/init -r./lib/bbs_reader.rb -r./lib/core_ext.rb -e \"ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'db/pcgw.db')\"")
 end
 
 task :dbconsole do

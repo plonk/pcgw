@@ -87,6 +87,17 @@ class Pcgw < Sinatra::Base
     slim :screen_shots, locals: { program: program }
   end
 
+  get '/programs/:id/digest' do |id|
+    program = ChannelInfo.find(id) rescue halt(404, 'entry not found')
+    if Bbs.shitaraba_thread?(program.url)
+      thread = Bbs.thread_from_url(program.url)
+      digest = ProgramDigest.new(program, thread.posts(1..Float::INFINITY))
+    else
+      digest = ProgramDigest.new(program, [])
+    end
+    slim :program_digest, locals: { program: program, digest: digest }
+  end
+
   delete '/programs/:id' do |id|
     must_be_admin!(@user)
 

@@ -3,6 +3,29 @@ require 'uri'
 
 module Bbs
 
+SHITARABA_THREAD_URL_PATTERN = %r{\Ahttp://jbbs\.shitaraba\.net/bbs/read\.cgi/(\w+)/(\d+)/(\d+)(:?|\/.*)\z}
+
+def shitaraba_thread?(url)
+  if url.to_s =~ SHITARABA_THREAD_URL_PATTERN
+    return true
+  else
+    return false
+  end
+end
+module_function :shitaraba_thread?
+
+def thread_from_url(url)
+  if url.to_s =~ SHITARABA_THREAD_URL_PATTERN
+    category, board_num, thread_num = $1, $2.to_i, $3.to_i
+    board = Board.new(category, board_num)
+    thread = board.thread(thread_num)
+    raise 'no such thread' if thread.nil?
+    return thread
+  end
+  raise 'bad URL'
+end
+module_function :thread_from_url
+
 class Board
   def initialize(category, board_num)
     @category = category
@@ -83,6 +106,10 @@ class Post
     [no, name, mail, @date, body, '', ''].join('<>')
   end
 
+  def deleted?
+    @date == '＜削除＞'
+  end
+
   private
 
   def str2time(str)
@@ -90,7 +117,7 @@ class Post
       y, mon, d, h, min, sec = [$1, $2, $3, $4, $5, $6].map(&:to_i)
       Time.new(y, mon, d, h, min, sec)
     else
-      fail ArgumentError
+      fail ArgumentError, "#{str.inspect}"
     end
   end
 end
