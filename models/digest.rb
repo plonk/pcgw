@@ -15,7 +15,7 @@ class ProgramDigest
     }
 
     @groups = ranges.map.with_index { |range, i|
-      ps = posts.select { |post| !post.deleted? && range.include?(post.date) }
+      ps = posts.select { |post| !post.deleted? && range.cover?(post.date) }
       Group.new(screen_shots[i], ps)
     }
   end
