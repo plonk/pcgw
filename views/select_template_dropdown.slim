@@ -1,0 +1,17 @@
+.dropdown.hidden-md
+  button.btn.btn-default.dropdown-toggle type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+    | 以前の設定を読み込む 
+    span.caret
+  ul.dropdown-menu
+    - recent_programs.each do |program|
+      li
+        a href="/create?template=#{program.id}" style="padding: 10px 20px"
+          div style="display: inline-block; margin-left: 5px; vertical-align: top;"
+            div style="display: inline-block"
+              b
+                = program.channel
+              small.text-muted
+                | ・
+                = TimeUtil.render_date(program.created_at.localtime)
+              br
+              = program.summary

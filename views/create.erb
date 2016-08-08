@@ -1,6 +1,9 @@
 <div class="row">
   <div class="col-md-8">
+
     <h1>チャンネル作成</h1>
+
+    <%= slim :select_template_dropdown, locals: { recent_programs: recent_programs } %>
 
     <% if @user.never_broadcast? %>
     <%= slim :create_help %>
