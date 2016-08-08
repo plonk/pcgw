@@ -4,7 +4,7 @@ class Pcgw < Sinatra::Base
   end
 
   post '/account' do
-    @user.update!(params.slice('name'))
+    @user.update!(params.slice('name', 'bio'))
     @success_message = '変更を保存しました。'
     slim :account
   end

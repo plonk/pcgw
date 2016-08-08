@@ -1,3 +1,6 @@
+/ @user: User
+/ @success_message: String
+
 - unless @success_message.blank?
   .alert.alert-success
     span.glyphicon.glyphicon-ok style="margin-right: 6px"
@@ -9,5 +12,18 @@ form action="/account" method="POST" role="form"
       | ユーザー名
     input.form-control type="text" name="name" required=true value=@user.name
 
-  button.btn.btn-primary.btn-block type="submit"
-    | 変更を保存
+  .form-group
+    label for="bio"
+      | 紹介文
+    textarea.form-control name="bio"
+      = @user.bio
+
+  .form-group
+    button.btn.btn-primary.btn-block.btn-lg type="submit"
+      | 変更を保存
+
+form action="/user/#{@user.id}" method="POST"
+  .form-group
+    input type="hidden" name="_method" value="delete"
+    button.btn.btn-danger.btn-block type="submit"
+      | アカウントを削除

@@ -4,6 +4,9 @@
 .panel.panel-default
   == slim :profile_panel_content, locals: { user: user }
 
+  .panel-body
+    = user.bio
+
   - if user.channels.any?
     == slim :profile_onair, locals: { user: user }
 
