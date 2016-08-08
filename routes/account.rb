@@ -8,4 +8,14 @@ class Pcgw < Sinatra::Base
     @success_message = '変更を保存しました。'
     slim :account
   end
+
+  delete '/account/:id' do |id|
+    unless @user.id == id.to_i
+      halt 403, 'not permitted'
+    end
+
+    @user.destroy!
+    session.clear
+    redirect to("/")
+  end
 end

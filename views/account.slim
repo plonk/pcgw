@@ -22,7 +22,7 @@ form action="/account" method="POST" role="form"
     button.btn.btn-primary.btn-block.btn-lg type="submit"
       | 変更を保存
 
-form action="/user/#{@user.id}" method="POST"
+form action="/account/#{@user.id}" method="POST"
   .form-group
     input type="hidden" name="_method" value="delete"
     button.btn.btn-danger.btn-block type="submit"

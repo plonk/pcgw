@@ -76,7 +76,12 @@ class Pcgw < Sinatra::Base
         log.info("channel #{ch.id}(#{ch.gnu_id}) destroyed for inactivity")
       end
     end
-    get_user
+    begin
+      get_user
+    rescue ActiveRecord::RecordNotFound => e
+      log.error("user not found: #{e.to_s}; clearing session")
+      session.clear
+    end
 
     # クッキーを消す
     (cookies.keys - ['rack.session']).each do |key|
