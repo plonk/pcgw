@@ -1,5 +1,7 @@
-p.text-success
-  = @success_message
+- unless @success_message.blank?
+  .alert.alert-success
+    span.glyphicon.glyphicon-ok style="margin-right: 6px"
+    = @success_message
 
 form action="/account" method="POST" role="form"
   .form-group
