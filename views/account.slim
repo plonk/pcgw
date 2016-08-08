@@ -1,0 +1,11 @@
+p.text-success
+  = @success_message
+
+form action="/account" method="POST" role="form"
+  .form-group
+    label for="name"
+      | ユーザー名
+    input.form-control type="text" name="name" required=true value=@user.name
+
+  button.btn.btn-primary.btn-block type="submit"
+    | 変更を保存
