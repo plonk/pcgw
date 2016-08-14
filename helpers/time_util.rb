@@ -44,4 +44,39 @@ module TimeUtil
     "#{t.month}月#{t.day}日"
   end
   module_function :render_date
+
+  def render_duration(second)
+    unless second.is_a?(Integer) then raise TypeError end
+    unless second >= 0 then raise ArgumentError end
+
+    hour = second / 3600
+    minute = (second % 3600) / 60
+    second = second % 60
+
+    fields = [hour, minute, second]
+    seen_non_zero = false
+    str = ""
+
+    fields.each_with_index do |n, i|
+      if n == 0
+        if seen_non_zero
+        # nothing
+        else
+          if i == 2
+            str += "0秒間"
+          else
+            # nothing
+          end
+        end
+      else
+        str += "#{n}" + ['時', '分', '秒'][i]
+        unless seen_non_zero
+          str += '間'
+          seen_non_zero = true
+        end
+      end
+    end
+    return str
+  end
+  module_function :render_duration
 end
