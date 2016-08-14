@@ -1,0 +1,7 @@
+/ programs: [ChannelInfo]
+.panel.panel-default
+  .panel-heading 最近の配信
+  .list-group
+    - programs.each do |program|
+      a.list-group-item href="/programs/#{program.id}"
+        == slim :channel_info_thumbnail, locals: { program: program }

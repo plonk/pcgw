@@ -13,6 +13,15 @@ class Pcgw < Sinatra::Base
     slim :program_index, locals: { months: months }
   end
 
+  get '/programs/recent' do
+    slim :recent_programs
+  end
+
+  get '/programs/includes/recent_programs' do
+    programs = ChannelInfo.all.order(created_at: :desc).limit(10)
+    slim :includes_recent_programs, locals: { programs: programs }, layout: false
+  end
+
   def validate_date(year, month = 1, day = 1)
     Time.new(year, month, day)
     true
