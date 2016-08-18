@@ -40,7 +40,7 @@ class ScreenShotRefresh
 	return false
       end
     end
-    return true
+    return File.exist?(output)
   rescue Timeout::Error
     # ffmpeg がダウンロードを開始すると 1 回の SIGTERM では死なないので
     # 2 回送る。
