@@ -31,18 +31,28 @@ class Servent < ActiveRecord::Base
     super
   end
 
+  def yellow_page_viewer?
+    _program_name, version_number = api.getVersionInfo['agentName'].split('/')
+    version_number > '1.9.2'
+  end
+
   # YP などの設定
   def setup
     requirement = YellowPage.all
     what_it_has = api.getYellowPages.map { |y| y['name'] }
-
     shortage = requirement.map(&:name) - what_it_has
+    new_signature = yellow_page_viewer?
 
     shortage.each do |name|
       log.info "adding #{name} to #{self.name}..."
-      api.addYellowPage('pcp', name, requirement.find { |y| y.name == name }.uri)
+      announceUrl = requirement.find { |y| y.name == name }.uri
+      if new_signature
+        channelsUrl = ''
+        api.addYellowPage('pcp', name, nil, announceUrl, channelsUrl)
+      else
+        api.addYellowPage('pcp', name, announceUrl)
+      end
     end
-
   end
 
   private
