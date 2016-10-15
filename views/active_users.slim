@@ -1,0 +1,6 @@
+/ users: [User]
+- content_for :title do
+  | アクティブなユーザー 
+
+- users.each do |user|
+  img src=user.image title=user.name
