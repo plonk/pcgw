@@ -10,23 +10,18 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" title="Peercast Gateway" href="/">
-        Peercast Gateway
-        <% if ENV['PCGW_ENV'] == "development" %>
-        <br>
-        <small class="text-danger" style="float: right; position: relative; transform: translate(3px, -6px)">development</small>
-        <% end %>
-      </a>
     </div>
 
     <div class="collapse navbar-collapse" id="navbar-collapse-1">
 
       <ul class="nav navbar-nav navbar-left">
+        <% if @user %>
+          <%= slim :home_tab %>
+        <% end %>
         <%= slim :watch_tab %>
         <%= slim :history_tab %>
         <%= slim :users_tab %>
         <% if @user %>
-          <!-- slim :home_tab -->
           <%= slim :notice_tab %>
         <% end %>
       </ul>
