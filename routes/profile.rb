@@ -1,4 +1,11 @@
 class Pcgw < Sinatra::Base
+  get '/profile/search' do
+    halt 400, 'query must not be blank' if params['query'].blank?
+
+    users = User.where('name like ? escape \'\\\'', params['query'])
+    slim :active_users, locals: { users: users, title: '検索結果', query: params['query'] }
+  end
+
   # ユーザープロフィール
   get '/profile/:id' do |id|
     user = User.find(id) rescue halt(404, 'user not found')
@@ -14,7 +21,7 @@ class Pcgw < Sinatra::Base
             .group(:id)
             .having("logged_on_at >= ? and channel_count >= 1", 30.days.ago)
             .order(:logged_on_at => :desc)
-    slim :active_users, locals: { users: users }
+    slim :active_users, locals: { users: users, title: 'アクティブなユーザー', query: '' }
   end
 
 end

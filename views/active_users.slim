@@ -1,7 +1,28 @@
 / users: [User]
 - content_for :title do
-  | アクティブなユーザー 
+  = title
 
-- users.each do |user|
-  a href="/profile/#{user.id}"
-    img src=user.image alt=user.name title=user.name
+div style="margin-bottom: 15px"
+  form.form-inline action="/profile/search" method="GET"
+    .form-group
+      input.form-control name="query" type="text" value=query placeholder="ユーザー名を入力" title="任意の文字列 % と、任意の一文字 _ のワイルドカードが使えます。これらの文字自体を検索したい場合は \ を前に付けてください。"
+    button type="submit" 検索
+
+.panel.panel-default
+  .panel-heading
+    h4
+      = title
+      span.badge #{users.to_a.count}
+  .panel-body
+    - if users.size == 0
+      p.text-success style="text-align: center; font-style: italic" 条件に合致するユーザーは居ませんでした。
+      - if query !~ /[%_]/
+        p style="text-align: center"
+          | 名前に
+          a href="/profile/search?query=%25#{URI::escape(query)}%25"
+            | ｢#{query}｣を含むユーザー
+          | を検索しますか？
+    - else
+      - users.each do |user|
+        a href="/profile/#{user.id}"
+          img src=user.image alt=user.name title=user.name
