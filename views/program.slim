@@ -1,24 +1,47 @@
 / program: ChannelInfo
 
 - content_for :title do
-  | プログラム #{}
+  | 番組 #{program.id}
 
-div
-  img class="img-rounded" src=program.primary_screen_shot.path style="width: 300px"
+.panel.panel-default
+  .panel-heading
+    h4
+      = program.channel
+  .panel-body
+    div style="text-align: center"
+      img class="img-rounded" src=program.primary_screen_shot.path style="width: 300px"
 
-  div style="display: inline-block; margin-left: 5px; vertical-align: top"
-    div style="display: inline-block"
-      b
-        = program.channel
-      br
-      = program.summary
-      p
-        | コンタクトURL：
-        a.btn.btn-default href=program.url target="_blank" style="margin-left: 0.5em"
-          span.glyphicon.glyphicon-new-window style="margin-right: 0.5em"
+  table.table
+    tr
+      th style="line-height: 34px" 配信者
+      td
+        a href="/profile/#{program.user.id}" alt=program.user.name title=program.user.name
+          img.img-rounded width="34" src=program.user.image alt=program.user.name
+          span style="margin-left: 0.3em"
+            = program.user.name
+    tr
+      th 内容
+      td
+        = program.summary
+
+    tr
+      th 日時
+      td
+        - if program.terminated_at
+          = TimeUtil.render_time_range(program.created_at.localtime, program.terminated_at.localtime)
+        - else
+          | #{TimeUtil.render_time(program.created_at.localtime)} 〜
+    tr
+      th コンタクト
+      td
+        a href=program.url target="_blank"
           = program.url
 
 hr
+.form-group
+ a.btn.btn-block.btn-default href="/programs/#{program.id}/digest"
+   | 配信ダイジェスト
+   span.text-warning style="margin-left: 0.3em" β
 - if @user == program.user
   .form-group
     a.btn.btn-block.btn-default href="/create?template=#{program.id}" 続きを配信 &raquo;
