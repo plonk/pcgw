@@ -3,4 +3,5 @@
   | アクティブなユーザー 
 
 - users.each do |user|
-  img src=user.image title=user.name
+  a href="/profile/#{user.id}"
+    img src=user.image alt=user.name title=user.name
