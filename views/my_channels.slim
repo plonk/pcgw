@@ -7,3 +7,6 @@
       - channels.each do |ch|
         a.list-group-item href="/channels/#{ch.id}"
           == slim :horizontal_thumbnail, locals: { channel: ch }
+  - else
+    .panel-body
+      div style="font-style: italic; text-align: center" チャンネルはありません。
