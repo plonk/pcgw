@@ -5,11 +5,13 @@
     <span style="color: #ffa922; font-weight: bold; font-size: 200%"><%= channels.size %></span> / <%= max_channels %> <%= jp_words 'チャンネルが配信中' %>
   </div>
 
-  <% if channels.any? %>
   <div class="panel-body">
-    <% channels.each do |ch| %>
-    <%= erb :card, locals: { channel: ch } %>
+    <% if channels.any? %>
+      <% channels.each do |ch| %>
+        <%= erb :card, locals: { channel: ch } %>
+      <% end %>
+    <% else %>
+      <div style="font-style: italic; text-align: center">チャンネルはありません。</div>
     <% end %>
   </div>
-  <% end %>
 </div>

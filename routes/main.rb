@@ -9,11 +9,11 @@ class Pcgw < Sinatra::Base
   end
 
   get '/includes/onair' do
-    erb :onair, locals: { max_channels: Servent.total_capacity, channels: Channel.all }, layout: false
+    erb :includes_onair, locals: { max_channels: Servent.total_capacity, channels: Channel.all }, layout: false
   end
 
   get '/onair' do
-    erb :onair, locals: { max_channels: Servent.total_capacity, channels: Channel.all }
+    slim :onair
   end
 
   get '/includes/my_history' do
