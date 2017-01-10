@@ -120,6 +120,9 @@ class Pcgw < Sinatra::Base
   end
 
   get '/channels/:id/play' do
+    unless @channel.user == @user
+      halt 403, '再生できるのはチャンネルの配信者だけです。'
+    end
     slim :play, locals: { channel: @channel }
   end
 

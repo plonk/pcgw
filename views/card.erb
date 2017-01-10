@@ -1,10 +1,7 @@
 <!-- channel: Channel -->
 <div class="thumbnail thumbnail-channel" style="display: inline-block">
   <div style="display: inline-block; text-align: center; width: 100%; position: relative">
-    <a href="/channels/<%= h channel.id %>/play" class="thumbnail-channel-play-button">
-      <img src="<%= h channel.channel_info.primary_screen_shot.path %>">
-      <span class="glyphicon glyphicon-play"></span>
-    </a>
+    <img src="<%= h channel.channel_info.primary_screen_shot.path %>">
 
   </div>
 
@@ -12,14 +9,14 @@
     <p style="position: relative">
       <a href="/profile/<%= channel.user.id %>"><img width="48" src="<%= channel.user.image %>" alt="<%= channel.user.name %>" class="img-rounded" style="display: inline; margin-right: 5px"></a>
       <a href="/profile/<%= channel.user.id %>">
-	<b>
-	  <%= h channel.channel_info.channel %>
-	</b>
+        <b>
+          <%= h channel.channel_info.channel %>
+        </b>
       </a>
 
       <small style="position: absolute; right: 0px; text-align: left">
-	<span class="glyphicon glyphicon-time"></span>
-	<%= h IndexTxt.uptime_fmt(channel.status['uptime']) %>
+        <span class="glyphicon glyphicon-time"></span>
+        <%= h IndexTxt.uptime_fmt(channel.status['uptime']) %>
       </small>
     </p>
 
@@ -27,12 +24,12 @@
 
     <p>
       <span style="margin-right: 20px">
-	<span class="glyphicon glyphicon-user"></span>
-	<%= h channel.listener_count_display %>
+        <span class="glyphicon glyphicon-user"></span>
+        <%= h channel.listener_count_display %>
       </span>
       <span style="margin-right: 20px">
-	<span class="glyphicon glyphicon-book"></span>
-	<%= slim :yellow_page_links, locals: { yp_names: channel.info['yellowPages'].map { |y| y['name'] } } %>
+        <span class="glyphicon glyphicon-book"></span>
+        <%= slim :yellow_page_links, locals: { yp_names: channel.info['yellowPages'].map { |y| y['name'] } } %>
       </span>
     </p>
   </div>

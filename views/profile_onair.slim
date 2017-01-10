@@ -2,7 +2,7 @@ table class="table"
   tr
     th チャンネル名
     th 内容
-    th アクション
+    th YP
   - user.channels.each do |ch|
     tr
       td
@@ -12,5 +12,4 @@ table class="table"
         a href=ch.info['info']['url']
           = [ch.info['info']['desc'],ch.info['info']['genre']].reject(&:empty?).first
       td
-        a.btn.btn-default.btn-xs href="/channels/#{ch.id}/play" style="display: inline-block"
-          | 再生
+        == slim :yellow_page_links, locals: { yp_names: ch.info['yellowPages'].map{|y| y['name']} }
