@@ -9,6 +9,10 @@ class Pcgw < Sinatra::Base
   end
 
   get '/channels/:id' do
+    unless @user.admin? || @channel.user == @user
+      halt 403, 'permission denied'
+    end
+
     begin
       @status = @channel.servent.api.getChannelStatus(@channel.gnu_id)
       @info = @channel.servent.api.getChannelInfo(@channel.gnu_id)
@@ -41,6 +45,9 @@ class Pcgw < Sinatra::Base
 
   # Ajax エンドポイント
   get '/channels/:id/update' do
+    unless @user.admin? || @channel.user == @user
+      halt 403, 'permission denied'
+    end
     # チャンネルが存在しない場合はページ自体のリロードを促す
     unless @channel
       js = "$(window).off('beforeunload'); location.reload();"
