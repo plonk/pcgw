@@ -22,8 +22,8 @@
   $('#contact').text("<%= @info['info']['url'] %>")
   $('#contact').attr("href", "<%= @info['info']['url'] %>")
   $('#genre').text("<%= @info['info']['genre'] %>")
-  $('#comment').text("<%= @info['info']['comment'] %>")
-  $('#desc').text("<%= @info['info']['desc'] %>")
+  $('#comment').text(<%= @info['info']['comment'] %>")
+  $('#desc').text(<%= javascript_string @info['info']['desc'] %>)
   $('#error').text("")
 <% end %>
 
