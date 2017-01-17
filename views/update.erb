@@ -16,7 +16,7 @@
   $('#connections').html(<%= javascript_string @connections %>)
   $('#relay').text(<%= javascript_string  @status['totalRelays'] %>)
   $('#direct').text(<%= javascript_string  @status['totalDirects'] %>)
-  $('#bitrate').text(<%= javascript_string  "#{@source_kbps}Kbps / #{@info['info']['bitrate']}" %>)
+  $('#bitrate').text(<%= javascript_string  @source_kbps %>Kbps / <%= @info['info']['bitrate'] %>)
   $('#uptime').text(<%= javascript_string  TimeUtil.render_duration @status['uptime'] %>)
   $('#status').text(<%= javascript_string  @status['status'] %>).removeClass().addClass(<%= javascript_string  @status_class %>)
   $('#contact').text(<%= javascript_string  @info['info']['url'] %>)
