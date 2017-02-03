@@ -56,8 +56,8 @@ class BroadcastRequest
       },
       track: {
         name:    '',
-        creator: '',
-        genre:   "#{@client_ip} via Peercast Gateway",
+        creator: "#{@client_ip} via Peercast Gateway",
+        genre:   '',
         album:   '',
         url:     ''
       },
