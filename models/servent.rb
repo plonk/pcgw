@@ -38,6 +38,10 @@ class Servent < ActiveRecord::Base
 
   # YP などの設定
   def setup
+    if agent =~ /^PeerCast\//
+      return
+    end
+
     requirement = YellowPage.all
     what_it_has = api.getYellowPages.map { |y| y['name'] }
     shortage = requirement.map(&:name) - what_it_has
