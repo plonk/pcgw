@@ -10,9 +10,9 @@ script src="/reloader.js"
       == erb :tweet_button, locals: { link_url: @link_url, data_text: @data_text }
       .btn-group style="vertical-align: -0.07em;"
         button.btn.btn-default.dropdown-toggle type="button" data-toggle="dropdown" aria-expanded="false"
-          |  更新の間隔 
+          |  更新の間隔
           span#refresh-interval
-          | 秒 
+          | 秒
           span.caret style="margin-left: 0.5em"
           span.sr-only
             | ドロップダウンをトグルします
@@ -29,11 +29,11 @@ script src="/reloader.js"
           li
             a href="#" onclick="changeInterval(10)"
               | 10秒
-    
+
     p#error style="color: red"
-    
+
     .alert.alert-warning#warning style="display: none"
-    
+
     table.table.head-keep
       tr
         th メディア URL
@@ -65,9 +65,9 @@ script src="/reloader.js"
         th リスナー/リレー
         td
           span#direct
-          |  / 
+          |  /
           span#relay
-          |  
+          |
           a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/relay_tree" target="_blank"
             span.glyphicon.glyphicon-new-window
             |  リレーツリー
@@ -95,7 +95,7 @@ script src="/reloader.js"
         th 掲載YP
         td
           == slim :yellow_page_links, locals: { yp_names: @info['yellowPages'].map { |y| y['name'] } }
-    
+
     div
       form action="/channels/#{@channel.id}/stop" method="POST" role="form"
         div.btn-group.btn-group-justified role="group"
@@ -107,7 +107,7 @@ script src="/reloader.js"
             a.btn.btn-default href="/channels/#{@channel.id}/play" target="_blank"
               span class="glyphicon glyphicon-new-window"
               |  再生
-  
+
   .col-md-4.hidden-sm.hidden-xs
     .reloader data-url="/includes/channel_switcher" data-interval=60
 
@@ -119,7 +119,8 @@ javascript:
   }
   $(function() {
     var timeoutSec = 10;
-    changeInterval(3);
+    changeInterval(5); // Peercast のデータレート更新が5秒ごとなので5
+                       // 秒が良いと思う。
     var recur = function() {
       $.ajax({
         url: '/channels/#{@channel.id}/update',
