@@ -27,7 +27,10 @@ class Servent < ActiveRecord::Base
   end
 
   def enabled=(boolean)
-    setup if boolean
+    if boolean
+      load_from_server
+      save!
+    end
     super
   end
 
@@ -36,27 +39,15 @@ class Servent < ActiveRecord::Base
     version_number > '1.9.2'
   end
 
-  # YP などの設定
-  def setup
-    if agent =~ /^PeerCast\//
-      return
-    end
 
-    requirement = YellowPage.all
-    what_it_has = api.getYellowPages.map { |y| y['name'] }
-    shortage = requirement.map(&:name) - what_it_has
-    new_signature = yellow_page_viewer?
+  def load_from_server
+    self.agent = api.getVersionInfo['agentName']
 
-    shortage.each do |name|
-      log.info "adding #{name} to #{self.name}..."
-      announceUrl = requirement.find { |y| y.name == name }.uri
-      if new_signature
-        channelsUrl = ''
-        api.addYellowPage('pcp', name, nil, announceUrl, channelsUrl)
-      else
-        api.addYellowPage('pcp', name, announceUrl)
-      end
-    end
+    supported_yp_uris = api.getYellowPages.map { |yp| yp['announceUri'] }
+
+    self.yellow_pages = YellowPage.all.select { |yp|
+      supported_yp_uris.include?(yp.uri)
+    }.map { |yp| yp.name }.join(' ')
   end
 
   private

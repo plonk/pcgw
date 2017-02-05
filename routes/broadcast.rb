@@ -1,7 +1,7 @@
 require 'lockfile'
 
 # チャンネル作成要求を表わすクラス。
-class BroadcastRequest
+class PeercastStationBroadcastRequest
   attr_reader :info
 
   def initialize(servent, ch_info, yellow_pages, client_ip)
@@ -10,6 +10,31 @@ class BroadcastRequest
     @yellow_pages = yellow_pages
     @client_ip = client_ip
   end
+
+  def genre
+    if !yp
+      @info.genre
+    else
+      yp.add_prefix(@info.genre)
+    end
+  end
+
+  def source_uri
+    case @info.stream_type
+    when 'WMV'
+      source_uri_http(@info.user)
+    when 'FLV'
+      source_uri_rtmp(@info.user)
+    else
+      fail
+    end
+  end
+
+  def issue
+    @servent.api.broadcastChannel(to_h)
+  end
+
+  private
 
   def ypid
     if yp
@@ -20,14 +45,6 @@ class BroadcastRequest
       pecastYP['yellowPageId']
     else
       nil
-    end
-  end
-
-  def genre
-    if !yp
-      @info.genre
-    else
-      yp.add_prefix(@info.genre)
     end
   end
 
@@ -77,6 +94,37 @@ class BroadcastRequest
     args
   end
 
+  def source_uri_rtmp(user)
+    port = 9000 + user.id
+    "rtmp://#{@servent.hostname}:#{port}/live/livestream"
+  end
+
+  def source_uri_http(user)
+    path = "#{9000 + user.id}"
+    "http://#{WM_MIRROR_HOSTNAME}:5000/#{path}"
+  end
+
+end
+
+class PeercastBroadcastRequest
+  attr_reader :info
+
+  def initialize(servent, ch_info, yellow_pages, client_ip)
+    @servent = servent
+    @info = ch_info
+    @yellow_pages = yellow_pages
+    # いまのところ使い道ないけど一応もっとく。
+    @client_ip = client_ip
+  end
+
+  def genre
+    if !yp
+      @info.genre
+    else
+      yp.add_prefix(@info.genre)
+    end
+  end
+
   def source_uri
     case @info.stream_type
     when 'WMV'
@@ -88,18 +136,41 @@ class BroadcastRequest
     end
   end
 
+  def issue
+    @servent.api.fetch(to_h)
+  end
+
   private
 
+  def yp
+    if @info.yp.blank?
+      nil
+    else
+      ret = @yellow_pages.find { |y| y.name == @info.yp }
+      fail "yellow page #{@info.yp.inspect} not found" unless ret
+      ret
+    end
+  end
+
+  def to_h
+    {
+      url: source_uri,
+      name: @info.channel,
+      desc: @info.desc,
+      genre: genre,
+      contact: @info.url,
+      bitrate: 0,
+      type: @info.stream_type
+    }
+  end
+
   def source_uri_rtmp(user)
-    port = 9000 + user.id
-    "rtmp://#{@servent.hostname}:#{port}/live/livestream"
+    "http://#{WM_MIRROR_HOSTNAME}:6000/live/#{9000 + user.id}"
   end
 
   def source_uri_http(user)
-    path = "#{9000 + user.id}"
-    "http://#{WM_MIRROR_HOSTNAME}:5000/#{path}"
+    "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user.id}"
   end
-
 end
 
 class Pcgw < Sinatra::Base
@@ -142,6 +213,35 @@ class Pcgw < Sinatra::Base
     end
   end
 
+  def choose_servent(serv_id, yp)
+    case serv_id
+    when -1
+      servent = Servent.request_one(yp)
+      unless servent
+        raise '利用可能な配信サーバーがありません。'
+      end
+    else
+      begin
+        servent = Servent.find(serv_id)
+      rescue
+        raise '指定のサーバーが見付かりません。'
+      end
+
+      unless servent.enabled
+        raise '指定のサーバーは現在無効化されています。'
+      end
+
+      unless servent.vacancies > 0
+        raise '指定のサーバーにはこれ以上チャンネルを作成できません。'
+      end
+
+      unless servent.yellow_pages.split(' ').include?(yp)
+        raise "指定のサーバーはイエローページ#{yp}に対応していません。"
+      end
+    end
+    servent
+  end
+
   post '/broadcast' do
     halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
 
@@ -151,30 +251,17 @@ class Pcgw < Sinatra::Base
 
       broadcast_check_params!
 
-      serv_id = params['servent'].to_i
-      case serv_id
-      when -1
-        servent = Servent.request_one
-      else
-        begin
-          servent = Servent.find(serv_id)
-        rescue
-          raise '指定のサーバーが見付かりません。'
-        end
-        unless servent.enabled && servent.vacancies > 0
-          raise '指定のサーバーは利用不可です。'
-        end
+      servent = choose_servent(params['servent'].to_i, params['yp'])
+      case servent.agent
+      when /^PeerCastStation\//
+        breq = PeercastStationBroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip)
+      when /^PeerCast\//
+        breq = PeercastBroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip)
       end
-      raise '利用可能な配信サーバーがありません。' unless servent
-      breq = BroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip)
 
-      # PeerCast Station に同じ ID のチャンネルが立たないことを
-      # 保証するためにロックファイルを使用する
-      chid = nil
-      Lockfile('tmp/lock.file') do
-        ascertain_new!(servent.api, breq)
-        chid = servent.api.broadcastChannel(breq.to_h)
-      end
+      # PeerCast Station に同じ ID のチャンネルが立たないようにする。
+      ascertain_new!(servent.api, breq)
+      chid = breq.issue
 
       ch = @user.channels.build(gnu_id: chid)
       ch.channel_info = channel_info

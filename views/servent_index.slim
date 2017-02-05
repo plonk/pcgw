@@ -24,6 +24,7 @@ p
   table.table
     tr
       th 名前
+      th 種別
       th エンドポイント
       th 稼働率
       th 優先度
@@ -33,6 +34,8 @@ p
       tr
         td
           = serv.name
+        td
+          = serv.agent.blank? ? "(不明)" : serv.agent
         td
           input type="hidden" name="id[]" form="save" value=serv.id
           .form-inline

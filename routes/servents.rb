@@ -77,4 +77,13 @@ class Pcgw < Sinatra::Base
     servent = Servent.find(params['id'])
     slim :servent, locals: { servent: servent }
   end
+
+  # サーバーからエージェント名と対応YPの情報を取得して、DBを更新。
+  post '/servents/:id/update' do
+    servent = Servent.find(params['id'])
+    servent.load_from_server
+    servent.save!
+    redirect to("/servents/#{params['id']}")
+  end
+
 end
