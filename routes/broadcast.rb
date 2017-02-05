@@ -271,7 +271,7 @@ class Pcgw < Sinatra::Base
       log.info("user #{@user.id} created channel #{ch.id}")
 
       redirect to("/channels/#{ch.id}")
-    rescue StandardError => e
+    rescue RuntimeError => e
       # 必要なフィールドがなかった場合などフォームを再表示する
       @message = e.message
       programs = ChannelInfo.where(user: @user).order(created_at: :desc).limit(10)
