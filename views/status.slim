@@ -37,9 +37,14 @@ script src="/reloader.js"
     table.table.head-keep
       tr
         th メディア URL
-        td.text-info
-          span#source.url
-            = @status['source']
+        td
+          span.text-info#source.url
+            = @channel.push_uri
+          - if @channel.stream_key
+            br
+            span style="margin-right: 1em" ストリームキー
+            span.text-info
+              = @channel.stream_key
       tr
         th 状態
         td

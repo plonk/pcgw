@@ -92,6 +92,23 @@ class Channel < ActiveRecord::Base
     connections.find { |conn| conn.type == 'source' }
   end
 
+  # ユーザーがエンコーダーに設定するURL。
+  def push_uri
+    if servent.agent =~ /^PeerCast\// && channel_info.stream_type == 'FLV'
+      "rtmp://#{WM_MIRROR_HOSTNAME}/live"
+    else
+      status['source']
+    end
+  end
+
+  def stream_key
+    if servent.agent =~ /^PeerCast\// && channel_info.stream_type == 'FLV'
+      (9000 + user.id).to_s
+    else
+      nil
+    end
+  end
+
   def destroy
     info = self.channel_info
 
