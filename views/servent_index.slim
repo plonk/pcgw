@@ -45,9 +45,9 @@ p
         td
           .form-inline
             | #{serv.channels.count} / 
-            input.form-control name="max_channels#{serv.id}" form="save" style="width: 6em" type="number" min="0" value=serv.max_channels
+            input.form-control name="max_channels#{serv.id}" form="save" style="width: 4em" type="number" min="0" value=serv.max_channels
         td
-          input.form-control name="priority#{serv.id}" form="save" style="width: 6em" type="number" value=serv.priority
+          input.form-control name="priority#{serv.id}" form="save" style="width: 4em" type="number" value=serv.priority
         td
           input name="enabled#{serv.id}" form="save" type="checkbox" value="true" checked=serv.enabled
         td
