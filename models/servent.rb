@@ -42,7 +42,7 @@ class Servent < ActiveRecord::Base
   def load_from_server
     self.agent = api.getVersionInfo['agentName']
 
-    supported_yp_uris = api.getYellowPages.map { |yp| yp['announceUri'] }
+    supported_yp_uris = api.getYellowPages.map { |yp| yp['announceUri'] || yp['uri'] }
 
     self.yellow_pages = YellowPage.all.select { |yp|
       supported_yp_uris.include?(yp.uri)
