@@ -137,7 +137,15 @@ class PeercastBroadcastRequest
   end
 
   def issue
-    @servent.api.fetch(to_h)
+    id = @servent.api.fetch(to_h)
+
+    json = @servent.api.getChannelInfo(id)
+
+    json['info']['comment'] = @info.comment
+    json['track']['creator'] = "#{@client_ip} via Peercast Gateway"
+    @servent.api.setChannelInfo(id, json['info'], json['track'])
+
+    id
   end
 
   private
