@@ -60,17 +60,14 @@ form action="/broadcast" method="POST" role="form"
             span.glyphicon.glyphicon-new-window
             | &nbsp;利用規約
 
-  - if servents.size == 1
-    input type="hidden" name="servent" value="-1"
-  - else
-    .form-group
-      label for="servent" 配信サーバー
-      - servents.each do |serv|
-        .radio
-          label
-            input required="required" type="radio" name="servent" data-yellow-pages=serv.yellow_pages value=serv.id
-            | #{serv.name}
-            small &emsp;#{serv.desc}
+  .form-group
+    label for="servent" 配信サーバー
+    - servents.each do |serv|
+      .radio
+        label
+          input required="required" type="radio" name="servent" data-yellow-pages=serv.yellow_pages value=serv.id
+          | #{serv.name}
+          small &emsp;#{serv.desc}
 
   button.btn.btn-primary.btn-block type="submit" 開始
 
