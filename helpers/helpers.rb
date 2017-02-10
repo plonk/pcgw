@@ -31,7 +31,9 @@ class Pcgw < Sinatra::Base
 
     # user が管理者でなければ停止する。
     def must_be_admin!(user)
-      halt 403, 'Administrator only' unless user.admin
+      if user.nil? || !user.admin?
+        halt 403, 'Administrator only'
+      end
     end
 
     # Peercast Station のチャンネル状態文字列に対応する
