@@ -51,7 +51,7 @@ form action="/broadcast" method="POST" role="form"
       .radio
         label
           input required="required" type="radio" name="yp" value="#{yp.name}" checked=(template.yp == yp.name)
-          img src=yp.icon
+          img src=yp.icon width="32"
           | &nbsp;
           a href=yp.top
             = yp.name
