@@ -65,7 +65,6 @@ class Pcgw < Sinatra::Base
       src = @channel.source_stream
       @source_kbps = src.recvRateKbps
       connections = @channel.connections.select { |c| c.type == "relay" }
-
       @connections = slim :connections, locals: { channel: @channel, connections: connections }, layout: false
       js = erb :update, layout: false
 
@@ -74,6 +73,7 @@ class Pcgw < Sinatra::Base
        [js]]
     rescue => e
       @error = e.message
+      js = erb :update, layout: false
       [200,
        { 'Content-Type' => 'text/javascript', 'Content-Length' => js.bytesize.to_s },
        [js]]
