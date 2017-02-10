@@ -69,7 +69,8 @@ form action="/broadcast" method="POST" role="form"
         .radio
           label
             input required="required" type="radio" name="servent" data-yellow-pages=serv.yellow_pages value=serv.id
-            | #{serv.name} (#{serv.hostname}:#{serv.port})
+            | #{serv.name}
+            small &emsp;#{serv.desc}
 
   button.btn.btn-primary.btn-block type="submit" 開始
 
