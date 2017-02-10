@@ -59,31 +59,23 @@ form action="/broadcast" method="POST" role="form"
           a.btn.btn-default.btn-xs href=yp.terms target="_blank"
             span.glyphicon.glyphicon-new-window
             | &nbsp;利用規約
-    - if @user.admin
-      .radio
-        label.text-warning
-          input required="required" type="radio" name="yp" value="" checked=template.yp.blank?
-          | 掲載しない
 
   - if servents.size == 1
     input type="hidden" name="servent" value="-1"
   - else
     .form-group
       label for="servent" 配信サーバー
-      .radio
-        label.text-success
-          input required="required" type="radio" name="servent" value="-1" checked=true
-          strong おまかせ
       - servents.each do |serv|
         .radio
           label
-            input required="required" type="radio" name="servent" value=serv.id
+            input required="required" type="radio" name="servent" data-yellow-pages=serv.yellow_pages value=serv.id
             | #{serv.name} (#{serv.hostname}:#{serv.port})
 
   button.btn.btn-primary.btn-block type="submit" 開始
 
-/ フォームの二重送信を防止する。
 javascript:
+
+  // フォームの二重送信を防止する。
   jQuery.fn.preventDoubleSumission = function() {
     $(this).on('submit', function(e) {
       var $form = $(this);
@@ -97,3 +89,27 @@ javascript:
     return this;
   };
   $('form').preventDoubleSumission();
+
+  $('input[name="yp"]').on('change', onYellowPagesChange);
+  function onYellowPagesChange() {
+    var yp = this.value;
+    var already_checked = false;
+    $('input[name="servent"]').each(function (index) {
+      var support = $(this).data("yellow-pages").split(' ').indexOf(yp) !== -1;
+      this.checked = false;
+      if (support) {
+        this.disabled = false;
+        if (!already_checked) {
+          this.checked = true;
+          already_checked = true;
+        }
+        $(this.parentElement).removeClass("text-muted");
+      } else {
+        this.disabled = true;
+        $(this.parentElement).addClass("text-muted");
+      }
+    });
+  }
+  $(function () {
+    onYellowPagesChange.apply($('input[name="yp"][checked]')[0]);
+  });
