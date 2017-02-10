@@ -44,9 +44,10 @@ script src="/reloader.js"
         th 状態
         td
           span#status
-          a.btn.btn-default.btn-xs style="margin-left: 0.5em" href="/channels/#{@channel.id}/reset" onclick="$(window).off('beforeunload')" title="エンコーダーとの現在の接続を破棄し、待ち受け状態に戻します(FLV の場合)。"
-            span.glyphicon.glyphicon-refresh
-            |  リセット
+          - if @channel.servent.can_restart_channel_connection?
+            a.btn.btn-default.btn-xs style="margin-left: 0.5em" href="/channels/#{@channel.id}/reset" onclick="$(window).off('beforeunload')" title="エンコーダーとの現在の接続を破棄し、待ち受け状態に戻します(FLV の場合)。"
+              span.glyphicon.glyphicon-refresh
+              |  リセット
       tr
         th リレー時間
         td
@@ -62,10 +63,11 @@ script src="/reloader.js"
           span#direct
           |  /
           span#relay
-          |
-          a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/relay_tree" target="_blank"
-            span.glyphicon.glyphicon-new-window
-            |  リレーツリー
+          - if @channel.servent.can_get_relay_tree?
+            |
+            a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/relay_tree" target="_blank"
+              span.glyphicon.glyphicon-new-window
+              |  リレーツリー
       tr
         th 直下接続
         td
@@ -89,7 +91,7 @@ script src="/reloader.js"
       tr
         th 掲載YP
         td
-          == slim :yellow_page_links, locals: { yp_names: @info['yellowPages'].map { |y| y['name'] } }
+          == slim :yellow_page_links, locals: { yp_names: [@channel.channel_info.yp] }
 
     div
       form action="/channels/#{@channel.id}/stop" method="POST" role="form"

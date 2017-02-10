@@ -12,4 +12,4 @@ table class="table"
         a href=ch.info['info']['url']
           = [ch.info['info']['desc'],ch.info['info']['genre']].reject(&:empty?).first
       td
-        == slim :yellow_page_links, locals: { yp_names: ch.info['yellowPages'].map{|y| y['name']} }
+        == slim :yellow_page_links, locals: { yp_names: [ch.channel_info.yp] }
