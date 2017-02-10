@@ -50,6 +50,18 @@ class Servent < ActiveRecord::Base
     }.map { |yp| yp.name }.join(' ')
   end
 
+  def can_stop_connections?
+    if agent =~ /^PeerCastStation\// then true else false end
+  end
+
+  def can_get_relay_tree?
+    if agent =~ /^PeerCastStation\// then true else false end
+  end
+
+  def can_restart_channel_connection?
+    if agent =~ /^PeerCastStation\// then true else false end
+  end
+
   private
 
   def create_basic_authorization_header(id, pwd)

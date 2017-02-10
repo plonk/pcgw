@@ -6,4 +6,7 @@ table.connections
       td
         form action="/channels/#{channel.id}/connections/#{conn.connectionId}" method="POST"
           input type="hidden" name="_method" value="DELETE"
-          button.btn.btn-warning.btn-xs type="submit" onclick="$(window).off('beforeunload')" 切断
+          - if channel.servent.can_stop_connections?
+            button.btn.btn-warning.btn-xs type="submit" onclick="$(window).off('beforeunload')" 切断
+          - else
+            button.btn.btn-default.btn-xs disabled=true style="pointer-events: auto" title="このサーバーではリレー接続の切断はサポートされていません。" type="submit" onclick="$(window).off('beforeunload')" 切断
