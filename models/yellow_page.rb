@@ -14,13 +14,15 @@ class YellowPage
                        'http://temp.orz.hm/yp/',
                        'http://temp.orz.hm/yp/favicon.ico',
                        'pcp://temp.orz.hm/'],
-                      ['TestP',
-                       'tp',
-                       '',
-                       'http://localhost/',
-                       'http://ie.pcgw.pgw.jp/favicon.ico',
-                       'pcp://localhost:7146/'],
                      ]
+      if ENV['PCGW_ENV'] == 'development'
+        yellow_pages << ['TestP',
+                         'tp',
+                         '',
+                         'http://localhost/',
+                         'http://ie.pcgw.pgw.jp/favicon.ico',
+                         'pcp://localhost:7146/']
+      end
       return yellow_pages.map do |name, prefix, terms, top, icon, pcp|
         YellowPage.new('name'=>name, 'prefix'=>prefix, 'terms'=>terms, 'top'=>top, 'icon'=>icon, 'uri'=>pcp)
       end
