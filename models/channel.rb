@@ -65,6 +65,26 @@ class Channel < ActiveRecord::Base
     end
   end
 
+  def push_uri
+    case info['info']['contentType']
+    when 'WMV'
+      "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user.id}"
+    when 'FLV'
+      "rtmp://#{WM_MIRROR_HOSTNAME}:6000/live"
+    else
+      stream_uri
+    end
+  end
+
+  def stream_key
+    case info['info']['contentType']
+    when 'WMV'
+      nil
+    when 'FLV'
+      (9000 + user.id).to_s
+    end
+  end
+
   def connections
     @connections ||= servent.api.getChannelConnections(gnu_id).map(&Connection.method(:new))
   end
