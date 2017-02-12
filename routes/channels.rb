@@ -45,11 +45,13 @@ class Pcgw < Sinatra::Base
 
   # Ajax エンドポイント
   get '/channels/:id/update' do
-    unless @user.admin? || @channel.user == @user
-      halt 403, 'permission denied'
-    end
-    # チャンネルが存在しない場合はページ自体のリロードを促す
-    unless @channel
+    if @channel
+      unless @user.admin? || @channel.user == @user
+        halt 403, 'permission denied'
+      end
+    else
+      # チャンネルが存在しない場合はページ自体のリロードを促す。所有判
+      # 定はできない。
       js = "$(window).off('beforeunload'); location.reload();"
       return [200,
               { 'Content-Type' => 'text/javascript',
