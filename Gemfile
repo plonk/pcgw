@@ -15,3 +15,4 @@ gem 'twitter'
 gem 'rack-flash3'
 gem 'sanitize'
 gem 'rspec', :group => :development
+gem 'pry', :group => :development
