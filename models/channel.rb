@@ -108,7 +108,7 @@ class Channel < ActiveRecord::Base
     false
   end
 
-  def source_stream
+  def source_connection
     connections.find { |conn| conn.type == 'source' }
   end
 

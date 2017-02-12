@@ -62,7 +62,7 @@ class Pcgw < Sinatra::Base
       @info = @channel.info
       @status_class = status_semantic_class @status['status']
 
-      src = @channel.source_stream
+      src = @channel.source_connection
       @source_kbps = src.recvRateKbps
       connections = @channel.connections.select { |c| c.type == "relay" }
       @connections = slim :connections, locals: { channel: @channel, connections: connections }, layout: false
