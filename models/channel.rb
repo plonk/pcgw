@@ -44,7 +44,7 @@ class Channel < ActiveRecord::Base
 
   def playlist_url
     # WMV の場合
-    case info['info']['contentType']
+    case channel_info.stream_type
     when 'WMV'
       "http://#{servent.hostname}:#{servent.port}/pls/#{gnu_id}.asx"
     when 'FLV'
@@ -55,7 +55,7 @@ class Channel < ActiveRecord::Base
   end
 
   def stream_url
-    case info['info']['contentType']
+    case channel_info.stream_type
     when 'WMV'
       "mmsh://#{servent.hostname}:#{servent.port}/stream/#{gnu_id}.wmv"
     when 'FLV'
@@ -66,23 +66,11 @@ class Channel < ActiveRecord::Base
   end
 
   def push_uri
-    case info['info']['contentType']
-    when 'WMV'
-      "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user.id}"
-    when 'FLV'
-      "rtmp://#{WM_MIRROR_HOSTNAME}:6000/live"
-    else
-      ''
-    end
+    servent.push_uri(channel_info.stream_type, user.id)
   end
 
   def stream_key
-    case info['info']['contentType']
-    when 'WMV'
-      nil
-    when 'FLV'
-      (9000 + user.id).to_s
-    end
+    servent.stream_key(channel_info.stream_type, user.id)
   end
 
   def connections

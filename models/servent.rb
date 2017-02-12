@@ -61,6 +61,46 @@ class Servent < ActiveRecord::Base
     if agent =~ /^PeerCastStation\// then true else false end
   end
 
+  def push_uri(stream_type, user_id)
+    case agent
+    when /^PeerCastStation\//
+      case stream_type
+      when 'WMV'
+        "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user_id}"
+      when 'FLV'
+        "rtmp://#{hostname}:#{9000 + user_id}/live/livestream"
+      else
+        fail 'unsupported stream type'
+      end
+    when /^PeerCast\//
+      case stream_type
+      when 'WMV'
+        "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user_id}"
+      when 'FLV'
+        "rtmp://#{WM_MIRROR_HOSTNAME}:6000/live"
+      else
+        fail 'unsupported stream type'
+      end
+    else
+      fail 'unsupported agent'
+    end
+  end
+
+  def stream_key(stream_type, user_id)
+    case stream_type
+    when 'WMV'
+      nil
+    when 'FLV'
+      if agent =~ /^PeerCast\//
+        "#{9000 + user_id}"
+      else
+        nil
+      end
+    else
+      fail 'unsupported stream type'
+    end
+  end
+
   private
 
   def create_basic_authorization_header(id, pwd)
