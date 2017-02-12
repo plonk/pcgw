@@ -72,7 +72,7 @@ class Channel < ActiveRecord::Base
     when 'FLV'
       "rtmp://#{WM_MIRROR_HOSTNAME}:6000/live"
     else
-      stream_uri
+      ''
     end
   end
 
