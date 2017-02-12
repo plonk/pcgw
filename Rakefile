@@ -19,5 +19,9 @@ task :dbconsole do
 end
 
 task :run do
-   system("rerun -i '**/*.{slim,erb,js,css}' bundle exec rackup")
+  system("rerun -i '**/*.{slim,erb,js,css}' bundle exec rackup")
+end
+
+task :test do
+  system("rspec test/*.rb")
 end

@@ -14,3 +14,4 @@ gem 'lockfile', '~> 2.1.3'
 gem 'twitter'
 gem 'rack-flash3'
 gem 'sanitize'
+gem 'rspec', :group => :development
