@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
 class Pcgw < Sinatra::Base
   helpers do
+    include ViewHelpers
+
     # ログインされていたら true。
     def logged_in?
       not session[:uid].blank?
@@ -70,7 +71,7 @@ class Pcgw < Sinatra::Base
           scheme = case $1
                    when 'ttp' then 'http'
                    when 'ttps' then 'https'
-		   else $1
+                   else $1
                    end
           "<a href=\"#{scheme}://#{$2}\">#{phrase}</a>"
         else
@@ -78,7 +79,6 @@ class Pcgw < Sinatra::Base
         end
       }
     end
-
 
   end
 end

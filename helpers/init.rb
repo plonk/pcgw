@@ -1,3 +1,4 @@
+require_relative 'view_helpers'
 require_relative 'graphviz'
 require_relative 'relay_tree_renderer'
 require_relative 'helpers'

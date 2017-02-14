@@ -2,6 +2,11 @@ table.connections
   - connections.each do |conn|
     tr
       td #{conn.remoteHostname}
+      td
+        div style="display: inline-block; height: 1em; line-height: 1.0em; text-align: center; vertical-align: middle; transform: translate(0px, -30px)"
+          div.text-muted style="font-size: 10px; transform: translate(0px, 17px)" ▼
+          br
+          meter value=bitrate_meter(conn.sendRateKbps, @info['info']['bitrate']) max="1.0" min="0.0" low="0.25" high="0.75" optimum="0.5"
       td #{conn.sendRateKbps} Kbps
       td
         form action="/channels/#{channel.id}/connections/#{conn.connectionId}" method="POST"

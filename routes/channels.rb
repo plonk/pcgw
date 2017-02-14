@@ -66,6 +66,8 @@ class Pcgw < Sinatra::Base
 
       src = @channel.source_connection
       @source_kbps = src.recvRateKbps
+      @bitrate_meter = bitrate_meter(@source_kbps, @info['info']['bitrate'])
+
       connections = @channel.connections.select { |c| c.type == "relay" }
       @connections = slim :connections, locals: { channel: @channel, connections: connections }, layout: false
       js = erb :update, layout: false
