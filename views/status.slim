@@ -70,13 +70,13 @@ script src="/reloader.js"
         th リスナー/リレー
         td
           span#direct
-          |  /
+          |  /&nbsp;
           span#relay
           - if @channel.servent.can_get_relay_tree?
-            |
+            | &nbsp;
             a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/relay_tree" target="_blank"
               span.glyphicon.glyphicon-new-window
-              |  リレーツリー
+              | リレーツリー
       tr
         th 直下接続
         td
