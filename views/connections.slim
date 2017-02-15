@@ -7,7 +7,7 @@ table.connections
           div.text-muted style="font-size: 10px; transform: translate(0px, 17px)" ▼
           br
           meter value=bitrate_meter(conn.sendRateKbps, @info['info']['bitrate']) max="1.0" min="0.0" low="0.25" high="0.75" optimum="0.5"
-      td #{conn.sendRateKbps} Kbps
+      td style="min-width: 70px; text-align: right" #{conn.sendRateKbps} Kbps
       td
         form action="/channels/#{channel.id}/connections/#{conn.connectionId}" method="POST"
           input type="hidden" name="_method" value="DELETE"
