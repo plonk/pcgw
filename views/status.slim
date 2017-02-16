@@ -49,7 +49,7 @@ script src="/reloader.js"
         td
           span#status
           - if @channel.servent.can_restart_channel_connection?
-            a.btn.btn-default.btn-xs style="margin-left: 0.5em" href="/channels/#{@channel.id}/reset" onclick="$(window).off('beforeunload')" title="エンコーダーとの現在の接続を破棄し、待ち受け状態に戻します(FLV の場合)。"
+            a.btn.btn-default.btn-xs style="margin-left: 0.5em" href="/channels/#{@channel.id}/reset" title="エンコーダーとの現在の接続を破棄し、待ち受け状態に戻します(FLV の場合)。"
               span.glyphicon.glyphicon-refresh
               |  リセット
       tr
@@ -83,20 +83,17 @@ script src="/reloader.js"
           #connections
       tr
         th ジャンル
-        td
-          span#genre
+        td #{@info['info']['genre']}
       tr
         th 詳細
-        td
-          span#desc
+        td #{@info['info']['desc']}
       tr
         th コメント
-        td
-          span#comment
+        td #{@info['info']['comment']}
       tr
         th コンタクト URL
         td
-          a#contact target="_blank"
+          a target="_blank" href=@info['info']['url'] #{@info['info']['url']}
       tr
         th 掲載YP
         td
@@ -106,9 +103,9 @@ script src="/reloader.js"
       form action="/channels/#{@channel.id}/stop" method="POST" role="form"
         div.btn-group.btn-group-justified role="group"
           .btn-group
-            button.btn.btn-warning type="submit" onclick="$(window).off('beforeunload')" 配信停止
+            button.btn.btn-warning type="submit" 配信停止
           .btn-group
-            a.btn.btn-default href="/channels/#{@channel.id}/edit" onclick="$(window).off('beforeunload')" 詳細変更
+            a.btn.btn-default href="/channels/#{@channel.id}/edit" 詳細変更
           .btn-group
             a.btn.btn-default href="/channels/#{@channel.id}/play" target="_blank"
               span class="glyphicon glyphicon-new-window"

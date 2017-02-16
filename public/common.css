@@ -37,3 +37,22 @@ table.table tr td { min-height: 44px; vertical-align: middle; }
     margin-left: auto;
     margin-right: auto;
 }
+
+.meter-outer {
+    display: inline-block;
+    height: 1em;
+    line-height: 1.0em;
+    text-align: center;
+    vertical-align: middle;
+    transform: translate(0px, -30px);
+}
+
+.meter-notch {
+    font-size: 10px;
+    transform: translate(0px, 17px);
+}
+
+td.bitrate {
+    min-width: 70px;
+    text-align: right;
+}

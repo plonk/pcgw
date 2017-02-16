@@ -3,15 +3,16 @@ table.connections
     tr
       td #{conn.nipponizedRemoteIPAddress}
       td
-        div style="display: inline-block; height: 1em; line-height: 1.0em; text-align: center; vertical-align: middle; transform: translate(0px, -30px)"
-          div.text-muted style="font-size: 10px; transform: translate(0px, 17px)" ▼
+        .meter-outer
+          .meter-notch ▼
           br
-          meter value=bitrate_meter(conn.sendRateKbps, @info['info']['bitrate']) max="1.0" min="0.0" low="0.25" high="0.75" optimum="0.5"
-      td style="min-width: 70px; text-align: right" #{conn.sendRateKbps} Kbps
+          - meter_value = "%.2f" % bitrate_meter(conn.sendRateKbps, @info['info']['bitrate'])
+          meter value=meter_value low="0.25" high="0.75" optimum="0.5"
+      td.bitrate #{conn.sendRateKbps} Kbps
       td
         form action="/channels/#{channel.id}/connections/#{conn.connectionId}" method="POST"
           input type="hidden" name="_method" value="DELETE"
           - if channel.servent.can_stop_connections?
-            button.btn.btn-warning.btn-xs type="submit" onclick="$(window).off('beforeunload')" 切断
+            button.btn.btn-warning.btn-xs type="submit" 切断
           - else
-            button.btn.btn-default.btn-xs disabled=true style="pointer-events: auto" title="このサーバーではリレー接続の切断はサポートされていません。" type="submit" onclick="$(window).off('beforeunload')" 切断
+            button.btn.btn-default.btn-xs disabled=true style="pointer-events: auto" title="このサーバーではリレー接続の切断はサポートされていません。" type="submit" 切断
