@@ -1,6 +1,7 @@
 require 'active_support'
 require 'active_support/core_ext'
 require 'resolv'
+require_relative '../lib/nipponize'
 
 class Connection
   KEYS = [:connectionId, :type, :status, :sendRate, :recvRate,
@@ -19,6 +20,18 @@ class Connection
     Resolv.getname($1)
   rescue Resolv::ResolvError
     $1
+  end
+
+  def remoteIPAddress
+    unless remoteEndPoint =~ /\A(\d+).(\d+).(\d+).(\d+):\d+\z/
+      fail
+    end
+
+    [$1, $2, $3, $4].map(&:to_i)
+  end
+
+  def nipponizedRemoteIPAddress
+    Nipponize.encode(remoteIPAddress)
   end
 
   def recvRateKbps
