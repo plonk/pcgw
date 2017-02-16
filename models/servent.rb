@@ -77,7 +77,7 @@ class Servent < ActiveRecord::Base
       when 'WMV'
         "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user_id}"
       when 'FLV'
-        "rtmp://#{WM_MIRROR_HOSTNAME}:6000/live"
+        "rtmp://#{WM_MIRROR_HOSTNAME}/live"
       else
         fail 'unsupported stream type'
       end
