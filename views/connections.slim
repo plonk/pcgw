@@ -4,7 +4,7 @@ table.connections
       td #{conn.nipponizedRemoteIPAddress}
       td
         .meter-outer
-          .meter-notch ▼
+          .meter-notch.text-muted ▼
           br
           - meter_value = "%.2f" % bitrate_meter(conn.sendRateKbps, @info['info']['bitrate'])
           meter value=meter_value low="0.25" high="0.75" optimum="0.5"
