@@ -168,7 +168,7 @@ class Pcgw < Sinatra::Base
   delete '/channels/:id/connections/:connection_id' do
     halt 403, "チャンネルを所有していません。" unless @channel.user == @user
 
-    success = @channel.servent.api.stopChannelConnection(@channel.gnu_id, params['connection_id'])
+    success = @channel.servent.api.stopChannelConnection(@channel.gnu_id, params['connection_id'].to_i)
     if success
       redirect back
     else
