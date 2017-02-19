@@ -1,5 +1,9 @@
 / program: ChannelInfo
 / digest: Digest
+
+- content_for :title do
+  | 番組 #{program.id} / ダイジェスト
+
 .page-header
   h1
     = program.channel
