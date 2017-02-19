@@ -1,53 +1,18 @@
 / programs: ChannelInfo のコレクション。
-/
-/ ブロックが与えられた場合は、アクションカラムを生成する。ブロックには
-/ 対象の番組情報がその都度渡され、ブロックを評価した値はアクションカラ
-/ ムの TD の inner HTML とされる。
-.table-responsive
-  table.table
-    tr
-      th
-      th チャンネル
-      th.hidden-xs ジャンル
-      th.hidden-xs 詳細
-      th.visible-xs 内容
-      th 時間
-      - if block_given?
-        th アクション
 
-    - [nil, *programs].each_cons(2) do |prev, curr|
-      tr
-        / 同じユーザーの上の項目と同じならば「〃」にする
-        - ditto = -> (field, &block) { (!prev || prev.user != curr.user || prev.send(field) != curr.send(field)) ? block.() : '〃' }
+.list-group
+  - programs.each do |curr|
+    a.list-group-item href="/programs/#{curr.id}"
+      span  style="white-space: nowrap"
         / ユーザー画像
-        td style="text-align: right"
-          - if !prev || prev.user != curr.user
-            a href="/profile/#{curr.user.id}"
-              img.img-rounded width="28" src=curr.user.image alt=curr.user.name
+        img.img-rounded width="28" src=curr.user.image alt=curr.user.name
         / チャンネル名
-        td
-          == ditto.(:channel) do
-            |  #{curr.channel}
-        td.hidden-xs
-          == ditto.(:genre) do
-            = default_to('㊙', curr.genre_proper)
-        td.hidden-xs
-          - if curr.url.empty?
-            == ditto.(:desc) do
-              = default_to('㊙', curr.desc)
-          - else
-            a href=curr.url
-              == ditto.(:desc) do
-                = default_to('㊙', curr.desc)
-        td.visible-xs
-          a href=curr.url
-            == ditto.(:summary) do
-              = curr.summary
-        td
-          - if curr.terminated_at
-            = TimeUtil.render_time_range(curr.created_at.localtime, curr.terminated_at.localtime)
-          - else
-            | #{TimeUtil.render_time(curr.created_at.localtime)} 〜
-        td
-          - if block_given?
-            == yield curr
+        b style="margin-left: 0.5em"
+          | #{curr.channel}
+        span style="margin-left: 1em"
+          = curr.summary
+      span style="float: right; min-width: 200px"
+        - if curr.terminated_at
+          = TimeUtil.render_time_range(curr.created_at.localtime, curr.terminated_at.localtime)
+        - else
+          | #{TimeUtil.render_time(curr.created_at.localtime)} 〜
