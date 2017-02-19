@@ -1,7 +1,7 @@
 / servent: Servent
 
 - content_for :title do
-  | 管理 / サーバント #{servent.hostname}:#{servent.port}
+  | 管理 / サーバント #{servent.hostname}:#{servent.port.to_s}
 
 == slim :flash
 
