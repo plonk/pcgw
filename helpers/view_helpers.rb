@@ -17,4 +17,21 @@ module ViewHelpers
     end
   end
   module_function :bitrate_meter
+
+  def speech_proportion(str)
+    str.scan(/\p{Word}/).size.fdiv(str.size)
+  end
+  module_function :speech_proportion
+
+  def aa?(str)
+    if str !~ /<br>/
+      false
+    else
+      # タグっぽいものは削除する
+      str = str.gsub(/<[^>]>/, '')
+      threshold = 0.7
+      speech_proportion(str) < threshold
+    end
+  end
+  module_function :aa?
 end
