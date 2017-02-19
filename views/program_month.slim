@@ -9,7 +9,7 @@
 .panel.panel-default
   .panel-heading #{calendar.year}年#{calendar.month}月
 
-  - if @user && @user.admin?
+  - if admin_view?
     == slim :program_table, locals: { programs: programs } do |program|
       form action="/programs/#{program.id}" method="POST"
         input type="hidden" name="_method" value="DELETE"

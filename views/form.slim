@@ -48,6 +48,7 @@ form action="/broadcast" method="POST" role="form"
   .form-group
     label for="yp" 掲載YP
     - @yellow_pages.each do |yp|
+      - next if !admin_view? && yp.admin_only
       .radio
         label
           input required="required" type="radio" name="yp" value="#{yp.name}" checked=(template.yp == yp.name)

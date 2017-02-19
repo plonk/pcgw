@@ -7,7 +7,7 @@
 
 - if notices.empty?
   p 今のところお知らせはありません。
-- if @user.admin?
+- if admin_view?
   p
     a.btn.btn-primary href="/notices/new" 新規作成
 

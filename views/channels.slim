@@ -8,7 +8,7 @@ table.table
     th チャンネル名
     th 状態
     th ID
-    - if @user.admin?
+    - if admin_view?
       th アクション
 
   - channels.each do |ch|
@@ -21,6 +21,6 @@ table.table
         = ch.status['status']
       td
         = ch.gnu_id
-      - if @user.admin?
+      - if admin_view?
         td
           == slim :channel_controls, locals: { ch: ch }

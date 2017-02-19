@@ -45,7 +45,7 @@ hr
 - if @user == program.user
   .form-group
     a.btn.btn-block.btn-default href="/create?template=#{program.id}" 続きを配信 &raquo;
-- if @user == program.user || @user&.admin?
+- if @user == program.user || admin_view?
   .form-group
     form action="/programs/#{program.id}" method="POST"
       input type="hidden" name="_method" value="DELETE"

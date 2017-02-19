@@ -55,6 +55,8 @@ class Pcgw < Sinatra::Base
   end
 
   before do
+    @noadmin = params['noadmin'] == 'yes'
+
     # SQLiteに同期をOSに任せるように指定する。
     ActiveRecord::Base.connection.execute('PRAGMA synchronous=OFF')
 

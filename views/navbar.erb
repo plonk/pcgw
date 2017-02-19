@@ -37,7 +37,7 @@
                 <strong><%= h @user.name %></strong><br>
                 <small class="metadata">プロフィールを表示</small></a></li>
             <li class=divider></li>
-            <% if @user.admin? %>
+            <% if admin_view? %>
             <li><a href="/admin"><span class="text-warning">管理</span></a></li>
             <li class=divider></li>
             <% end %>

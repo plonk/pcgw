@@ -2,7 +2,7 @@
 - content_for :title do
   = notice.title
 
-- if @user.admin?
+- if admin_view?
   div
     a.btn.btn-primary href="/notices/#{notice.id}/edit" 編集
     form action="/notices/#{notice.id}" method="POST" style="display: inline;"

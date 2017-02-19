@@ -37,6 +37,18 @@ class Pcgw < Sinatra::Base
       end
     end
 
+    def admin_view?
+      if @user.nil?
+        false
+      elsif !@user.admin?
+        false
+      elsif @noadmin
+        false
+      else
+        true
+      end
+    end
+
     # Peercast Station のチャンネル状態文字列に対応する
     # bootstrap テキストセマンティッククラスを返す。
     def status_semantic_class(status)
