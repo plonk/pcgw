@@ -54,7 +54,7 @@ class Servent < ActiveRecord::Base
   end
 
   def can_get_relay_tree?
-    if agent =~ /^PeerCastStation\// then true else false end
+    true
   end
 
   def can_restart_channel_connection?
