@@ -101,6 +101,10 @@ class Servent < ActiveRecord::Base
     end
   end
 
+  def control_panel_uri
+    "http://#{hostname}:#{port}/"
+  end
+
   private
 
   def create_basic_authorization_header(id, pwd)

@@ -8,19 +8,24 @@ table.table
     th チャンネル名
     th 状態
     th ID
+    th 配信サーバー
     - if admin_view?
       th アクション
 
   - channels.each do |ch|
     tr
       td
-        a href="/profile/#{ch.user.id}"
-          img.img-rounded width="28" src=ch.user.image alt=ch.user.name
+        a href="/profile/#{ch.user.id}" style="margin-right: 0.5em"
+          img.img-rounded width="34" src=ch.user.image alt=ch.user.name
         = ch.info['info']['name']
       td
         = ch.status['status']
       td
-        = ch.gnu_id
+        code.text-info
+          = ch.gnu_id
+      td
+        a href=ch.servent.control_panel_uri
+          = ch.servent.name
       - if admin_view?
         td
           == slim :channel_controls, locals: { ch: ch }
