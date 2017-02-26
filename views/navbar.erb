@@ -39,6 +39,7 @@
             <li class=divider></li>
             <% if admin_view? %>
             <li><a href="/admin"><span class="text-warning">管理</span></a></li>
+            <li><a href="<%= h request.path_info + '?noadmin=yes' %>">一般ユーザビュー</a></li>
             <li class=divider></li>
             <% end %>
 
