@@ -1,0 +1,27 @@
+/ servents: [Servent]
+
+- content_for :title do
+  | 利用状況
+
+script src="/reloader.js"
+
+.reloader data-url="/includes/onair" data-interval=60
+
+.panel.panel-default
+  .panel-heading
+    | サーバー
+
+  table.table
+    tr
+      td 名前
+      td IP
+      td 説明
+      td チャンネル数
+    - servents.each do |servent|
+      tr
+        td #{servent.name}
+        td #{servent.hostname}:#{servent.port}
+        td #{servent.desc}
+        td
+          meter value=servent.channels.size max=servent.max_channels
+          |  #{servent.channels.size} / #{servent.max_channels}

@@ -25,6 +25,10 @@ class Pcgw < Sinatra::Base
     slim :channel_switcher, locals: { channels: @user.channels }, layout: false
   end
 
+  get '/stats' do
+    slim :stats, locals: { servents: Servent.enabled }
+  end
+
   # ホーム
   get '/home' do
     slim :home
