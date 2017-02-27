@@ -9,7 +9,7 @@ create_table "servents", force: true do |t|
   t.integer "max_channels", default: 0
   t.boolean "enabled", default: false
   t.string "agent"
-  t.string "yellow_pages"
+  t.string "yellow_pages", default: ""
 end
 
 create_table "channels", force: true do |t|
