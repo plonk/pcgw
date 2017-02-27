@@ -259,7 +259,7 @@ class Pcgw < Sinatra::Base
 
       broadcast_check_params!
 
-      servent = choose_servent(params['servent'].to_i, params['yp'])
+      servent = choose_servent(-1, params['yp'])
       case servent.agent
       when /^PeerCastStation\//
         breq = PeercastStationBroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip)

@@ -37,7 +37,7 @@ script src="/reloader.js"
     table.table.head-keep
       tr
         th メディア URL
-        td.
+        td
           code#source.url.text-info
             = @channel.push_uri
           - if @channel.stream_key
@@ -45,25 +45,32 @@ script src="/reloader.js"
               | &emsp;ストリームキー&nbsp;
             code.text-info #{@channel.stream_key}
       tr
-        th 状態
+        th 配信サーバー
+        td
+          = @channel.servent.name
+          span.text-muted
+            |  #{@channel.servent.hostname}:#{@channel.servent.port}
+      tr
+        th 稼動時間
+        td
+          span#uptime
+      tr
+        th 接続状態
         td
           span#status
           - if @channel.servent.can_restart_channel_connection?
             a.btn.btn-default.btn-xs style="margin-left: 0.5em" href="/channels/#{@channel.id}/reset" title="エンコーダーとの現在の接続を破棄し、待ち受け状態に戻します(FLV の場合)。"
               span.glyphicon.glyphicon-refresh
               |  リセット
-      tr
-        th リレー時間
-        td
-          span#uptime
-      tr
-        th ビットレート
-        td
           div style="display: inline-block; height: 1em; line-height: 1.0em; text-align: center; vertical-align: middle; transform: translate(0px, -30px)"
             div.text-muted style="font-size: 10px; transform: translate(0px, 17px)" ▼
             br
             meter#bitrate_meter value="0.1" max="1.0" min="0.0" low="0.25" high="0.75" optimum="0.5"
-          | &nbsp;
+          span#source_rate
+          | Kbps
+      tr
+        th 公称ビットレート
+        td
           span#bitrate
           | Kbps
       tr

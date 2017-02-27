@@ -61,15 +61,6 @@ form action="/broadcast" method="POST" role="form"
             span.glyphicon.glyphicon-new-window
             | &nbsp;利用規約
 
-  .form-group
-    label for="servent" 配信サーバー
-    - servents.each do |serv|
-      .radio
-        label
-          input required="required" type="radio" name="servent" data-yellow-pages=serv.yellow_pages value=serv.id
-          | #{serv.name}
-          small &emsp;#{serv.desc}
-
   button.btn.btn-primary.btn-block type="submit" 開始
 
 javascript:
@@ -88,27 +79,3 @@ javascript:
     return this;
   };
   $('form').preventDoubleSumission();
-
-  $('input[name="yp"]').on('change', onYellowPagesChange);
-  function onYellowPagesChange() {
-    var yp = this.value;
-    var already_checked = false;
-    $('input[name="servent"]').each(function (index) {
-      var support = $(this).data("yellow-pages").split(' ').indexOf(yp) !== -1;
-      this.checked = false;
-      if (support) {
-        this.disabled = false;
-        if (!already_checked) {
-          this.checked = true;
-          already_checked = true;
-        }
-        $(this.parentElement).removeClass("text-muted");
-      } else {
-        this.disabled = true;
-        $(this.parentElement).addClass("text-muted");
-      }
-    });
-  }
-  $(function () {
-    onYellowPagesChange.apply($('input[name="yp"][checked]')[0]);
-  });

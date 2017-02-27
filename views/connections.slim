@@ -1,18 +1,22 @@
-table.connections
-  - connections.each do |conn|
-    tr
-      td #{conn.nipponizedRemoteIPAddress}
-      td
-        .meter-outer
-          .meter-notch.text-muted ▼
-          br
-          - meter_value = "%.2f" % bitrate_meter(conn.sendRateKbps, @info['info']['bitrate'])
-          meter value=meter_value low="0.25" high="0.75" optimum="0.5"
-      td.bitrate #{conn.sendRateKbps} Kbps
-      td
-        form action="/channels/#{channel.id}/connections/#{conn.connectionId}" method="POST"
-          input type="hidden" name="_method" value="DELETE"
-          - if channel.servent.can_stop_connections?
-            button.btn.btn-warning.btn-xs type="submit" 切断
-          - else
-            button.btn.btn-default.btn-xs disabled=true style="pointer-events: auto" title="このサーバーではリレー接続の切断はサポートされていません。" type="submit" 切断
+- if connections.empty?
+  span.text-warning
+    | なし
+- else
+  table.connections
+    - connections.each do |conn|
+      tr
+        td #{conn.nipponizedRemoteIPAddress}
+        td
+          .meter-outer
+            .meter-notch.text-muted ▼
+            br
+            - meter_value = "%.2f" % bitrate_meter(conn.sendRateKbps, @info['info']['bitrate'])
+            meter value=meter_value low="0.25" high="0.75" optimum="0.5"
+        td.bitrate #{conn.sendRateKbps} Kbps
+        td
+          form action="/channels/#{channel.id}/connections/#{conn.connectionId}" method="POST"
+            input type="hidden" name="_method" value="DELETE"
+            - if channel.servent.can_stop_connections?
+              button.btn.btn-warning.btn-xs type="submit" 切断
+            - else
+              button.btn.btn-default.btn-xs disabled=true style="pointer-events: auto" title="このサーバーではリレー接続の切断はサポートされていません。" type="submit" 切断

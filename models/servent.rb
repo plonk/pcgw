@@ -113,8 +113,8 @@ class Servent < ActiveRecord::Base
   end
 
   class << self
-    def request_one
-      enabled.to_a.find { |s| s.vacancies > 0 }
+    def request_one(yp)
+      enabled.to_a.find { |s| s.yellow_pages.split(' ').include?(yp) && s.vacancies > 0 }
     end
 
     def enabled
