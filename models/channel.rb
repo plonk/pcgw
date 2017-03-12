@@ -27,8 +27,11 @@ class Channel < ActiveRecord::Base
     raise ChannelNotFoundError unless dict
     @status = dict['status']
     if @status['status'] == "Receiving"
-      self.last_active_at = Time.now
-      save
+      source_connection = connections.find { |conn| conn.type == 'source' }
+      if source_connection && source_connection.recvRateKbps >= 1.0
+        self.last_active_at = Time.now
+        save
+      end
     end
     @info = { 'info' => dict['info'], 'track' => dict['track'], 'yellowPages' => dict['yellowPages'] }
   end
