@@ -5,7 +5,8 @@
   table.connections
     - connections.each do |conn|
       tr
-        td #{conn.nipponizedRemoteIPAddress}
+        td
+          a href="/ip/decode/#{conn.nipponizedRemoteIPAddress}" #{conn.nipponizedRemoteIPAddress}
         td
           .meter-outer
             .meter-notch.text-muted ▼

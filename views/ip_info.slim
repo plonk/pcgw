@@ -1,0 +1,17 @@
+- content_for :title do
+  | ホスト情報 #{ip.to_s}
+
+.panel.panel-default
+  table.table
+    tr
+      th IPアドレス
+      td
+        = ip
+    tr
+      th ホスト名
+      td
+        = hostname
+    tr
+      th 日本語エンコード
+      td
+        = nipponized

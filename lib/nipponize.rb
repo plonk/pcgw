@@ -79,6 +79,7 @@ module Nipponize
 
     addr
   end
+  module_function :decode
 end
 
 if __FILE__ == $0
