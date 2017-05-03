@@ -19,7 +19,7 @@ class YellowPage
                       ['TestP',
                        '',
                        '',
-                       'http:/yp.pcgw.pgw.jp/',
+                       'http://yp.pcgw.pgw.jp/',
                        'http://ie.pcgw.pgw.jp/favicon.ico',
                        'pcp://yp.pcgw.pgw.jp:7146/',
                        true]]
