@@ -19,11 +19,11 @@ form action="/account" method="POST" role="form"
       = @user.bio
 
   .form-group
-    button.btn.btn-primary.btn-block.btn-lg type="submit"
+    button.btn.btn-primary type="submit"
       | 変更を保存
 
-form action="/account/#{@user.id}" method="POST"
+form action="/account/#{@user.id}" method="POST" style="float: right; display: inline"
   .form-group
     input type="hidden" name="_method" value="delete"
-    button.btn.btn-danger.btn-block type="submit"
+    button.btn.btn-danger type="submit"
       | アカウントを削除

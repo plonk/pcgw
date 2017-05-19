@@ -37,17 +37,14 @@
         a href=program.url target="_blank"
           = program.url
 
-hr
-.form-group
- a.btn.btn-block.btn-default href="/programs/#{program.id}/digest"
-   | 配信ダイジェスト
-   span.text-warning style="margin-left: 0.3em" β
+a.btn.btn-default href="/programs/#{program.id}/digest" style="margin-right: 0.8em"
+  | 配信ダイジェスト
+  span.text-warning style="margin-left: 0.3em" β
 - if @user == program.user
-  .form-group
-    a.btn.btn-block.btn-default href="/create?template=#{program.id}" 続きを配信 &raquo;
+  a.btn.btn-default href="/create?template=#{program.id}" style="margin-right: 0.8em"
+    | 続きを配信 &raquo;
 - if @user == program.user || admin_view?
-  .form-group
-    form action="/programs/#{program.id}" method="POST"
-      input type="hidden" name="_method" value="DELETE"
-      input type="hidden" name="redirect_path" value="/home"
-      button.btn.btn-warning.btn-block type="submit" 削除
+  form action="/programs/#{program.id}" method="POST" style="display: inline"
+    input type="hidden" name="_method" value="DELETE"
+    input type="hidden" name="redirect_path" value="/home"
+    button.btn.btn-warning type="submit" 削除
