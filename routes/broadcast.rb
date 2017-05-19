@@ -26,7 +26,7 @@ class PeercastStationBroadcastRequest
     when 'FLV'
       source_uri_rtmp(@info.user)
     else
-      fail
+      fail 'Unsupported stream type'
     end
   end
 
@@ -128,11 +128,13 @@ class PeercastBroadcastRequest
   def source_uri
     case @info.stream_type
     when 'WMV'
-      source_uri_http(@info.user)
+      source_uri_wmv(@info.user)
     when 'FLV'
-      source_uri_rtmp(@info.user)
+      source_uri_flv(@info.user)
+    when 'MKV'
+      source_uri_mkv(@info.user)
     else
-      fail
+      fail 'Unsupported stream type'
     end
   end
 
@@ -172,12 +174,16 @@ class PeercastBroadcastRequest
     }
   end
 
-  def source_uri_rtmp(user)
+  def source_uri_wmv(user)
+    "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user.id}"
+  end
+
+  def source_uri_flv(user)
     "http://#{WM_MIRROR_HOSTNAME}:6000/live/#{9000 + user.id}"
   end
 
-  def source_uri_http(user)
-    "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user.id}"
+  def source_uri_mkv(user)
+    "http://#{WM_MIRROR_HOSTNAME}:7000/#{9000 + user.id}"
   end
 end
 

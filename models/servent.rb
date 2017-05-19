@@ -78,6 +78,8 @@ class Servent < ActiveRecord::Base
         "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user_id}"
       when 'FLV'
         "rtmp://#{WM_MIRROR_HOSTNAME}/live"
+      when 'MKV'
+        "http://#{WM_MIRROR_HOSTNAME}:7000/#{9000 + user_id}"
       else
         fail 'unsupported stream type'
       end
@@ -88,7 +90,7 @@ class Servent < ActiveRecord::Base
 
   def stream_key(stream_type, user_id)
     case stream_type
-    when 'WMV'
+    when 'WMV', 'MKV'
       nil
     when 'FLV'
       if agent =~ /^PeerCast\//

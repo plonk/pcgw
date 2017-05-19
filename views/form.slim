@@ -45,6 +45,11 @@ form action="/broadcast" method="POST" role="form"
         input type="radio" name="stream_type" value="WMV" checked=(template.stream_type == 'WMV')
         | WMV
 
+    .radio
+      label title="Matroska"
+        input type="radio" name="stream_type" value="MKV" checked=(template.stream_type == 'MKV')
+        | MKV (β)
+
   .form-group
     label for="yp" 掲載YP
     - @yellow_pages.each do |yp|

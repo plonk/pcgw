@@ -9,6 +9,8 @@
   == erb :wmv, locals: { playlist: channel.playlist_url, stream: channel.stream_url }
 - elsif channel.info['info']['contentType'] == 'FLV'
   == erb :flv, locals: { stream: channel.stream_url }
+- elsif channel.info['info']['contentType'] == 'MKV'
+  == erb :mkv, locals: { stream: channel.stream_url }
 
 p
   | コンタクトURL：

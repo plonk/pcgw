@@ -52,6 +52,8 @@ class Channel < ActiveRecord::Base
       "http://#{servent.hostname}:#{servent.port}/pls/#{gnu_id}.asx"
     when 'FLV'
       "http://#{servent.hostname}:#{servent.port}/pls/#{gnu_id}.m3u"
+    when 'MKV'
+      "http://#{servent.hostname}:#{servent.port}/pls/#{gnu_id}.m3u"
     else
       ''
     end
@@ -63,6 +65,8 @@ class Channel < ActiveRecord::Base
       "mmsh://#{servent.hostname}:#{servent.port}/stream/#{gnu_id}.wmv"
     when 'FLV'
       "http://#{servent.hostname}:#{servent.port}/stream/#{gnu_id}.flv"
+    when 'MKV'
+      "http://#{servent.hostname}:#{servent.port}/stream/#{gnu_id}.mkv"
     else
       ''
     end
