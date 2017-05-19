@@ -13,8 +13,12 @@
   == erb :mkv, locals: { stream: channel.stream_url }
 
 p
-  | コンタクトURL：
+  | 再生されない場合はプレイリストを試してください。
+
+p
   a.btn.btn-default href=channel.info['info']['url'] target="_blank" style="margin-left: 0.5em"
     span.glyphicon.glyphicon-new-window style="margin-right: 0.5em"
-    = channel.info['info']['url']
-      
+    | コンタクトURL
+  a.btn.btn-default href=channel.playlist_url target="_blank" style="margin-left: 0.5em"
+    span.glyphicon.glyphicon-download-alt style="margin-right: 0.5em"
+    | プレイリスト
