@@ -55,7 +55,7 @@ class Pcgw < Sinatra::Base
                                  "error_message" => "したらば掲示板のURLではありません。" })
         end
       end
-    rescue Timeout::Error
+    rescue Timeout::Error, Bbs::HTTPError
       return json_response({ "status"        => "error",
                              "error_message" => "情報を得ることができませんでした。" })
     end
