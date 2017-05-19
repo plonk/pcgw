@@ -46,7 +46,13 @@ class Board
 
   def settings
     str = download(@settings_url)
-    return parse_settings(str.force_encoding("EUC-JP").encode("UTF-8"))
+    # 成功した時は EUC-JP で、エラーの時は UTF-8 で来る
+    begin
+      str.force_encoding("EUC-JP").encode!("UTF-8")
+    rescue Encoding::InvalidByteSequenceError
+      str.force_encoding("UTF-8")
+    end
+    return parse_settings(str)
   end
 
   def thread_list
