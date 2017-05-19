@@ -21,7 +21,7 @@ class Pcgw < Sinatra::Base
           settings = board.settings
           if settings.has_key?("ERROR")
             return json_response({ "status"        => "error",
-                                   "error_message" => "そのような板はありません。" })
+                                   "error_message" => settings["ERROR"] })
           end
 
           thread = board.thread(thread_num)
@@ -43,7 +43,7 @@ class Pcgw < Sinatra::Base
           settings = board.settings
           if settings.has_key?("ERROR")
             return json_response({ "status"        => "error",
-                                   "error_message" => "そのような板はありません。" })
+                                   "error_message" => settings["ERROR"] })
           end
 
           return json_response({ "status" => "ok",
