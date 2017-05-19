@@ -85,7 +85,6 @@ class Pcgw < Sinatra::Base
     else
       redirect to '/images/blank_screen.png'
     end
-    
   end
 
   get '/programs/:id/screen_shots' do |id|

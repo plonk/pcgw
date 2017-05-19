@@ -60,5 +60,4 @@ class Pcgw < Sinatra::Base
                              "error_message" => "情報を得ることができませんでした。" })
     end
   end
-  
 end
