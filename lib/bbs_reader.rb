@@ -3,6 +3,12 @@ require 'uri'
 
 module Bbs
 
+class HTTPError < StandardError
+  def code
+    message.to_i
+  end
+end
+
 SHITARABA_THREAD_URL_PATTERN = %r{\Ahttp://jbbs\.shitaraba\.net/bbs/read\.cgi/(\w+)/(\d+)/(\d+)(:?|\/.*)\z}
 
 def shitaraba_thread?(url)
@@ -70,6 +76,9 @@ class Board
     response = Net::HTTP.start(url.host, url.port) { |http|
       http.get(url.path)
     }
+    if response.code != '200'
+      raise HTTPError, response.code
+    end
     return response.body
   end
 
