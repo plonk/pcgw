@@ -23,9 +23,10 @@ class ScreenShotRefresh
 
   def command(channel, output)
     case channel.channel_info.stream_type
-    when 'FLV' then "ffmpeg -i http://#{channel.servent.hostname}:#{channel.servent.port}/stream/#{channel.gnu_id} -y -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr -vframes 1 #{Shellwords.escape(output)}"
     when 'WMV' then "ffmpeg -i mmsh://#{channel.servent.hostname}:#{channel.servent.port}/stream/#{channel.gnu_id} -y -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr -vframes 1 #{Shellwords.escape(output)}"
-    else "" end
+    else
+      "ffmpeg -i http://#{channel.servent.hostname}:#{channel.servent.port}/stream/#{channel.gnu_id} -y -vf \"select='eq(pict_type,PICT_TYPE_I)'\" -vsync vfr -vframes 1 #{Shellwords.escape(output)}"
+    end
   end
 
   def capture(channel, output)
