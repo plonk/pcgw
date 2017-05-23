@@ -71,7 +71,7 @@ class Board
   end
 
   def threads
-    thread_list.each_line.map do |line|
+    thread_list.each_line.to_a.uniq.map do |line|
       fail 'スレ一覧のフォーマットが変です' unless line =~ /^(\d+)\.cgi,(.+?)\((\d+)\)$/
       id, title, last = $1.to_i, $2, $3.to_i
       Thread.new(self, id, title, last)
