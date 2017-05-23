@@ -101,8 +101,15 @@ class Pcgw < Sinatra::Base
       if Bbs.shitaraba_thread?(program.url)
         thread = Bbs.thread_from_url(program.url)
         digest = ProgramDigest.new(program, thread.posts(1..Float::INFINITY))
+      elsif Bbs.shitaraba_board?(program.url)
+        board = Bbs.board_from_url(program.url)
+        threads = board.threads.sort_by(&:created_at)
+        t1 = threads.select { |t| t.created_at < program.created_at }.first
+        new_threads = threads.select { |t| t.created_at >= program.created_at }
+        posts = [*t1, *new_threads].flat_map { |t| t.posts(1..Float::INFINITY) }
+        digest = ProgramDigest.new(program, posts)
       else
-        digest = ProgramDigest.new(program, [])
+        halt 404, 'コンタクトURLが掲示板ではありません。'
       end
       slim :program_digest, locals: { program: program, digest: digest }
     rescue Bbs::HTTPError => e

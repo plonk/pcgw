@@ -10,15 +10,17 @@ class HTTPError < StandardError
 end
 
 SHITARABA_THREAD_URL_PATTERN = %r{\Ahttp://jbbs\.shitaraba\.net/bbs/read\.cgi/(\w+)/(\d+)/(\d+)(:?|\/.*)\z}
+SHITARABA_BOARD_URL_PATTERN = %r{\Ahttp://jbbs\.shitaraba\.net/(\w+)/(\d+)/?\z}
 
 def shitaraba_thread?(url)
-  if url.to_s =~ SHITARABA_THREAD_URL_PATTERN
-    return true
-  else
-    return false
-  end
+  !!(url.to_s =~ SHITARABA_THREAD_URL_PATTERN)
 end
 module_function :shitaraba_thread?
+
+def shitaraba_board?(url)
+  !!(url.to_s =~ SHITARABA_BOARD_URL_PATTERN)
+end
+module_function :shitaraba_board?
 
 def thread_from_url(url)
   if url.to_s =~ SHITARABA_THREAD_URL_PATTERN
@@ -31,6 +33,16 @@ def thread_from_url(url)
   raise 'bad URL'
 end
 module_function :thread_from_url
+
+def board_from_url(url)
+  if url.to_s =~ SHITARABA_BOARD_URL_PATTERN
+    category, board_num = $1, $2.to_i
+    board = Board.new(category, board_num)
+    return board
+  end
+  raise 'bad URL'
+end
+module_function :board_from_url
 
 class Board
   def initialize(category, board_num)
