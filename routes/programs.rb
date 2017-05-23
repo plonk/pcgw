@@ -104,8 +104,17 @@ class Pcgw < Sinatra::Base
       elsif Bbs.shitaraba_board?(program.url)
         board = Bbs.board_from_url(program.url)
         threads = board.threads.sort_by(&:created_at)
-        t1 = threads.select { |t| t.created_at < program.created_at }.first
-        new_threads = threads.select { |t| t.created_at >= program.created_at }
+        # 配信開始よりも前に作成されたスレッドの中で一番新しいもの
+        t1 = threads.select { |t| t.created_at < program.created_at }.last
+
+        if program.terminated_at
+          termination_time = program.terminated_at.localtime + 5.minutes
+        else
+          termination_time = Time.now.localtime
+        end
+        # 配信中に作成されたスレッド
+        new_threads = threads.select { |t| t.created_at >= program.created_at && t.created_at < termination_time }
+
         posts = [*t1, *new_threads].flat_map { |t| t.posts(1..Float::INFINITY) }
         digest = ProgramDigest.new(program, posts)
       else
