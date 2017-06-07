@@ -67,6 +67,7 @@ class Pcgw < Sinatra::Base
     rescue RestClient::ResourceNotFound
       halt 500, 'PeerCast Station は API による操作を受け付けていません。'
     end
+
     # チャンネルがサーバントで生きているか確認。
     Channel.all.each do |ch|
       if !ch.exist?
@@ -78,6 +79,7 @@ class Pcgw < Sinatra::Base
         log.info("channel #{ch.id}(#{ch.gnu_id}) destroyed for inactivity")
       end
     end
+
     begin
       get_user
     rescue ActiveRecord::RecordNotFound => e
@@ -97,7 +99,7 @@ class Pcgw < Sinatra::Base
     # トップページ
     if request.path_info == '/'
       if logged_in?
-        redirect to("/home") 
+        redirect to("/home")
       else
         pass
       end
