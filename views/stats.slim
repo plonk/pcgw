@@ -14,12 +14,14 @@ script src="/reloader.js"
   table.table
     tr
       td 名前
+      td バージョン
       td IP
       td 説明
       td チャンネル数
     - servents.each do |servent|
       tr
         td #{servent.name}
+        td #{servent.agnet}
         td #{servent.hostname}:#{servent.port}
         td #{servent.desc}
         td
