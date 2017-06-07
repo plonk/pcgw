@@ -60,13 +60,7 @@ class Pcgw < Sinatra::Base
     # SQLiteに同期をOSに任せるように指定する。
     ActiveRecord::Base.connection.execute('PRAGMA synchronous=OFF')
 
-    begin
-      @yellow_pages = YellowPage.all
-    rescue RestClient::Unauthorized
-      halt 500, 'PeerCast Station に認証を要求されました。'
-    rescue RestClient::ResourceNotFound
-      halt 500, 'PeerCast Station は API による操作を受け付けていません。'
-    end
+    @yellow_pages = YellowPage.all
 
     # チャンネルがサーバントで生きているか確認。
     Channel.all.each do |ch|
