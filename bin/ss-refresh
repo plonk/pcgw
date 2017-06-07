@@ -51,7 +51,7 @@ class ScreenShotRefresh
     end
     # 子供の死を看取る
     Process.waitpid(pid)
-    log.error('timed out')
+    log.error('capturing timed out')
     return false
   end
 
