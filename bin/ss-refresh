@@ -38,7 +38,7 @@ class ScreenShotRefresh
       Process.waitpid(pid)
       log.info "exit status #{$?}"
       if $? != 0
-	return false
+        return false
       end
     end
     return File.exist?(output)
