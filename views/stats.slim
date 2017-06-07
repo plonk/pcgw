@@ -16,14 +16,12 @@ script src="/reloader.js"
       td 名前
       td バージョン
       td IP
-      td 説明
       td チャンネル数
     - servents.each do |servent|
       tr
         td #{servent.name}
         td #{servent.agnet}
         td #{servent.hostname}:#{servent.port}
-        td #{servent.desc}
         td
           meter value=servent.channels.size max=servent.max_channels
           |  #{servent.channels.size} / #{servent.max_channels}
