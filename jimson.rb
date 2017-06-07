@@ -75,7 +75,7 @@ class Pcgw < Sinatra::Base
     end
 
     # サーバーにだけ存在するチャンネルは停止する。
-    Servent.all.each do |servent|
+    Servent.enabled.each do |servent|
       servent.api.getChannels.map { |it| it['channelId'] }.each do |cid|
         unless Channel.find_by(gnu_id: cid)
           servent.api.stopChannel(cid)
