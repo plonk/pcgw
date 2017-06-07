@@ -74,6 +74,16 @@ class Pcgw < Sinatra::Base
       end
     end
 
+    # サーバーにだけ存在するチャンネルは停止する。
+    Servent.all.each do |servent|
+      servent.api.getChannels.map { |it| it['channelId'] }.each do |cid|
+        unless Channel.find_by(gnu_id: cid)
+          servent.api.stopChannel(cid)
+          log.warn("unknown channel #{cid} on server #{servent.id} stopped")
+        end
+      end
+    end
+
     begin
       get_user
     rescue ActiveRecord::RecordNotFound => e
