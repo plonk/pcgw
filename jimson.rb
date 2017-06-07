@@ -62,7 +62,7 @@ class Pcgw < Sinatra::Base
 
     @yellow_pages = YellowPage.all
 
-    # チャンネルがサーバントで生きているか確認。
+    # チャンネルがサーバーで生きているか確認。
     Channel.all.each do |ch|
       if !ch.exist?
         ch.destroy

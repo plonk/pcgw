@@ -1,12 +1,12 @@
 require 'rack-flash'
 
-# サーバントの管理
+# サーバーの管理
 class Pcgw < Sinatra::Base
   before '/servents/?*' do
     must_be_admin!(@user)
   end
 
-  # サーバント一覧
+  # サーバー一覧
   get '/servents/?' do
     servents = Servent.order(priority: :asc)
     slim :servent_index, locals: { servents: servents }

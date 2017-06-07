@@ -1,12 +1,12 @@
 / servent: Servent
 
 - content_for :title do
-  | 管理 / サーバント #{servent.hostname}:#{servent.port.to_s}
+  | 管理 / サーバー #{servent.hostname}:#{servent.port.to_s}
 
 == slim :flash
 
 p
-  a.btn.btn-default href="/servents" &laquo; サーバント一覧
+  a.btn.btn-default href="/servents" &laquo; サーバー一覧
 
 .panel.panel-default
   .panel-heading サーバー情報

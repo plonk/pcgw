@@ -1,7 +1,7 @@
 / servents:
 
 - content_for :title do
-  | 管理 / サーバント一覧
+  | 管理 / サーバー一覧
 
 == slim :flash
 
@@ -11,7 +11,7 @@ p
 
 .panel.panel-default
   .panel-heading
-    #{servents.count} サーバント
+    #{servents.count} サーバー
 
   / テーブルで使うフォームを生成する。
   - servents.each do |serv|
