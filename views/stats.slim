@@ -20,7 +20,7 @@ script src="/reloader.js"
     - servents.each do |servent|
       tr
         td #{servent.name}
-        td #{servent.agnet}
+        td #{servent.agent}
         td #{servent.hostname}:#{servent.port}
         td
           meter value=servent.channels.size max=servent.max_channels
