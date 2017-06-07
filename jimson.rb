@@ -108,8 +108,7 @@ class Pcgw < Sinatra::Base
     # ヘルプ
     pass if request.path_info =~ %r{^/doc($|/)}
     # プロフィール
-    pass if request.path_info =~ %r{^/profile}
-    pass if request.path_info =~ %r{^/profile/}
+    pass if request.path_info =~ %r{^/profile/?}
     # index.txt
     pass if request.path_info == '/index.txt'
     # 配信履歴
