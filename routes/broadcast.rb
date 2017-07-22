@@ -1,5 +1,3 @@
-require 'lockfile'
-
 # チャンネル作成要求を表わすクラス。
 class PeercastStationBroadcastRequest
   attr_reader :info
