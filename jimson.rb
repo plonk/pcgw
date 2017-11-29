@@ -2,6 +2,7 @@
 require 'jimson'
 require 'sinatra/base'
 require 'sinatra/content_for'
+require 'active_support'
 require 'active_support/core_ext'
 require 'omniauth-twitter'
 require 'active_record'
