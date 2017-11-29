@@ -127,9 +127,12 @@ class Pcgw < Sinatra::Base
   end
 
   delete '/programs/:id' do |id|
-    must_be_admin!(@user)
-
     info = ChannelInfo.find(id) rescue halt(404, 'entry not found')
+
+    if get_user != info.user
+      must_be_admin! @user
+    end
+
     unless info.terminated_at?
       halt(403, "cannot delete active channel info")
     end
