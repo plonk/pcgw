@@ -10,8 +10,7 @@ class Peercast
   end
 
   class << self
-    attr_accessor :debug
-    Peercast.debug = false
+    attr_accessor :logger
   end
 
   attr_reader :host, :port
@@ -32,7 +31,7 @@ class Peercast
                 @helper.process_call(name, args, &block)
               end
     end
-    STDERR.puts("%s: %d msec elapsed" % [name, span*1000]) if Peercast.debug
+    Peercast.logger&.info("%s: %d usec elapsed" % [name, span*1000*1000])
     value
   rescue Errno::ECONNREFUSED, RestClient::Unauthorized => e
     raise Unavailable.new(host, port, e.message)
