@@ -56,6 +56,7 @@ class Board
     return URI.parse("http://jbbs.shitaraba.net/bbs/rawmode.cgi/#{@category}/#{@board_num}/#{thread_num}/")
   end
 
+  # () → Hash
   def settings
     str = download(@settings_url)
     # 成功した時は EUC-JP で、エラーの時は UTF-8 で来る
