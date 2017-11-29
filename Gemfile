@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rack', '~> 1.4.5'
+gem 'rack'
 gem 'jimson'
 gem 'sinatra'
 gem 'sinatra-contrib' # for cookies
