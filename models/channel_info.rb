@@ -6,11 +6,7 @@ class ChannelInfo < ActiveRecord::Base
   has_many :screen_shots, dependent: :destroy
 
   def primary_screen_shot
-    if screen_shots.empty?
-      ScreenShot.new
-    else
-      screen_shots.order(created_at: :desc).first
-    end
+    screen_shots.order(created_at: :desc).first || ScreenShot.new
   end
 
   def genre_proper
