@@ -135,7 +135,9 @@ class Post
   end
 
   def deleted?
-    @date == '＜削除＞'
+    # 四つのフィールドが等しかった場合に削除されたものとみなす。日付以
+    # 外のフィールドが日付に等しかった場合、偽陽性となることに注意。
+    [@name, @mail, @body].all? { |f| f == @date }
   end
 
   private
@@ -145,7 +147,7 @@ class Post
       y, mon, d, h, min, sec = [$1, $2, $3, $4, $5, $6].map(&:to_i)
       Time.new(y, mon, d, h, min, sec)
     else
-      fail ArgumentError, "#{str.inspect}"
+      fail ArgumentError, "Not a date. Delete post? #{str.inspect}"
     end
   end
 end
