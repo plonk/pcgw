@@ -5,7 +5,7 @@ gem 'jimson'
 gem 'sinatra'
 gem 'sinatra-contrib' # for cookies
 gem 'activesupport'
-gem 'activerecord', '~> 4.1.7'
+gem 'activerecord'
 gem 'omniauth-twitter'
 gem 'sqlite3'
 gem 'slim'
