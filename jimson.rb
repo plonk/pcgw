@@ -47,12 +47,14 @@ class Pcgw < Sinatra::Base
     Slim::Engine.set_default_options pretty: true
     set :show_exceptions, :after_handler
     Peercast.logger = Logging.logger
+    ActiveRecord::Base.logger = Logging.logger
   end
 
   configure :production do
     Logging.logger = Logger.new('log/pcgw.log', 'daily')
     Slim::Engine.set_default_options pretty: false
     Peercast.logger = Logging.logger
+    ActiveRecord::Base.logger = Logging.logger
   end
 
   before do
