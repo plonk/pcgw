@@ -14,6 +14,7 @@ class ChannelInfo < ActiveRecord::Base
         if terminated_at
           self.primary_screen_shot_id = latest.id
           save!
+          latest
         else
           latest
         end
