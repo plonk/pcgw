@@ -42,6 +42,7 @@ create_table "channel_infos", force: true do |t|
   t.string  "yp"
   t.timestamps
   t.datetime "terminated_at"
+  t.integer "primary_screen_shot_id", default: nil
 end
 
 create_table "screen_shots", force: true do |t|
