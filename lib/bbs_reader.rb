@@ -9,8 +9,8 @@ class HTTPError < StandardError
   end
 end
 
-SHITARABA_THREAD_URL_PATTERN = %r{\Ahttp://jbbs\.shitaraba\.net/bbs/read\.cgi/(\w+)/(\d+)/(\d+)(:?|\/.*)\z}
-SHITARABA_BOARD_URL_PATTERN = %r{\Ahttp://jbbs\.shitaraba\.net/(\w+)/(\d+)/?\z}
+SHITARABA_THREAD_URL_PATTERN = %r{\Ahttps?://jbbs\.shitaraba\.net/bbs/read\.cgi/(\w+)/(\d+)/(\d+)(:?|\/.*)\z}
+SHITARABA_BOARD_URL_PATTERN = %r{\Ahttps?://jbbs\.shitaraba\.net/(\w+)/(\d+)/?\z}
 
 def shitaraba_thread?(url)
   !!(url.to_s =~ SHITARABA_THREAD_URL_PATTERN)

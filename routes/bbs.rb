@@ -12,7 +12,7 @@ class Pcgw < Sinatra::Base
     begin
       Timeout.timeout(3) do 
         case url
-        when %r{\Ahttp://jbbs\.shitaraba\.net/bbs/read\.cgi/(\w+)/(\d+)/(\d+)(:?|\/.*)\z}
+        when %r{\Ahttps?://jbbs\.shitaraba\.net/bbs/read\.cgi/(\w+)/(\d+)/(\d+)(:?|\/.*)\z}
           category = $1
           board_num = $2.to_i
           thread_num = $3.to_i
@@ -35,7 +35,7 @@ class Pcgw < Sinatra::Base
                                  "thread_title" => thread.title,
                                  "last"         => thread.last,
                                  "max"          => settings['BBS_THREAD_STOP'].to_i })
-        when %r{\Ahttp://jbbs\.shitaraba\.net/(\w+)/(\d+)/?\z}
+        when %r{\Ahttps?://jbbs\.shitaraba\.net/(\w+)/(\d+)/?\z}
           category = $1
           board_num = $2.to_i
 

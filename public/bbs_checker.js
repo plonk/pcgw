@@ -1,7 +1,7 @@
 $(function () {
     function isValidBbsUrl(str) {
-        var THREAD_URL = /^http:\/\/jbbs\.shitaraba\.net\/bbs\/read\.cgi\/(\w+)\/(\d+)\/(\d+)(?:|\/.*)$/;
-        var BOARD_URL = /^http:\/\/jbbs\.shitaraba\.net\/(\w+)\/(\d+)\/?$/;
+        var THREAD_URL = /^https?:\/\/jbbs\.shitaraba\.net\/bbs\/read\.cgi\/(\w+)\/(\d+)\/(\d+)(?:|\/.*)$/;
+        var BOARD_URL = /^https?:\/\/jbbs\.shitaraba\.net\/(\w+)\/(\d+)\/?$/;
         if (str.match(THREAD_URL) || str.match(BOARD_URL))
             return true;
         else
