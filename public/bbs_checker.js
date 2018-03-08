@@ -8,23 +8,63 @@ $(function () {
             return false;
     }
 
-    function buildMessage(response) {
-        if (response.status == 'error') {
-            return "エラー: " + response.error_message;
-        } else if (response.status == 'ok') {
-            if (response.type == 'board') {
-                return "「" + response.title + "」掲示板トップ";
-            } else if (response.type == 'thread') {
-                var msg = "掲示板「" + response.title + "」のスレ「" + response.thread_title + " (";
-                if (response.last == response.max) {
+    function boardUrl(r) {
+        return "https://jbbs.shitaraba.net/" +
+            r.category + "/" +
+            r.board_num + "/";
+    }
+
+    function threadUrl(r) {
+        if (r.type !== 'thread') {
+            throw new Error("boardUrl: not a thread response");
+        }
+        return "https://jbbs.shitaraba.net/bbs/read.cgi/" +
+            r.category + "/" +
+            r.board_num + "/" +
+            r.thread_num;
+    }
+
+    function latestThreadButton(category, board_num) {
+        return "<button type=\"button\" class=\"btn btn-xs btn-default\" onclick=\"changeToLatestThread(&quot;" + category + "&quot;, " + board_num + ")\" title=\"コンタクトURLをこの板でまだ埋まっていない、もっとも最近立てられたスレッドに変更します。\">新スレに移動</button>";
+    }
+
+    window.changeToLatestThread = function (category, board_num) {
+        var request_url = "/bbs/latest-thread?" + $.param({ category: category, board_num: board_num })
+        $.getJSON(request_url, function (data) {
+            updateEntry(data);
+        }).fail(function () {
+            alert("changeToLatestThread: 不明なエラー。");
+        });
+    }
+
+    function updateEntry(r) {
+        if (r.status === "error") {
+            alert(r.error_message);
+        } else if (r.status === 'ok') {
+            if (confirm("コンタクトURL欄をスレッド「" + r.thread_title + "」に変更します。")) {
+                $('#bbs-checker-input').val(r.thread_url);
+                callback();
+            }
+        }
+    }
+
+    function buildMessage(r) {
+        if (r.status == 'error') {
+            return "エラー: " + r.error_message;
+        } else if (r.status == 'ok') {
+            if (r.type == 'board') {
+                return "「" + "<a href=\"" + boardUrl(r) + "\">" + r.title + "</a>」掲示板トップ " + latestThreadButton(r.category, r.board_num);
+            } else if (r.type == 'thread') {
+                var msg = "掲示板「" + "<a href=\"" + boardUrl(r) + "\">" + r.title + "</a>」のスレ「" + "<a href=\"" + threadUrl(r) + "\">" + r.thread_title + "</a> (";
+                if (r.last == r.max) {
                     msg += '<b class="text-danger">';
-                    msg += response.last;
+                    msg += r.last;
                     msg += '</b>';
                 } else {
-                    msg += response.last;
+                    msg += r.last;
                 }
                 msg +=")」";
-                return msg;
+                return msg + " " + latestThreadButton(r.category, r.board_num);
             } else {
                 return "???";
             }
