@@ -81,7 +81,7 @@ class Pcgw < Sinatra::Base
     program = ChannelInfo.find(id) rescue halt(404, 'entry not found')
     screen_shot = program.primary_screen_shot
     if screen_shot
-      return [200, { 'Content-Type' => 'image/jpeg' }, File.read("screenshots/#{screen_shot.filename}")]
+      send_file File.expand_path("screen_shots/#{screen_shot.filename}", settings.public_folder)
     else
       redirect to '/images/blank_screen.png'
     end
