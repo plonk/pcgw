@@ -55,7 +55,7 @@ class Pcgw < Sinatra::Base
     Logging.logger = Logger.new('log/pcgw.log', 'daily')
     Slim::Engine.set_default_options pretty: false
     Peercast.logger = Logging.logger
-    ActiveRecord::Base.logger = Logging.logger
+    #ActiveRecord::Base.logger = Logging.logger
   end
 
   before do
