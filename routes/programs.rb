@@ -98,10 +98,12 @@ class Pcgw < Sinatra::Base
   get '/programs/:id/digest' do |id|
     program = ChannelInfo.find(id) rescue halt(404, 'entry not found')
     begin
+      # コンタクトURLがスレだった場合
       if Bbs.shitaraba_thread?(program.url)
         thread = Bbs.thread_from_url(program.url)
         digest = ProgramDigest.new(program, thread.posts(1..Float::INFINITY))
       elsif Bbs.shitaraba_board?(program.url)
+        # コンタクトURLが板だった場合
         board = Bbs.board_from_url(program.url)
         threads = board.threads.sort_by(&:created_at)
         # 配信開始よりも前に作成されたスレッドの中で一番新しいもの
@@ -110,6 +112,7 @@ class Pcgw < Sinatra::Base
         if program.terminated_at
           termination_time = program.terminated_at.localtime + 5.minutes
         else
+          # まだ配信中の場合は現在時刻を範囲の終端にする
           termination_time = Time.now.localtime
         end
         # 配信中に作成されたスレッド
