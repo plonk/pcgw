@@ -9,7 +9,10 @@ table class="table"
         img.img-rounded src=ch.channel_info.primary_screen_shot.path height="28"
         |  #{ch.info['info']['name']}
       td
-        a href=ch.info['info']['url']
-          = [ch.info['info']['desc'],ch.info['info']['genre']].reject(&:empty?).first
+        - if ch.channel_info.url.blank?
+          = ch.channel_info.summary
+        - else
+          a href=ch.channel_info.url
+            = ch.channel_info.summary
       td
         == slim :yellow_page_links, locals: { yp_names: [ch.channel_info.yp] }
