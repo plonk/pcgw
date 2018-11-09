@@ -16,6 +16,7 @@ create_table "channels", force: true do |t|
   t.string  "gnu_id"
   t.belongs_to :user, index: true
   t.belongs_to :servent, index: true
+  t.boolean "hide_screenshots", default: false
   t.datetime "last_active_at"
 end
 
@@ -43,6 +44,7 @@ create_table "channel_infos", force: true do |t|
   t.timestamps
   t.datetime "terminated_at"
   t.integer "primary_screen_shot_id", default: nil
+  t.boolean "hide_screenshots", default: false
 end
 
 create_table "screen_shots", force: true do |t|

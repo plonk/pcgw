@@ -258,7 +258,7 @@ class Pcgw < Sinatra::Base
     halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
 
     begin
-      props = params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type')
+      props = params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type', 'hide_screenshots')
       channel_info = ChannelInfo.new({ user: @user }.merge(props))
 
       broadcast_check_params!
@@ -277,6 +277,7 @@ class Pcgw < Sinatra::Base
 
       ch = @user.channels.build(gnu_id: chid)
       ch.channel_info = channel_info
+      ch.hide_screenshots = params['hide_screenshots']
       ch.servent = servent
       ch.save!
 

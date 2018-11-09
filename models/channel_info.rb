@@ -5,6 +5,14 @@ class ChannelInfo < ActiveRecord::Base
   belongs_to :user
   has_many :screen_shots, dependent: :destroy
 
+  def primary_screenshot_path
+    if hide_screenshots
+      "/images/miserarenaiyo.png"
+    else
+      primary_screen_shot.path
+    end
+  end
+
   def primary_screen_shot
     if primary_screen_shot_id
       ScreenShot.find(primary_screen_shot_id)

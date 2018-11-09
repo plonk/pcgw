@@ -13,20 +13,24 @@
       |  
       small.text-muted
         = TimeUtil.render_date(program.created_at.localtime)
-- digest.groups.each do |group|
-    div style="margin-bottom: 0px; overflow: hidden"
-      div style="float: left"
-        img src=group.screen_shot.path style="display: block; margin-top: 0px; margin-right:10px; margin-bottom: 20px; border-radius: 10px; border: solid 10px #555"
 
-      div style="padding-top: 0px; overflow: hidden"
-        - group.posts.each.with_index do |post, i|
-          - text = auto_link(Sanitize.fragment(post.body, elements: ['br']))
-          - if aa?(post.body)
-            pre style="font-family: 'MS PGothic'; font-size: 16px; line-height: 18px; background-color: transparent; border-radius: 0px; border: none; border-left: solid 5px #ccc"
-              == text
-          - else
-            div class="#{i==0?'lead':''}" style="margin-bottom: 14px; border-left: solid 5px #ccc; padding: 10px"
-              == text
+- if program.hide_screenshots
+  p.text-warning この番組のダイジェストは利用できません。
+- else
+  - digest.groups.each do |group|
+      div style="margin-bottom: 0px; overflow: hidden"
+        div style="float: left"
+          img src=group.screen_shot.path style="display: block; margin-top: 0px; margin-right:10px; margin-bottom: 20px; border-radius: 10px; border: solid 10px #555"
+
+        div style="padding-top: 0px; overflow: hidden"
+          - group.posts.each.with_index do |post, i|
+            - text = auto_link(Sanitize.fragment(post.body, elements: ['br']))
+            - if aa?(post.body)
+              pre style="font-family: 'MS PGothic'; font-size: 16px; line-height: 18px; background-color: transparent; border-radius: 0px; border: none; border-left: solid 5px #ccc"
+                == text
+            - else
+              div class="#{i==0?'lead':''}" style="margin-bottom: 14px; border-left: solid 5px #ccc; padding: 10px"
+                == text
 
 p.text-muted
   | 出典: 

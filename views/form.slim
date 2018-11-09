@@ -9,64 +9,79 @@ p style="color: red"
 
 script src="/bbs_checker.js"
 
-form action="/broadcast" method="POST" role="form"
+form.form-horizontal action="/broadcast" method="POST" role="form"
 
   .form-group
-    label for="channel" チャンネル名
-    input class="form-control" type="text" name="channel" required=true value=template.channel
+    label.col-sm-3.control-label for="channel" チャンネル名
+    .col-sm-9
+      input class="form-control" type="text" name="channel" required=true value=template.channel
 
   .form-group
-    label for="genre" ジャンル
-    input class="form-control" type="text" name="genre" value=template.genre
+    label.col-sm-3.control-label for="genre" ジャンル
+    .col-sm-9
+      input class="form-control" type="text" name="genre" value=template.genre
 
   .form-group
-    label for="desc" 詳細
-    input class="form-control" type="text" name="desc" value=template.desc
+    label.col-sm-3.control-label for="desc" 詳細
+    .col-sm-9
+      input class="form-control" type="text" name="desc" value=template.desc
 
   .form-group
-    label for="comment" コメント
-    input class="form-control" type="text" name="comment" value=template.comment
+    label.col-sm-3.control-label for="comment" コメント
+    .col-sm-9
+      input class="form-control" type="text" name="comment" value=template.comment
 
   .form-group
-    label for="url"
+    label.col-sm-3.control-label for="url"
       | コンタクト&thinsp;URL
-    span#bbs-checker-indicator style="float: right"
-    input.form-control#bbs-checker-input name="url" type="url" value=template.url
+    .col-sm-9
+      input.form-control#bbs-checker-input name="url" type="url" value=template.url
+      span#bbs-checker-indicator style="margin-top: 5px; float: right"
 
   .form-group
-    label for="type" ストリームタイプ
-    .radio
-      label title="Flash Video (Open Broadcaster Software などはこちら)"
-        input type="radio" name="stream_type" value="FLV" required=true checked=(template.stream_type == 'FLV')
-        | FLV
-
-    .radio
-      label title="Windows Media Video (Windows Media Encoder や Expression Encoder はこちら)"
-        input type="radio" name="stream_type" value="WMV" checked=(template.stream_type == 'WMV')
-        | WMV
-
-    .radio
-      label title="Matroska"
-        input type="radio" name="stream_type" value="MKV" checked=(template.stream_type == 'MKV')
-        | MKV (β)
-
-  .form-group
-    label for="yp" 掲載YP
-    - @yellow_pages.each do |yp|
-      - next if !admin_view? && yp.admin_only
+    label.col-sm-3.control-label for="type" ストリームタイプ
+    .col-sm-9
       .radio
-        label
-          input required="required" type="radio" name="yp" value="#{yp.name}" checked=(template.yp == yp.name)
-          img src=yp.icon width="32"
-          | &nbsp;
-          a href=yp.top
-            = yp.name
-          | &emsp;&emsp;&emsp;&emsp;
-          a.btn.btn-default.btn-xs href=yp.terms target="_blank"
-            span.glyphicon.glyphicon-new-window
-            | &nbsp;利用規約
+        label title="Flash Video (Open Broadcaster Software などはこちら)"
+          input type="radio" name="stream_type" value="FLV" required=true checked=(template.stream_type == 'FLV')
+          | FLV
 
-  button.btn.btn-primary.btn-block type="submit" 開始
+      .radio
+        label title="Windows Media Video (Windows Media Encoder や Expression Encoder はこちら)"
+          input type="radio" name="stream_type" value="WMV" checked=(template.stream_type == 'WMV')
+          | WMV
+
+      .radio
+        label title="Matroska"
+          input type="radio" name="stream_type" value="MKV" checked=(template.stream_type == 'MKV')
+          | MKV (β)
+
+  .form-group
+    label.col-sm-3.control-label for="yp" 掲載YP
+    .col-sm-9
+      - @yellow_pages.each do |yp|
+        - next if !admin_view? && yp.admin_only
+        .radio
+          label
+            input required="required" type="radio" name="yp" value="#{yp.name}" checked=(template.yp == yp.name)
+            img src=yp.icon width="32"
+            | &nbsp;
+            a href=yp.top style="display: inline-block; min-width: 60px"
+              = yp.name
+            a.btn.btn-default.btn-xs href=yp.terms target="_blank"
+              span.glyphicon.glyphicon-new-window
+              | &nbsp;利用規約
+
+  .form-group
+    .col-sm-offset-3.col-sm-9
+      .checkbox style="margin-bottom: 10px;"
+        label title="配信画面のスクリーンショットを非公開にします。"
+          input type="checkbox" name="hide_screenshots" checked=template.hide_screenshots
+          span.text-danger.glyphicon.glyphicon-eye-close
+          | &nbsp;配信画面の掲載を禁止する
+
+      button.btn.btn-primary type="submit" 開始
+
 
 javascript:
 
