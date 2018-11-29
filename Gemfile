@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rack'
+gem "rack", ">= 1.6.11"
 gem 'jimson'
 gem 'sinatra'
 gem 'sinatra-contrib' # for cookies
@@ -12,7 +12,7 @@ gem 'slim'
 gem 'ridgepole'
 gem 'twitter'
 gem 'rack-flash3'
-gem 'sanitize'
+gem "sanitize", ">= 4.6.3"
 gem 'rspec', :group => :development
 gem 'pry', :group => :development
 gem 'rerun', :group => :development
