@@ -31,7 +31,7 @@ class Peercast
                 @helper.process_call(name, args, &block)
               end
     end
-    Peercast.logger&.info("%s: %d usec elapsed" % [name, span*1000*1000])
+    Peercast.logger&.info("%s:%d: %s: %d usec elapsed" % [@host, @port, name, span*1000*1000])
     value
   rescue Errno::ECONNREFUSED, RestClient::Unauthorized => e
     raise Unavailable.new(host, port, e.message)
