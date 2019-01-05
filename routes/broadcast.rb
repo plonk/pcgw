@@ -177,7 +177,7 @@ class PeercastBroadcastRequest
   end
 
   def source_uri_flv(user)
-    "http://#{WM_MIRROR_HOSTNAME}:6000/live/#{9000 + user.id}"
+    "rtmp://#{WM_MIRROR_HOSTNAME}/live/#{9000 + user.id}"
   end
 
   def source_uri_mkv(user)
