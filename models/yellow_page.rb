@@ -16,13 +16,13 @@ class YellowPage
                        'http://temp.orz.hm/yp/favicon.ico',
                        'pcp://temp.orz.hm/',
                        false],
-                      ['TestP',
+                      ['平成YP',
                        '',
-                       '',
+                       'http://yp.pcgw.pgw.jp/kiyaku.html',
                        'http://yp.pcgw.pgw.jp/',
-                       'http://ie.pcgw.pgw.jp/favicon.ico',
+                       'http://yp.pcgw.pgw.jp/favicon.ico',
                        'pcp://yp.pcgw.pgw.jp:7146/',
-                       true]]
+                       false]]
       return yellow_pages.map do |name, prefix, terms, top, icon, pcp, admin_only|
         YellowPage.new('name'=>name, 'prefix'=>prefix, 'terms'=>terms, 'top'=>top, 'icon'=>icon, 'uri'=>pcp, 'admin_only'=>admin_only)
       end
