@@ -7,9 +7,12 @@
 p
   | [
   - (program.screen_shots.size/30 + 1).times do |i|
-    a href="/programs/#{program.id}/screen_shots?start=#{i*30}"
+    - if i*30 == start
       = i+1
-      | &nbsp;|&nbsp;
+    - else
+      a href="/programs/#{program.id}/screen_shots?start=#{i*30}"
+        = i+1
+    |  | 
   | ]
 
 - program.screen_shots.each_with_index do |ss, i|
