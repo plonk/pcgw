@@ -5,8 +5,9 @@
     | 秘密
 
 - (program.screen_shots.size / 30).times do |i|
-  a href="/program/#{program.id}/screen_shots?start=#{i*30}"
+  a href="/programs/#{program.id}/screen_shots?start=#{i*30}"
     = i+1
+    | 
 
 - program.screen_shots.each_with_index do |ss, i|
   - if start <= i && i < start+30
