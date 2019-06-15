@@ -82,7 +82,7 @@ class Pcgw < Sinatra::Base
     if get_user != program.user
       must_be_admin! @user
     end
-    slim :screen_shots, locals: { program: program }
+    slim :screen_shots, locals: { program: program, start: params['start'].to_i }
   end
 
   get '/programs/:id/digest' do |id|

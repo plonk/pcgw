@@ -4,5 +4,12 @@
   span style="font-weight: normal; border: solid 2px #b33019; color: #b33019; border-radius: 3px; padding: 3px 5px 3px 5px" title="一般には公開されていないページです。"
     | 秘密
 
-- program.screen_shots.each do |ss|
-  img src="/screen_shots/#{ss.filename}"
+- (program.screen_shorts.size / 30).times do |i|
+  a href="/program/#{program.id}/screen_shots?start=#{i*30}"
+    = i+1
+
+- program.screen_shots.each_with_index do |ss, i|
+  - if start <= i && i < start+30
+    img src="/screen_shots/#{ss.filename}"
+    = ss.created_at
+    br
