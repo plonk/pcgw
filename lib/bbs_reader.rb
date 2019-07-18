@@ -205,6 +205,10 @@ module Bbs
       @last = last
     end
 
+    def created_at
+      Time.at(id)
+    end
+
     def dat_url
       @board.dat_url(@id)
     end
