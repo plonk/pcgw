@@ -209,12 +209,6 @@ module Bbs
       Time.at(id)
     end
 
-    def deleted?
-      # 四つのフィールドが等しかった場合に削除されたものとみなす。日付以
-      # 外のフィールドが日付に等しかった場合、偽陽性となることに注意。
-      [@name, @mail, @body].all? { |f| f == @date }
-    end
-
     def dat_url
       @board.dat_url(@id)
     end
