@@ -24,10 +24,11 @@ module Bbs
       @body = body
     end
 
-    # 削除された時のフィールドの値は、掲示板の設定によるなぁ。
-    # def deleted?
-    #   @date == '＜削除＞'
-    # end
+    def deleted?
+      # 四つのフィールドが等しかった場合に削除されたものとみなす。日付以
+      # 外のフィールドが日付に等しかった場合、偽陽性となることに注意。
+      [@name, @mail, @body].all? { |f| f == @date }
+    end
 
     def to_s
       [no, name, mail, date, body].join('<>')
