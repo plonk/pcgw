@@ -6,35 +6,56 @@ class Pcgw < Sinatra::Base
   end
 
   get '/bbs/latest-thread' do
-    halt 400, 'Error: board_num key not provided' if params[:board_num].blank?
-    halt 400, 'Error: category key not provided' if params[:category].blank?
+    halt 400, 'Error: board_url key not provided' if params[:board_url].blank?
 
-    board_num = params[:board_num].to_i
-    category = params[:category]
+    board_url = params[:board_url]
     begin
       Timeout.timeout(5) do
-        board = Bbs::Board.new(category, board_num)
+        board = Bbs::create_board(board_url)
         settings = board.settings
         if settings.has_key?("ERROR")
-          return json_response({ "status"        => "error",
-                                 "error_message" => settings["ERROR"] })
+          return json_response(
+                   {
+                     "status"        => "error",
+                     "error_message" => settings["ERROR"]
+                   }
+                 )
         end
         threads = board.threads
-        max = settings['BBS_THREAD_STOP'].to_i
+        max = settings['BBS_THREAD_STOP']&.to_i || 1000
         livingThreads = threads.select { |t| t.last < max }
         if livingThreads.empty?
-          return json_response({ "status"        => "error",
-                                 "error_message" => "この板には埋まっていないスレッドがありません。" })
+          return json_response(
+                   {
+                     "status"        => "error",
+                     "error_message" => "この板には埋まっていないスレッドがありません。"
+                   }
+                 )
         end
         latestThread = livingThreads.sort_by(&:id).last
-        return json_response({ "status" => "ok",
-                               "thread_title" => latestThread.title,
-                               "last" => latestThread.last,
-                               "thread_url" => "http://jbbs.shitaraba.net/bbs/read.cgi/#{category}/#{board_num}/#{latestThread.id}/" })
+        return json_response(
+                 {
+                   "status" => "ok",
+                   "thread_title" => latestThread.title,
+                   "last" => latestThread.last,
+                   "thread_url" => latestThread.read_url.to_s
+                 }
+               )
       end
-    rescue Timeout::Error, Bbs::HTTPError
-      return json_response({ "status"        => "error",
-                             "error_message" => "情報を得ることができませんでした。" })
+    rescue Timeout::Error
+      return json_response(
+               {
+                 "status"        => "error",
+                 "error_message" => "一定時間内に応答を得ることができませんでした。"
+               }
+             )
+    rescue Bbs::Downloader::DownloadFailure
+      return json_response(
+               {
+                 "status"        => "error",
+                 "error_message" => "情報を得ることができませんでした。"
+               }
+             )
     end
   end
 
@@ -45,58 +66,52 @@ class Pcgw < Sinatra::Base
     url = params[:url]
     begin
       Timeout.timeout(5) do
-        case url
-        when %r{\Ahttps?://jbbs\.shitaraba\.net/bbs/read\.cgi/(\w+)/(\d+)/(\d+)(:?|\/.*)\z}
-          category = $1
-          board_num = $2.to_i
-          thread_num = $3.to_i
-
-          board = Bbs::Board.new(category, board_num)
+        if (thread = Bbs.create_thread(url))
+          settings = thread.board.settings
+          return json_response(
+                   {
+                     "status"       => "ok",
+                     "type"         => "thread",
+                     "title"        => settings['BBS_TITLE'],
+                     "thread_title" => thread.title,
+                     "last"         => thread.last,
+                     "max"          => settings['BBS_THREAD_STOP']&.to_i || 1000,
+                     "thread_url"   => thread.read_url.to_s,
+                     "board_url"    => thread.board.top_url.to_s,
+                   }
+                 )
+        elsif (board = Bbs.create_board(url))
+          # したらばでのエラーチェック。詳細は忘れた。休止機能関連？
           settings = board.settings
           if settings.has_key?("ERROR")
-            return json_response({ "status"        => "error",
-                                   "error_message" => settings["ERROR"] })
+            return json_response(
+                     {
+                       "status"        => "error",
+                       "error_message" => settings["ERROR"]
+                     }
+                   )
           end
 
-          thread = board.thread(thread_num)
-          if thread.nil?
-            return json_response({ "status"        => "error",
-                                   "error_message" => "そのようなスレはありません。" })
-          end
-          return json_response({ "status"       => "ok",
-                                 "type"         => "thread",
-                                 "title"        => settings['BBS_TITLE'],
-                                 "category"     => category,
-                                 "board_num"    => board_num,
-                                 "thread_num"    => thread_num,
-                                 "thread_title" => thread.title,
-                                 "last"         => thread.last,
-                                 "max"          => settings['BBS_THREAD_STOP'].to_i })
-        when %r{\Ahttps?://jbbs\.shitaraba\.net/(\w+)/(\d+)/?\z}
-          category = $1
-          board_num = $2.to_i
-
-          board = Bbs::Board.new(category, board_num)
-          settings = board.settings
-          if settings.has_key?("ERROR")
-            return json_response({ "status"        => "error",
-                                   "error_message" => settings["ERROR"] })
-          end
-
-          return json_response({ "status" => "ok",
-                                 "type"   => "board",
-                                 "title"  => settings['BBS_TITLE'],
-                                 "category" => category,
-                                 "board_num" => board_num,
-                                 "max"    => settings['BBS_THREAD_STOP'].to_i })
+          return json_response(
+                   {
+                     "status" => "ok",
+                     "type"   => "board",
+                     "title"  => settings['BBS_TITLE'],
+                     "max"    => settings['BBS_THREAD_STOP']&.to_i || 1000,
+                     "board_url" => board.top_url.to_s,
+                   }
+                 )
         else
           return json_response({ "status"        => "error",
-                                 "error_message" => "したらば掲示板のURLではありません。" })
+                                 "error_message" => "対応している掲示板のURLではありません。" })
         end
       end
-    rescue Timeout::Error, Bbs::HTTPError
+    rescue Timeout::Error, Bbs::Downloader::DownloadFailure
       return json_response({ "status"        => "error",
                              "error_message" => "情報を得ることができませんでした。" })
+    rescue Bbs::NotFoundError
+      return json_response({ "status"        => "error",
+                             "error_message" => "そのようなスレはありません。" })
     end
   end
 end

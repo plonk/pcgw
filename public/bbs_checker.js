@@ -1,35 +1,23 @@
 $(function () {
-    function isValidBbsUrl(str) {
-        var THREAD_URL = /^https?:\/\/jbbs\.shitaraba\.net\/bbs\/read\.cgi\/(\w+)\/(\d+)\/(\d+)(?:|\/.*)$/;
-        var BOARD_URL = /^https?:\/\/jbbs\.shitaraba\.net\/(\w+)\/(\d+)\/?$/;
-        if (str.match(THREAD_URL) || str.match(BOARD_URL))
-            return true;
-        else
-            return false;
-    }
-
     function boardUrl(r) {
-        return "https://jbbs.shitaraba.net/" +
-            r.category + "/" +
-            r.board_num + "/";
+        return r.board_url;
     }
 
     function threadUrl(r) {
         if (r.type !== 'thread') {
             throw new Error("boardUrl: not a thread response");
         }
-        return "https://jbbs.shitaraba.net/bbs/read.cgi/" +
-            r.category + "/" +
-            r.board_num + "/" +
-            r.thread_num;
+        return r.thread_url;
     }
 
-    function latestThreadButton(category, board_num) {
-        return "<button type=\"button\" class=\"btn btn-xs btn-default\" onclick=\"changeToLatestThread(&quot;" + category + "&quot;, " + board_num + ")\" title=\"コンタクトURLをこの板でまだ埋まっていない、もっとも最近立てられたスレッドに変更します。\">新スレに移動</button>";
+    function latestThreadButton(board_url) {
+        return "<button type=\"button\" class=\"btn btn-xs btn-default\" onclick=\"changeToLatestThread(&quot;" +
+            board_url +
+            "&quot;)\" title=\"コンタクトURLをこの板でまだ埋まっていない、もっとも最近立てられたスレッドに変更します。\">新スレに移動</button>";
     }
 
-    window.changeToLatestThread = function (category, board_num) {
-        var request_url = "/bbs/latest-thread?" + $.param({ category: category, board_num: board_num })
+    window.changeToLatestThread = function (board_url) {
+        var request_url = "/bbs/latest-thread?" + $.param({ board_url: board_url })
         $.getJSON(request_url, function (data) {
             updateEntry(data);
         }).fail(function () {
@@ -53,7 +41,7 @@ $(function () {
             return "エラー: " + r.error_message;
         } else if (r.status == 'ok') {
             if (r.type == 'board') {
-                return "「" + "<a href=\"" + boardUrl(r) + "\">" + r.title + "</a>」掲示板トップ " + latestThreadButton(r.category, r.board_num);
+                return "「" + "<a href=\"" + boardUrl(r) + "\">" + r.title + "</a>」掲示板トップ " + latestThreadButton(boardUrl(r));
             } else if (r.type == 'thread') {
                 var msg = "掲示板「" + "<a href=\"" + boardUrl(r) + "\">" + r.title + "</a>」のスレ「" + "<a href=\"" + threadUrl(r) + "\">" + r.thread_title + "</a> (";
                 if (r.last == r.max) {
@@ -64,7 +52,7 @@ $(function () {
                     msg += r.last;
                 }
                 msg +=")」";
-                return msg + " " + latestThreadButton(r.category, r.board_num);
+                return msg + " " + latestThreadButton(boardUrl(r));
             } else {
                 return "???";
             }
@@ -89,7 +77,7 @@ $(function () {
     var input = $('#bbs-checker-input');
     function callback() {
         var text = input[0].value;
-        if (isValidBbsUrl(text)) {
+        if (text != "") {
             var request_url = "/bbs/info?" + $.param({ url: text })
             $.getJSON(request_url, function (data) {
                 updateIndicator(data);
@@ -99,5 +87,5 @@ $(function () {
         }
     }
     callback();
-    input.on('input', callback);
+    input.on('change', callback);
 });

@@ -89,12 +89,10 @@ class Pcgw < Sinatra::Base
     program = ChannelInfo.find(id) rescue halt(404, 'entry not found')
     begin
       # コンタクトURLがスレだった場合
-      if Bbs.shitaraba_thread?(program.url)
-        thread = Bbs.thread_from_url(program.url)
+      if (thread = Bbs.create_thread(program.url))
         digest = ProgramDigest.new(program, thread.posts(1..Float::INFINITY))
-      elsif Bbs.shitaraba_board?(program.url)
+      elsif (board = Bbs.create_board(program.url))
         # コンタクトURLが板だった場合
-        board = Bbs.board_from_url(program.url)
         threads = board.threads.sort_by(&:created_at)
         # 配信開始よりも前に作成されたスレッドの中で一番新しいもの
         t1 = threads.select { |t| t.created_at < program.created_at }.last
@@ -114,8 +112,8 @@ class Pcgw < Sinatra::Base
         halt 404, 'コンタクトURLが掲示板ではありません。'
       end
       slim :program_digest, locals: { program: program, digest: digest }
-    rescue Bbs::HTTPError => e
-      halt e.code, "掲示板の読み込みができませんでした。エラーコード: #{e.code}"
+    rescue Bbs::Downloader::DownloadFailure => e
+      halt 500, "掲示板の読み込みができませんでした。エラーコード: #{e.response.code}"
     end
   end
 
