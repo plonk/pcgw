@@ -34,7 +34,22 @@ module Bbs
       [no, name, mail, date, body].join('<>')
     end
 
+    def datetime
+      str2time(@date)
+    end
+
+    private
+    
+    def str2time(str)
+      if str =~ %r{^(\d{4})/(\d{2})/(\d{2})\(.\) (\d{2}):(\d{2}):(\d{2})}
+	y, mon, d, h, min, sec = [$1, $2, $3, $4, $5, $6].map(&:to_i)
+	Time.new(y, mon, d, h, min, sec)
+      else
+	fail ArgumentError, "Not a date. Delete post? #{str.inspect}"
+      end
+    end
   end
+
 
   class Downloader
     class DownloadFailure < StandardError

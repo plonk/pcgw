@@ -23,7 +23,7 @@ class ProgramDigest
              .map { |t1, t2| t1...t2 }
 
     @groups = ranges.map.with_index { |range, i|
-      ps = posts.select { |post| !post.deleted? && range.cover?(post.date) }
+      ps = posts.select { |post| !post.deleted? && range.cover?(post.datetime) }
       Group.new(screen_shots[i], ps)
     }
   end
