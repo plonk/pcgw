@@ -345,8 +345,15 @@ module Bbs
       class << self
         def from_url(url)
           uri = URI.parse(url)
-          return nil if uri.scheme != "http"
-          board_name = uri.path.split('/').reject(&:empty?).first
+          return nil unless uri.scheme == "http" || uri.scheme == "https"
+          # 今のところHTTPでしか動かないのでhttpにする。
+          if uri.scheme == "https" && uri.port == 443
+            uri = URI.parse("http://#{uri.hostname}#{uri.path}")
+          end
+          board_name, *rest = uri.path.split('/').reject(&:empty?).first
+          if rest.any?
+            return nil
+          end
           return nil if board_name.nil?
           Board.send(:new, uri.hostname, uri.port, board_name)
         end
@@ -377,7 +384,7 @@ module Bbs
       end
     end
 
-    NICHAN_THREAD_URL_PATTERN = %r{\Ahttp://[a-zA-z\-\.]+(?::\d+)?/test/read\.cgi\/(\w+)/(\d+)($|/)}
+    NICHAN_THREAD_URL_PATTERN = %r{\Ahttps?://[a-zA-z\-\.]+(?::\d+)?/test/read\.cgi\/(\w+)/(\d+)($|/)}
 
     # 2ちゃんスレッド
     class Thread < ThreadBase
