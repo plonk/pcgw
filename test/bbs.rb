@@ -31,12 +31,11 @@ describe Bbs do
         expect(t).to be_kind_of(Bbs::ThreadBase)
       end
 
-      # genkaiはSSLに対応していない。
-      # it 'genkaiスレッドを認識する' do
-      #   t = Bbs.create_thread \
-      #             'https://genkai.pcgw.pgw.jp/test/read.cgi/shuuraku/1000000000/'
-      #   expect(t).to be_kind_of(Bbs::ThreadBase)
-      # end
+      it 'genkaiスレッドを認識する' do
+        t = Bbs.create_thread \
+                  'https://genkai.pcgw.pgw.jp/test/read.cgi/shuuraku/1000000000/'
+        expect(t).to be_kind_of(Bbs::ThreadBase)
+      end
 
       it 'JPNKNスレッドを認識する' do
         t = Bbs.create_thread \
