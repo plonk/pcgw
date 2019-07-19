@@ -8,4 +8,12 @@ class User < ActiveRecord::Base
   def never_broadcast?
     channel_infos.empty?
   end
+
+  def image_https
+    if image
+      image.sub(/\Ahttp:/, "https:")
+    else
+      image
+    end
+  end
 end

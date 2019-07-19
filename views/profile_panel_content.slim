@@ -3,7 +3,7 @@
 .panel-heading
   h1
     / いずれ Twitter と同じに 200x200 にしたい
-    img.img-rounded width="48" src=user.image alt=user.name 
+    img.img-rounded width="48" src=user.image_https alt=user.name 
     |  #{user.name} 
     small
       == slim :broadcast_status, locals: { user: user }

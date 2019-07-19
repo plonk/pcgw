@@ -11,8 +11,8 @@
     <tr>
       <td><%= h user.id %></td>
       <td>
-        <img width="24" src="<%= user.image %>"
-             alt="<%= user.name %>"
+        <img width="24" src="<%= h user.image_https %>"
+             alt="<%= h user.name %>"
              class="img-rounded">
         <a href="/users/<%= h user.id %>">
           <%= h user.name %>
