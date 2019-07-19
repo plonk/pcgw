@@ -39,7 +39,7 @@ module Bbs
     end
 
     private
-    
+
     def str2time(str)
       if str =~ %r{^(\d{4})/(\d{2})/(\d{2})\(.\) (\d{2}):(\d{2}):(\d{2})}
 	y, mon, d, h, min, sec = [$1, $2, $3, $4, $5, $6].map(&:to_i)
@@ -57,6 +57,10 @@ module Bbs
 
       def initialize(response)
         @response = response
+      end
+
+      def message
+        "#{@response.code} #{@response.message}"
       end
     end
 
