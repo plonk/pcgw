@@ -377,7 +377,7 @@ module Bbs
       end
 
       def read_url(thread_num)
-        @server_uri.dup.tap { |u| u.path = "/#{@name}/#{thread_num}/" }
+        @server_uri.dup.tap { |u| u.path = "/test/read.cgi/#{@name}/#{thread_num}/" }
       end
 
       def top_url
