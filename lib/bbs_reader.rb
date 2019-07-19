@@ -100,7 +100,7 @@ module Bbs
     def download_binary(uri)
       resource = @resource_cache[uri]
       if resource
-        Net::HTTP.start(uri.host, uri.port) do |http|
+        Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme=='https') do |http|
           request = Net::HTTP::Get.new(uri)
           request['range'] = "bytes=#{resource.data.bytesize}-"
           response = http.request(request)
@@ -132,8 +132,7 @@ module Bbs
     end
 
     def download_binary_nocache(uri)
-      response = nil
-      Net::HTTP.start(uri.host, uri.port) do |http|
+      Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme=='https') do |http|
         request = Net::HTTP::Get.new(uri)
         response = http.request(request)
         response.body.force_encoding('ASCII-8BIT')
@@ -144,8 +143,8 @@ module Bbs
         else
           raise DownloadFailure.new(response)
         end
+        return response.body
       end
-      return response.body
     end
 
     def download_text(uri)
@@ -242,16 +241,17 @@ module Bbs
     SHITARABA_THREAD_URL_PATTERN = %r{\Ahttps?://jbbs\.shitaraba\.net/bbs/read\.cgi/(\w+)/(\d+)/(\d+)(:?|\/.*)\z}
     SHITARABA_BOARD_TOP_URL_PATTERN = %r{\Ahttps?://jbbs\.shitaraba\.net/(\w+)/(\d+)/?\z}
 
-    # したらば板
+    # したらば板 Bbs::Shitaraba::Board
     class Board < Bbs::BoardBase
       attr_reader :category, :board_num
 
       class << self
         def from_url(url)
-          if url.to_s =~ SHITARABA_BOARD_TOP_URL_PATTERN
+          fail ArgumentError, 'url must be a String' unless url.is_a? String
+          if url =~ SHITARABA_BOARD_TOP_URL_PATTERN
             category, board_num = $1, $2.to_i
             return Board.send(:new, category, board_num)
-          elsif url.to_s =~ SHITARABA_THREAD_URL_PATTERN
+          elsif url =~ SHITARABA_THREAD_URL_PATTERN
             category, board_num, thread_num = $1, $2.to_i, $3.to_i
             return Board.send(:new, category, board_num)
           else
@@ -285,11 +285,12 @@ module Bbs
       end
     end
 
-    # したらばスレッド
+    # したらばスレッド Bbs::Shitaraba::Thread
     class Thread < Bbs::ThreadBase
       class << self
         def from_url(url)
-          if url.to_s =~ SHITARABA_THREAD_URL_PATTERN
+          fail ArgumentError, 'url must be a String' unless url.is_a? String
+          if url =~ SHITARABA_THREAD_URL_PATTERN
             category, board_num, thread_num = $1, $2.to_i, $3.to_i
             board = Board.send(:new, category, board_num)
             thread = board.thread(thread_num)
@@ -342,45 +343,45 @@ module Bbs
   end # Shitaraba
 
   module Nichan
-    # 2ちゃん板
+    # 2ちゃん板 Bbs::Nichan::Board
     class Board < Bbs::BoardBase
       attr_reader :hostname, :port, :name
 
       class << self
         def from_url(url)
+          fail ArgumentError, 'url must be a String' unless url.is_a? String
           uri = URI.parse(url)
           return nil unless uri.scheme == "http" || uri.scheme == "https"
-          # 今のところHTTPでしか動かないのでhttpにする。
-          if uri.scheme == "https" && uri.port == 443
-            uri = URI.parse("http://#{uri.hostname}#{uri.path}")
-          end
-          board_name, *rest = uri.path.split('/').reject(&:empty?).first
-          if rest.any?
+          # 板名に許される文字が何かは知らない。
+          if uri.path =~ /\A\/(\w+)\/?/
+            board_name = $1
+          else
             return nil
           end
-          return nil if board_name.nil?
-          Board.send(:new, uri.hostname, uri.port, board_name)
+          server_uri = uri.dup
+          server_uri.path = ""
+          Board.send(:new, server_uri, board_name)
         end
       end
 
-      def initialize(hostname, port, name)
+      def initialize(server_uri, name)
         super('CP932')
-        @hostname, @port, @name = hostname, port, name
+        @server_uri, @name = server_uri, name
 
-        @settings_url = URI.parse("http://#{hostname}:#{port}/#{name}/SETTING.TXT")
-        @thread_list_url = URI.parse("http://#{hostname}:#{port}/#{name}/subject.txt")
+        @settings_url = @server_uri.dup.tap { |u| u.path = "/#{@name}/SETTING.TXT" }
+        @thread_list_url = @server_uri.dup.tap { |u| u.path = "/#{@name}/subject.txt" }
       end
 
       def dat_url(thread_num)
-        URI.parse("http://#{@hostname}:#{@port}/#{@name}/dat/#{thread_num}.dat")
+        @server_uri.dup.tap { |u| u.path = "/#{@name}/dat/#{thread_num}.dat" }
       end
 
       def read_url(thread_num)
-        URI.parse("http://#{@hostname}:#{@port}/test/read.cgi/#{@name}/#{thread_num}/")
+        @server_uri.dup.tap { |u| u.path = "/#{@name}/#{thread_num}/" }
       end
 
       def top_url
-        URI.parse("http://#{@hostname}:#{@port}/#{@name}/")
+        @server_uri.dup.tap { |u| u.path = "/#{@name}/" }
       end
 
       def create_thread_from_line(line)
@@ -390,14 +391,15 @@ module Bbs
 
     NICHAN_THREAD_URL_PATTERN = %r{\Ahttps?://[a-zA-z\-\.]+(?::\d+)?/test/read\.cgi\/(\w+)/(\d+)($|/)}
 
-    # 2ちゃんスレッド
+    # 2ちゃんスレッド Bbs::Nichan::Thread
     class Thread < ThreadBase
       class << self
         def from_url(url)
-          if url.to_s =~ NICHAN_THREAD_URL_PATTERN
+          fail ArgumentError, 'url must be a String' unless url.is_a? String
+          if url =~ NICHAN_THREAD_URL_PATTERN
             board_name, thread_num = $1, $2.to_i
-            uri = URI(url)
-            board = Board.send(:new, uri.hostname, uri.port, board_name)
+            uri = URI(url).tap { |u| u.path = "" }
+            board = Board.send(:new, uri, board_name)
             thread = board.thread(thread_num)
             raise NotFoundError, 'no such thread' if thread.nil?
             return thread
@@ -408,7 +410,7 @@ module Bbs
 
         def from_line(line, board)
           unless line =~ /^(\d+)\.dat<>(.+?) \((\d+)\)$/
-            fail 'スレ一覧のフォーマットが変です' 
+            fail 'スレ一覧のフォーマットが変です'
           end
           id, title, last = $1.to_i, $2, $3.to_i
           Thread.send(:new, board, id, title, last)
