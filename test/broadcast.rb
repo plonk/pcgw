@@ -104,7 +104,8 @@ describe PeercastBroadcastRequest do
       servent = Servent.new('hostname' => 'server-name')
 
       req = PeercastBroadcastRequest.new(servent, ch_info, nil, nil)
-      expect(req.source_uri).to eq("http://#{WM_MIRROR_HOSTNAME}:6000/live/9123")
+      # ホスト名 WM_MIRROR_HOSTNAME でいいの？
+      expect(req.source_uri).to eq("rtmp://#{WM_MIRROR_HOSTNAME}/live/9123")
     end
   end
 
