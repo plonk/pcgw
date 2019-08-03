@@ -88,4 +88,9 @@ $(function () {
     }
     callback();
     input.on('change', callback);
+    input.on('input', function(){
+        $('#bbs-checker-indicator').text("");
+        $('#bbs-checker-indicator').removeClass("text-danger");
+        $('#bbs-checker-indicator').removeClass("text-success");
+    });
 });
