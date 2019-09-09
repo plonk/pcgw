@@ -12,6 +12,7 @@ gem 'slim'
 gem 'ridgepole'
 gem 'twitter'
 gem 'rack-flash3'
+gem "nokogiri", ">= 1.10.4"
 gem "sanitize", ">= 4.6.3"
 gem 'rspec', :group => :development
 gem 'pry', :group => :development
