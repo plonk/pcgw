@@ -5,11 +5,12 @@
 
 script src="/reloader.js"
 
-.reloader data-url="/includes/onair" data-interval=60
+.reloader data-url="/includes/onair" data-interval=60 data-preloaded=1
+  == erb :includes_onair, locals: { channels: Channel.all }, layout: false
 
 .panel.panel-default
   .panel-heading
-    | サーバー
+    h5 サーバー
 
   table.table
     tr

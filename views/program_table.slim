@@ -5,7 +5,7 @@
     a.list-group-item href="/programs/#{curr.id}"
       span  style="white-space: nowrap"
         / ユーザー画像
-        img.img-rounded width="28" src=curr.user.image_https alt=curr.user.name
+        img.img-rounded width="28" src=curr.user.image_https alt="[#{curr.user.name}の画像]"
         / チャンネル名
         b style="margin-left: 0.5em"
           | #{curr.channel}
@@ -16,3 +16,4 @@
           = TimeUtil.render_time_range(curr.created_at.localtime, curr.terminated_at.localtime)
         - else
           | #{TimeUtil.render_time(curr.created_at.localtime)} 〜
+    br style="display: none"

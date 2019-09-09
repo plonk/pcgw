@@ -10,4 +10,12 @@ class ScreenShot < ActiveRecord::Base
       "/images/blank_screen.png"
     end
   end
+
+  def alt_text
+    if filename
+      ""
+    else
+      "[何も映ってない]"
+    end
+  end
 end

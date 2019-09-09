@@ -1,6 +1,7 @@
 / recent_programs: [ChannelInfo]
 .panel.panel-default
-  .panel-heading 最近の配信
+  .panel-heading
+    h5 最近の配信
   .list-group
     - recent_programs.each do |program|
       a.list-group-item href="/programs/#{program.id}"

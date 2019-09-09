@@ -25,6 +25,14 @@ class Pcgw < Sinatra::Base
       end
       @data_text = "【PeerCastで配信中！】#{@info['info']['name']}「#{@info['info']['desc']}」 #{@info['info']['url']} #{@yp_name}"
 
+      @status_class = status_semantic_class @status['status']
+      src = @channel.source_connection
+      @source_kbps = src.recvRateKbps
+      @bitrate_meter = bitrate_meter(@source_kbps, @info['info']['bitrate'])
+
+      connections = @channel.connections.select { |c| c.type == "relay" }
+      @connections = slim :connections, locals: { channel: @channel, connections: connections }, layout: false, pretty: false
+
       slim :status
     rescue Jimson::Client::Error => e
       h "なんかエラーだって: #{e}"

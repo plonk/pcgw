@@ -8,9 +8,13 @@
   <body>
     <%= erb :navbar %>
 
+    <hr style="display: none">
+
     <div class=container>
       <%= yield %>
     </div>
+
+    <hr style="display: none">
 
     <%= erb :footer %>
   </body>

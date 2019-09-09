@@ -11,7 +11,11 @@ html lang="ja"
   body
     == erb :navbar
 
+    hr style="display: none"
+
     .container
       == yield
+
+    hr style="display: none"
 
     == erb :footer

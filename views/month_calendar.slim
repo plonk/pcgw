@@ -1,7 +1,7 @@
 / calendar: Calendar
 / programs: ChannelInfoのコレクション。この月にあった番組
 - _programs = programs.to_a
-table.table.table-bordered.calendar
+table.table.table-bordered.calendar border=true
   - calendar.weeks.each do |week|
     tr
       - week.each do |day|
@@ -12,4 +12,4 @@ table.table.table-bordered.calendar
             - time_range = (this_day...this_day.next(:day))
             - freq = _programs.count { |p| p.time_range.instance_eval { [first,last] }.map(&:localtime).any? { |t| time_range.cover?(t) } }
             - if freq != 0
-              span.badge style="position: absolute; top: 60%; left: 70%;" #{freq}
+              span.badge style="position: absolute; top: 60%; left: 70%;" #{freq}件

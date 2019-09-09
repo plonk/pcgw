@@ -4,10 +4,12 @@
   | 配信履歴
 
 .panel.panel-default
-  .panel-heading 配信履歴
+  .panel-heading
+    h5 配信履歴
 
   .list-group
     - months.each do |(year, month), count|
       a.list-group-item href="/programs/by-date/#{year}/#{month}"
         | #{year}年#{month}月 
-        span.badge #{count}
+        span.badge #{count}件
+      br style="display: none"

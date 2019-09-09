@@ -6,6 +6,9 @@
 
 script src="/reloader.js"
 
-.reloader data-url="/includes/my_channels" data-interval=60
+.reloader data-url="/includes/my_channels" data-interval=60 data-preloaded=1
+  == slim :my_channels, locals: { channels: @user.channels }, layout: false
 
-.reloader data-url="/includes/my_history" data-interval=60
+.reloader data-url="/includes/my_history" data-interval=60 data-preloaded=1
+  - programs = ChannelInfo.where(user: @user).where.not(terminated_at: nil).order(created_at: :desc).limit(10)
+  == slim :my_history, locals: { recent_programs: programs }, layout: false

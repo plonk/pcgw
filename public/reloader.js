@@ -16,7 +16,10 @@ $(function () {
                     },
                 });
             };
-            callback();
+            if (r.dataset.preloaded === "1")
+                setTimeout(callback, r.dataset.interval * 1000);
+            else
+                callback();
         })(reloaders[i]);
     }
 });
