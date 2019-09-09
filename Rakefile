@@ -11,7 +11,7 @@ task :dryrun do
 end
 
 task :console do
-  system("pry -r./models/init -r./lib/bbs_reader.rb -r./lib/core_ext.rb -e \"ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'db/pcgw.db')\"")
+  system("bundle exec pry -r./models/init -r./lib/bbs_reader.rb -r./lib/core_ext.rb -e \"ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'db/pcgw.db')\"")
 end
 
 task :dbconsole do
@@ -19,9 +19,9 @@ task :dbconsole do
 end
 
 task :run do
-  system("rerun -i '**/*.{slim,erb,js,css}' bundle exec rackup")
+  system("bundle exec rerun -i '**/*.{slim,erb,js,css}' bundle exec rackup")
 end
 
 task :test do
-  system("rspec test/*.rb")
+  system("bundle exec rspec test/*.rb")
 end
