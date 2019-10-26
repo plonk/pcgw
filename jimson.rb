@@ -14,6 +14,7 @@ require 'logger'
 require_relative 'logging'
 require_relative 'peercast'
 require 'sanitize'
+require_relative 'yarr_client'
 
 # 初期化処理
 require_relative 'init'

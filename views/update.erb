@@ -8,6 +8,7 @@
   $('#bitrate_meter').attr("value", 0.1)
   $('#uptime').text("n/a")
   $('#status').text("n/a")
+  $('#repeater_status').text("n/a")
   $('#error').text("<%= @error %>")
 <% else %>
   $('#connections').html(<%= javascript_string @connections %>)
@@ -18,6 +19,7 @@
   $('#bitrate_meter').attr('value', <%= "%.2f" % @bitrate_meter %>)
   $('#uptime').text("<%= TimeUtil.render_duration @status['uptime'] %>")
   $('#status').text("<%= @status['status'] %>").removeClass().addClass("<%= @status_class %>")
+  $('#repeater_status').text(<%= javascript_string @repeater_status %>)
   $('#error').text("")
 <% end %>
 

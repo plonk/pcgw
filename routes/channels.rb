@@ -33,9 +33,25 @@ class Pcgw < Sinatra::Base
       connections = @channel.connections.select { |c| c.type == "relay" }
       @connections = slim :connections, locals: { channel: @channel, connections: connections }, layout: false, pretty: false
 
+      @repeater_status = channels_get_repeater_status(@channel, YarrClient.new)
+
       slim :status
     rescue Jimson::Client::Error => e
       h "なんかエラーだって: #{e}"
+    end
+  end
+
+  def channels_get_repeater_status(channel, yarr)
+    begin
+      rep_src = "#{channel.push_uri}/#{channel.stream_key}"
+      rep_proc = yarr.stats.find { |p| p['src'] == rep_src }
+      if rep_proc
+        return "#{URI(rep_proc['dst']).hostname}に送信中"
+      else
+        return "なし"
+      end
+    rescue => e
+      return "リピーター状態取得エラー: #{e.message}"
     end
   end
 
@@ -78,6 +94,9 @@ class Pcgw < Sinatra::Base
 
       connections = @channel.connections.select { |c| c.type == "relay" }
       @connections = slim :connections, locals: { channel: @channel, connections: connections }, layout: false, pretty: false
+
+      @repeater_status = channels_get_repeater_status(@channel, YarrClient.new)
+
       js = erb :update, layout: false
 
       [200,
@@ -203,4 +222,39 @@ class Pcgw < Sinatra::Base
     erb :stop
   end
 
+  get '/channels/:id/create_repeater' do
+    slim :create_repeater, locals: {}
+  end
+
+  post '/channels/:id/start_repeater' do
+    src = URI.parse(@channel.push_uri + "/" + @channel.stream_key)
+    dst = URI.parse(params[:stream_url] + "/" + params[:key])
+    unless src.scheme == "rtmp"
+      halt 400, "Bad protocol #{src.scheme.inspect} in source URL"
+    end
+    unless dst.scheme == "rtmp"
+      halt 400, "Bad protocol #{dst.scheme.inspect} in destination URL"
+    end
+    yarr = YarrClient.new
+    pid = yarr.start(src.to_s, dst.to_s)
+    log.info("user #{@user.id} started repeater (pid #{pid})")
+    redirect to("/channels/#{@channel.id}")
+  end
+
+  get '/channels/:id/stop_repeater' do
+    src = URI.parse(@channel.push_uri + "/" + @channel.stream_key)
+    unless src.scheme == "rtmp"
+      halt 400, "Bad protocol #{src.scheme.inspect} in source URL"
+    end
+
+    yarr = YarrClient.new
+    rep_src = src.to_s
+    yarr.stats.each do |p|
+      if p['src'] == rep_src
+        yarr.kill(p['pid'])
+      end
+    end
+
+    redirect to("/channels/#{@channel.id}")
+  end
 end
