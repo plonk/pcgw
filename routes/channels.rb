@@ -44,11 +44,11 @@ class Pcgw < Sinatra::Base
   def channels_get_repeater_status(channel, yarr)
     begin
       rep_src = "#{channel.push_uri}/#{channel.stream_key}"
-      rep_proc = yarr.stats.find { |p| p['src'] == rep_src }
-      if rep_proc
-        return "#{URI(rep_proc['dst']).hostname}に送信中"
-      else
+      text = yarr.stats.select { |p| p['src'] == rep_src }.map { |p| "#{URI(p['dst']).hostname}に送信中" }.join("、")
+      if text == ""
         return "なし"
+      else
+        return text
       end
     rescue => e
       return "リピーター状態取得エラー: #{e.message}"
