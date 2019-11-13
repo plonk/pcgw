@@ -168,6 +168,10 @@ class Pcgw < Sinatra::Base
     begin
       # チャンネルの所有者であるかのチェック
       if @user.admin? || @channel.user == @user
+        src = get_source_uri_with_key(@channel)
+        if src.scheme == 'rtmp'
+          stop_repeaters(src.to_s)
+        end
 
         @channel.servent.api.stopChannel(@channel.gnu_id)
         @channel.destroy
@@ -226,19 +230,31 @@ class Pcgw < Sinatra::Base
     redirect to("/channels/#{@channel.id}")
   end
 
+  def get_source_uri_with_key(channel)
+    return URI.parse(channel.push_uri + "/" + channel.stream_key)
+  end
+
+  def stop_repeaters(repeater_src_string)
+    yarr = YarrClient.new
+    yarr.stats.each do |process|
+      if process['src'] == repeater_src_string
+        success = yarr.kill(process['pid'])
+        if success
+          log.info("repeater #{process['pid']} killed")
+        else
+          log.error("failed to kill repeater #{process['pid']}")
+        end
+      end
+    end
+  end
+
   get '/channels/:id/stop_repeater' do
-    src = URI.parse(@channel.push_uri + "/" + @channel.stream_key)
+    src = get_source_uri_with_key(@channel)
     unless src.scheme == "rtmp"
       halt 400, "Bad protocol #{src.scheme.inspect} in source URL"
     end
 
-    yarr = YarrClient.new
-    rep_src = src.to_s
-    yarr.stats.each do |p|
-      if p['src'] == rep_src
-        yarr.kill(p['pid'])
-      end
-    end
+    stop_repeaters(src.to_s)
 
     redirect to("/channels/#{@channel.id}")
   end
