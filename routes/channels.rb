@@ -168,6 +168,9 @@ class Pcgw < Sinatra::Base
     begin
       # チャンネルの所有者であるかのチェック
       if @user.admin? || @channel.user == @user
+        # チャンネルをdestroyするのでinfoを取っておく。
+        @channel_info = @channel.info
+        
         src = get_source_uri_with_key(@channel)
         if src.scheme == 'rtmp'
           stop_repeaters(src.to_s)
