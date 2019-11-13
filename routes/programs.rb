@@ -85,6 +85,21 @@ class Pcgw < Sinatra::Base
     slim :screen_shots, locals: { program: program, start: params['start'].to_i }
   end
 
+  post '/programs/:id/delete_screen_shot' do |id|
+    program = ChannelInfo.find(id) rescue halt(404, 'program entry not found')
+    if get_user != program.user
+      must_be_admin! @user
+    end
+    ssid = params[:screen_shot_id].to_i
+    ss = ScreenShot.find(ssid) rescue halt(404, 'program entry not found')
+    ss.delete_file!
+    if ss.destroy
+      redirect back
+    else
+      halt(500, "スクリーンショット エントリーの削除に失敗。")
+    end
+  end
+
   get '/programs/:id/digest' do |id|
     program = ChannelInfo.find(id) rescue halt(404, 'entry not found')
     begin

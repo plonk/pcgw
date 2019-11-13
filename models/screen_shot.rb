@@ -11,6 +11,13 @@ class ScreenShot < ActiveRecord::Base
     end
   end
 
+  def delete_file!
+    if filename
+      File.unlink("./public/screen_shots/#{filename}")
+      self.filename = nil
+    end
+  end
+
   def alt_text
     if filename
       ""

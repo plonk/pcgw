@@ -4,6 +4,7 @@
   span style="font-weight: normal; border: solid 2px #b33019; color: #b33019; border-radius: 3px; padding: 3px 5px 3px 5px" title="一般には公開されていないページです。"
     | 秘密
 
+/ ページネーション。
 p
   | [
   - (program.screen_shots.size/30 + 1).times do |i|
@@ -18,7 +19,10 @@ p
 
 - program.screen_shots.each_with_index do |ss, i|
   - if start <= i && i < start+30
-    img width=150 src="/screen_shots/#{ss.filename}"
-    | 
-    = ss.created_at.localtime
-    br
+    div
+      img width=150 src="/screen_shots/#{ss.filename}"
+      | &nbsp;
+      = ss.created_at.localtime
+      form style="display: inline" action="/programs/#{program.id}/delete_screen_shot" method="POST"
+        input type="hidden" name="screen_shot_id" value=ss.id
+        input.btn.btn-warning type="submit" value="削除"
