@@ -168,7 +168,6 @@ class Pcgw < Sinatra::Base
     begin
       # チャンネルの所有者であるかのチェック
       if @user.admin? || @channel.user == @user
-        @channel_infos = [@channel.info]
 
         @channel.servent.api.stopChannel(@channel.gnu_id)
         @channel.destroy
@@ -206,20 +205,6 @@ class Pcgw < Sinatra::Base
   get '/channels/?' do
     channels = Channel.all
     slim :channels, locals: { channels: channels }
-  end
-
-  post '/stopall' do
-    @channel_infos = []
-    ids = params[:channel_ids].map(&:to_i)
-    channels = @user.channels.select { |ch| ids.include?(ch.id) }
-    channels.each do |ch|
-      @channel_infos << ch.info
-      ch.servent.api.stopChannel(ch.gnu_id)
-      ch.destroy
-
-      log.info("user #{@user.id} destroyed channel #{ch.id}")
-    end
-    erb :stop
   end
 
   get '/channels/:id/create_repeater' do

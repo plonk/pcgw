@@ -1,7 +1,5 @@
 <h1>チャンネルの停止</h1>
 
-<% @channel_infos.each do |info| %>
-  <p class="text-success">チャンネル「<%= info['info']['name'] %>」を停止しました。</p>
-<% end %>
+<p class="text-success">チャンネル「<%= @channel.info['info']['name'] %>」を停止しました。</p>
 
 <p><a href="/home" class="btn btn-primary btn-block">OK</a></p>
