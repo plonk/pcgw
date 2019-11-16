@@ -171,9 +171,11 @@ class Pcgw < Sinatra::Base
         # チャンネルをdestroyするのでinfoを取っておく。
         @channel_info = @channel.info
         
-        src = get_source_uri_with_key(@channel)
-        if src.scheme == 'rtmp'
-          stop_repeaters(src.to_s)
+        if @channel.channel_info.stream_type == "FLV"
+          src = get_source_uri_with_key(@channel)
+          if src.scheme == 'rtmp'
+            stop_repeaters(src.to_s)
+          end
         end
 
         @channel.servent.api.stopChannel(@channel.gnu_id)
@@ -252,6 +254,9 @@ class Pcgw < Sinatra::Base
   end
 
   get '/channels/:id/stop_repeater' do
+    if @channel.channel_info.stream_type != "FLV"
+      halt 400, "Not an FLV stream"
+    end
     src = get_source_uri_with_key(@channel)
     unless src.scheme == "rtmp"
       halt 400, "Bad protocol #{src.scheme.inspect} in source URL"
