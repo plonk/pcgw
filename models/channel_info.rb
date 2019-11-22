@@ -15,7 +15,13 @@ class ChannelInfo < ActiveRecord::Base
 
   def primary_screen_shot
     if primary_screen_shot_id
-      ScreenShot.find(primary_screen_shot_id)
+      begin
+        ScreenShot.find(primary_screen_shot_id)
+      rescue ActiveRecord::RecordNotFound
+        self.primary_screen_shot_id = nil
+        save!
+        primary_screen_shot
+      end
     else
       latest = screen_shots.order(created_at: :desc).first
       if latest
