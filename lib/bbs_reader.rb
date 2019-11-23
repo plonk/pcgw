@@ -179,9 +179,6 @@ module Bbs
 
     def threads
       lines = thread_list.each_line.to_a
-      if lines.size >= 2
-        lines = lines[0..-2] # 最後にトップスレッドが重複している
-      end
       lines.map do |line|
         create_thread_from_line(line)
       end
@@ -283,6 +280,15 @@ module Bbs
       def create_thread_from_line(line)
         Thread.from_line(line, self)
       end
+
+      def threads
+        ts = super
+        if ts.size >= 2
+          ts = ts[0..-2] # 最後にトップスレッドが重複している
+        end
+        return ts
+      end
+
     end
 
     # したらばスレッド Bbs::Shitaraba::Thread
