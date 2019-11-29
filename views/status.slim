@@ -50,22 +50,26 @@ script src="/reloader.js"
           span.text-muted
             |  #{@channel.servent.hostname}:#{@channel.servent.port}
       tr
-        th リピーター
+        th
+          | 同時配信
+          sup
+            a href="/doc/repeaters"
+              | ?
         td
           span#repeater_status
             = @repeater_status
           | &nbsp;
           - if @channel.channel_info.stream_type == "FLV"
             a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/create_repeater"
-              | 外部サーバーにストリームを送信...
+              | 外部サーバーに送信...
             | &nbsp;
-            a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/stop_repeater"
+            a.btn.btn-warning.btn-xs href="/channels/#{@channel.id}/stop_repeater"
               | 停止
           - else
             a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/create_repeater" disabled=true
-              | 外部サーバーにストリームを送信...
+              | 外部サーバーに送信...
             | &nbsp;
-            a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/stop_repeater" disabled=true
+            a.btn.btn-warning.btn-xs href="/channels/#{@channel.id}/stop_repeater" disabled=true
               | 停止
       tr
         th 稼動時間

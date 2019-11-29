@@ -3,9 +3,10 @@ class Pcgw < Sinatra::Base
     erb :doc
   end
 
+  DOCS = %w(how-to-obs how-to-wme how-to-ee desc faq repeaters)
+
   get '/doc/:name' do |name|
-    docs = %w(how-to-obs how-to-wme how-to-ee desc faq)
-    halt 404, 'Not Found' unless docs.include? name
+    halt 404, 'Not Found' unless DOCS.include? name
 
     erb name.to_sym
   end
