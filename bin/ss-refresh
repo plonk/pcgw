@@ -70,9 +70,11 @@ class ScreenShotRefresh
     n = Channel.all.to_a.count do |ch|
       while true
         filename = "#{random_128bit}.jpg"
-        path = "#{screen_shot_dir}/#{filename}"
+        path = "#{screen_shot_dir}/#{filename[0..1]}/#{filename[2..3]}/#{filename}"
         break unless File.exist? path
       end
+
+      FileUtils.mkdir_p File.dirname(path)
 
       success = capture(ch, path)
       if success

@@ -5,7 +5,7 @@ class ScreenShot < ActiveRecord::Base
 
   def path
     if filename
-      "/screen_shots/#{filename}"
+      "/screen_shots/#{filename[0..1]}/#{filename[2..3]}/#{filename}"
     else
       "/images/blank_screen.png"
     end
@@ -13,7 +13,7 @@ class ScreenShot < ActiveRecord::Base
 
   def delete_file!
     if filename
-      File.unlink("./public/screen_shots/#{filename}")
+      File.unlink("./public/screen_shots/#{filename[0..1]}/#{filename[2..3]}/#{filename}")
       self.filename = nil
     end
   end
