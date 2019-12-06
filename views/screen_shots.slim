@@ -20,7 +20,7 @@ p
 - program.screen_shots.each_with_index do |ss, i|
   - if start <= i && i < start+30
     div
-      img width=150 src="/screen_shots/#{ss.filename}"
+      img width=150 src=ss.path
       | &nbsp;
       = ss.created_at.localtime
       form style="display: inline" action="/programs/#{program.id}/delete_screen_shot" method="POST"
