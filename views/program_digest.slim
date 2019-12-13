@@ -26,7 +26,7 @@
 
         div style="padding-top: 0px; overflow: hidden"
           - group.posts.each.with_index do |post, i|
-            - text = auto_link(Sanitize.fragment(post.body, elements: ['br']))
+            - text = auto_link post.body.gsub('<br>',"\0").gsub('<',"&lt;").gsub('>',"&gt;").gsub("\0",'<br>')
             - if aa?(post.body)
               pre style="font-family: 'MS PGothic'; font-size: 16px; line-height: 18px; background-color: transparent; border-radius: 0px; border: none; border-left: solid 5px #ccc"
                 == text
