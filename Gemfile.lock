@@ -148,7 +148,6 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
-  activesupport
   jimson
   omniauth-twitter
   pry

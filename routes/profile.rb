@@ -19,7 +19,7 @@ class Pcgw < Sinatra::Base
     users = User.joins(:channel_infos)
             .select('users.*, count(channel_infos.id) as channel_count')
             .group(:id)
-            .having("logged_on_at >= ? and channel_count >= 1", 30.days.ago)
+            .having("logged_on_at >= ? and channel_count >= 1", Time.now - 30 * 24 * 3600)
             .order(:logged_on_at => :desc)
     slim :active_users, locals: { users: users, title: 'アクティブなユーザー', query: '' }
   end

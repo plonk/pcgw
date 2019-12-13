@@ -2,8 +2,6 @@
 require 'jimson'
 require 'sinatra/base'
 require 'sinatra/content_for'
-require 'active_support'
-require 'active_support/core_ext'
 require 'omniauth-twitter'
 require 'active_record'
 require_relative 'jp'
@@ -31,11 +29,12 @@ class Pcgw < Sinatra::Base
   NO_NEW_CHANNEL = false
 
   configure do
-    use Rack::Session::Cookie, expire_after: 30.days.to_i, secret: ENV['CONSUMER_SECRET']
+    # The session expires after 30 days.
+    use Rack::Session::Cookie, expire_after: 30 * 24 * 3600, secret: ENV['CONSUMER_SECRET']
     use Rack::Flash
 
     set :cookie_options do
-      { expires: Time.now + 30.days.to_i }
+      { expires: Time.now + 30 * 24 * 3600 }
     end
 
     use OmniAuth::Builder do
