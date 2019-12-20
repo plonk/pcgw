@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem "rack", ">= 1.6.11"
+gem "rack", ">= 1.6.12"
 gem 'jimson'
 gem 'sinatra'
 gem 'sinatra-contrib' # for cookies
