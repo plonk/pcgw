@@ -8,15 +8,11 @@ Sinatra で書かれています。
 
 サービス全体は次のものに依存しています。
 
-* PeerCast Station (http://www.pecastation.org/)
-* mirror (https://github.com/plonk/mirror)
-* stream_proxy (https://github.com/plonk/stream_proxy)
+* [PeerCast YT](https://github.com/plonk/peercast-yt/)
+* [mirror](https://github.com/plonk/mirror)
+* [MatroskaServer](https://github.com/plonk/MatroskaServer)
+* [cyarr](https://github.com/plonk/cyarr)
 * Graphviz
+* FFMPEG
 * ImageMagick
-
-## インストール (書きかけ)
-
-* twitter アプリケーションのキーを取得する
-* 適切な設定ファイル config/config.yml を書く
-* PeerCast Station と mirror と stream_proxy とが起動している状態にする
-* 管理ユーザーを作る
+* Nginx (with rtmp-module)
