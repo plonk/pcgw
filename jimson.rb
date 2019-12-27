@@ -137,6 +137,7 @@ class Pcgw < Sinatra::Base
 
   after do
     ActiveRecord::Base.connection.close
+    GC.start
   end
 
   error Peercast::Unavailable do
