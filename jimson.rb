@@ -122,8 +122,6 @@ class Pcgw < Sinatra::Base
     pass if request.path_info =~ %r{^/programs/?}
     # 配信のスクリーンショット
     pass if request.path_info =~ %r{^/channels/\d+/screenshot$}
-    # 現在配信中のチャンネル
-    pass if request.path_info =~ %r{^/onair$}
 
     if logged_in?
       # 最終ログオン時刻を更新する。
