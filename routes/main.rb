@@ -22,10 +22,6 @@ class Pcgw < Sinatra::Base
     slim :my_history, locals: { recent_programs: programs }, layout: false
   end
 
-  get '/includes/channel_switcher' do
-    slim :channel_switcher, locals: { channels: @user.channels }, layout: false
-  end
-
   get '/stats' do
     slim :stats, locals: { servents: Servent.enabled }
   end

@@ -4,7 +4,7 @@
 script src="/reloader.js"
 
 .row
-  .col-md-8
+  .col-md-12
     div
       h1 style="display: inline"
         = @info['info']['name']
@@ -145,9 +145,6 @@ script src="/reloader.js"
             a.btn.btn-default href="/channels/#{@channel.id}/play" target="_blank"
               span class="glyphicon glyphicon-new-window"
               |  再生
-
-  .col-md-4.hidden-sm.hidden-xs
-    .reloader data-url="/includes/channel_switcher" data-interval=60
 
 javascript:
   var g_interval;
