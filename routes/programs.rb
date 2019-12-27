@@ -1,6 +1,6 @@
 # 配信履歴。「番組情報」
 
-require_relative '../calendar'
+require_relative '../lib/calendar'
 require_relative '../lib/core_ext'
 
 class Pcgw < Sinatra::Base
