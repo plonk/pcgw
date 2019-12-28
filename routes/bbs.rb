@@ -1,10 +1,6 @@
 require_relative '../lib/bbs_reader'
 
 class Pcgw < Sinatra::Base
-  def json_response(data)
-    [200, { "Content-Type" => "application/json" }, data.to_json]
-  end
-
   get '/bbs/latest-thread' do
     halt 400, 'Error: board_url key not provided' if params[:board_url].blank?
 

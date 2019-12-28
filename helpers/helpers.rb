@@ -92,6 +92,10 @@ class Pcgw < Sinatra::Base
       }
     end
 
+    def json_response(data)
+      [200, { "Content-Type" => "application/json" }, data.to_json]
+    end
+
   end
 end
 
