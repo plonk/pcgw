@@ -1,6 +1,7 @@
 require_relative '../lib/bbs_reader'
 
 class Pcgw < Sinatra::Base
+  # 板URLから最新スレッドを問い合わせる。
   get '/bbs/latest-thread' do
     halt 400, 'Error: board_url key not provided' if params[:board_url].blank?
 
@@ -19,8 +20,8 @@ class Pcgw < Sinatra::Base
         end
         threads = board.threads
         max = settings['BBS_THREAD_STOP']&.to_i || 1000
-        livingThreads = threads.select { |t| t.last < max }
-        if livingThreads.empty?
+        living_threads = threads.select { |t| t.last < max }
+        if living_threads.empty?
           return json_response(
                    {
                      "status"        => "error",
@@ -28,13 +29,13 @@ class Pcgw < Sinatra::Base
                    }
                  )
         end
-        latestThread = livingThreads.sort_by(&:id).last
+        latest_thread = living_threads.sort_by(&:id).last
         return json_response(
                  {
                    "status" => "ok",
-                   "thread_title" => latestThread.title,
-                   "last" => latestThread.last,
-                   "thread_url" => latestThread.read_url.to_s
+                   "thread_title" => latest_thread.title,
+                   "last" => latest_thread.last,
+                   "thread_url" => latest_thread.read_url.to_s
                  }
                )
       end

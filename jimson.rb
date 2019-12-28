@@ -134,7 +134,10 @@ class Pcgw < Sinatra::Base
   end
 
   after do
+    # これやらないと新しく接続できなくなる。
     ActiveRecord::Base.connection.close
+
+    # メモリを接続。
     GC.start
   end
 
