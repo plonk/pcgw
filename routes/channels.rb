@@ -1,3 +1,5 @@
+require_relative '../lib/yarr_client'
+
 class Pcgw < Sinatra::Base
   before '/channels/:id/?*' do |id, resource|
     if resource == 'update'
@@ -172,7 +174,7 @@ class Pcgw < Sinatra::Base
       if @user.admin? || @channel.user == @user
         # チャンネルをdestroyするのでinfoを取っておく。
         @channel_info = @channel.info
-        
+
         if @channel.channel_info.stream_type == "FLV"
           src = get_source_uri_with_key(@channel)
           if src.scheme == 'rtmp'

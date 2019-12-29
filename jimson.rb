@@ -10,7 +10,6 @@ require 'slim'
 require 'logger'
 require_relative 'lib/logging'
 require_relative 'lib/peercast'
-require_relative 'yarr_client'
 
 # 初期化処理
 require_relative 'init'
