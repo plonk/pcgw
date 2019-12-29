@@ -1,3 +1,5 @@
+require_relative '../lib/jp'
+
 class Pcgw < Sinatra::Base
   helpers do
     include ViewHelpers
@@ -9,9 +11,9 @@ class Pcgw < Sinatra::Base
 
     # 折り返しの制御の為に、日本語のくぎりに零幅空白を挿入する。
     def jp_words(str)
-      zwsp = '&#8203;'
-      Jp.words(str).join(zwsp)
+      Jp.words(str).join(ZWSP)
     end
+    ZWSP = '&#8203;'
 
     # インスタンス変数 @user に現在のユーザーを設定する。
     def get_user
