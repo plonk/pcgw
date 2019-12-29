@@ -14,3 +14,4 @@ gem 'rack-flash3'
 gem 'rspec', :group => :development
 gem 'pry', :group => :development
 gem 'rerun', :group => :development
+gem 'rake', :group => :development
