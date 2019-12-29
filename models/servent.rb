@@ -1,5 +1,5 @@
 require 'active_record'
-require_relative '../peercast'
+require_relative '../lib/peercast'
 require_relative '../lib/logging'
 
 class Servent < ActiveRecord::Base
