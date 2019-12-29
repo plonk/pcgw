@@ -1,6 +1,6 @@
 require 'active_record'
 require_relative '../peercast'
-require_relative '../logging'
+require_relative '../lib/logging'
 
 class Servent < ActiveRecord::Base
   has_many :channels

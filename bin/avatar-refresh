@@ -9,7 +9,7 @@ Dir.chdir(APP_DIR)
 
 require_relative '../init'
 require_relative '../models/init'
-require_relative '../logging'
+require_relative '../../lib/logging'
 
 Logging.logger = Logger.new('log/pcgw.log', 'daily')
 
