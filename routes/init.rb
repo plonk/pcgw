@@ -11,7 +11,3 @@ require_relative 'programs'
 require_relative 'servents'
 require_relative 'bbs'
 require_relative 'ip'
-# require_relative 'index_txt'
-if ENV['PCGW_ENV'] == 'development'
-  require_relative 'debug'
-end
