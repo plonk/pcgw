@@ -22,10 +22,14 @@ class Channel < ActiveRecord::Base
     @info
   end
 
+  # サーバーにチャンネルの状態を問い合わせて @status と @info にセットする。
   def set_status_info
     dict = servent.api.getChannels.find { |ch| ch['channelId'] == gnu_id }
     raise ChannelNotFoundError unless dict
+
     @status = dict['status']
+
+    # 正常に受信中なら last_active_at を更新。
     if @status['status'] == "Receiving"
       source_connection = connections.find { |conn| conn.type == 'source' }
       if source_connection && source_connection.recvRateKbps >= 1.0
@@ -33,7 +37,8 @@ class Channel < ActiveRecord::Base
         save
       end
     end
-    @info = { 'info' => dict['info'], 'track' => dict['track'], 'yellowPages' => dict['yellowPages'] }
+
+    @info = dict.slice('info', 'track', 'yellowPages')
   end
 
   def inactive_for
