@@ -130,8 +130,9 @@ script src="/reloader.js"
         td
           a target="_blank" href=@info['info']['url'] #{@info['info']['url']}
           | &thinsp;
-          a.btn.btn-default href="/channels/#{@channel.id}/thread_list"
-            | 一覧
+          a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/thread_list"
+            span.glyphicon.glyphicon-list
+            |  一覧
       tr
         th 掲載YP
         td
