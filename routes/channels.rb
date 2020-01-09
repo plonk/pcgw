@@ -1,4 +1,5 @@
 require_relative '../lib/yarr_client'
+require_relative '../lib/bbs_reader'
 
 class Pcgw < Sinatra::Base
   before '/channels/:id/?*' do |id, resource|
@@ -159,6 +160,28 @@ class Pcgw < Sinatra::Base
     end
 
     redirect to("/channels/#{@channel.id}")
+  end
+
+  get '/channels/:id/update_contact_url' do
+    # チャンネル所有チェック
+    halt 403, 'permission denied' if @channel.user != @user
+
+    halt 400, 'url missing' if params['url'].blank?
+
+    info = @channel.info['info']
+    info['url'] = params['url']
+    @channel.servent.api.setChannelInfo(channelId: @channel.gnu_id,
+                                        info:      info,
+                                        track:     @channel.info['track'])
+    @channel.channel_info.update!(params.slice('url'))
+
+    redirect to("/channels/#{@channel.id}")
+  end
+
+  get '/channels/:id/thread_list' do
+    board = Bbs::create_board(@channel.channel_info.url)
+    threads = board.threads
+    slim :thread_list, locals: { board: board, threads: threads }
   end
 
   get '/channels/:id/play' do

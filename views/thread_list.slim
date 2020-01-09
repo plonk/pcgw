@@ -1,0 +1,7 @@
+h3
+  = board.settings['BBS_TITLE']
+
+.list-group
+  - threads.each do |thread|
+    a.list-group-item href="/channels/#{@channel.id}/update_contact_url?url=#{CGI::escape(thread.read_url.to_s)}"
+      = thread.title
