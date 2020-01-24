@@ -7,6 +7,9 @@ module Bbs
   class NotFoundError < StandardError
   end
 
+  class FormatError < StandardError
+  end
+
   class Post
     class << self
       def from_s(str)
@@ -205,7 +208,10 @@ module Bbs
 
     def parse_settings(string)
       string.each_line.map { |line|
-        line.chomp.split(/=/, 2)
+        pair = line.chomp.split(/=/, 2)
+        fail FormatError, 'invalid line' unless pair.size == 2
+        fail FormatError, 'invalid key' unless pair[0] =~ /\A\w+\z/
+        pair
       }.to_h
     end
   end

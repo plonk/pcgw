@@ -53,6 +53,13 @@ class Pcgw < Sinatra::Base
                  "error_message" => "情報を得ることができませんでした。"
                }
              )
+    rescue Bbs::FormatError
+      return json_response(
+               {
+                 "status"        => "error",
+                 "error_message" => "取得されたデータの形式が不正です。"
+               }
+             )
     end
   end
 
@@ -103,12 +110,22 @@ class Pcgw < Sinatra::Base
                                  "error_message" => "対応している掲示板のURLではありません。" })
         end
       end
-    rescue Timeout::Error, Bbs::Downloader::DownloadFailure
+    rescue Timeout::Error
+      return json_response(
+               {
+                 "status"        => "error",
+                 "error_message" => "一定時間内に応答を得ることができませんでした。"
+               }
+             )
+    rescue Bbs::Downloader::DownloadFailure
       return json_response({ "status"        => "error",
                              "error_message" => "情報を得ることができませんでした。" })
     rescue Bbs::NotFoundError
       return json_response({ "status"        => "error",
                              "error_message" => "そのようなスレはありません。" })
+    rescue Bbs::FormatError
+      return json_response({ "status"        => "error",
+                             "error_message" => "取得されたデータの形式が不正です。" })
     end
   end
 end
