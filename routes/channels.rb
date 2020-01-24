@@ -180,8 +180,12 @@ class Pcgw < Sinatra::Base
 
   get '/channels/:id/thread_list' do
     board = Bbs::create_board(@channel.channel_info.url)
-    halt 403, "掲示板のURLではないようです: #{@channel.channel_info.url}" unless board
-    threads = board.threads
+    halt 404, "掲示板のURLではないようです: #{@channel.channel_info.url}" unless board
+    begin
+      threads = board.threads
+    rescue RuntimeError => e # スレ一覧のフォーマットがおかしい時とか。
+      halt 404, e.message
+    end
     slim :thread_list, locals: { board: board, threads: threads }
   end
 
