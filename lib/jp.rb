@@ -9,6 +9,8 @@ module Jp
         w, r = $&, $'
       when /\A[\p{Katakana}ー]+[^\p{Han}\p{Katakana}ー]*/
         w, r = $&, $'
+      when /\A[^\p{Han}\p{Katakana}ー]+/
+        w, r = $&, $'
       else
         w, r = buf, ""
       end

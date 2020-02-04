@@ -1,12 +1,12 @@
 <% content_for :title do %>外部サイトへの同時配信<% end %>
 
-<div class="page-header"> <h1>外部サイトへの同時配信</h1> </div>
+<div class="page-header"> <h1><%= jp_words "外部サイトへの同時配信" %></h1> </div>
 
 <p> PeerCastに配信しているのと同じ内容を、YouTubeやTwitch等の外部ライ
   ブストリーミングサイトに中継する機能です。FLV配信のときだけ利用でき
   ます。以下ではYouTubeを例に取って、使い方を説明します。</p>
 
-<h2>YouTubeでライブ配信を作成する</h2>
+<h2><%= jp_words 'YouTubeでライブ配信を作成する' %></h2>
 
 <p> YouTubeでライブ配信を作成すると、ダッシュボードに<b>ストリーム
   URL</b>と<b>キー</b>が表示されます。(下図の左下)</p>
@@ -14,7 +14,7 @@
 <img class="img-responsive" alt="" title=""
 src="/images/ss_youtube_live_dashboard.png">
 
-<h2>PeerCast Gatewayで中継を開始する</h2>
+<h2><%= jp_words 'PeerCast Gatewayで中継を開始する' %></h2>
 
 <p>チャンネルの状態ページで<b>同時配信</b>の欄にある<b>外部サーバーに送信...</b>
   ボタンを押します。</p>
@@ -39,7 +39,7 @@ src="/images/ss_repeater_working.png">
 
 <p>なお、PeerCast Gatewayでチャンネル自体を停止した時も中継は止まります。</p>
 
-<h2>エンコーダーの設定に関する留意点</h2>
+<h2><%= jp_words 'エンコーダーの設定に関する留意点' %></h2>
 
 <p>
   配信サイトの多くは動画データの取り扱いやすさのために<b>キーフレーム間隔</b>

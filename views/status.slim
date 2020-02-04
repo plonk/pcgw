@@ -33,110 +33,112 @@ script src="/reloader.js"
 
     .alert.alert-warning#warning style="display: none"
 
-    table.table.head-keep
-      tr
-        th メディア URL
-        td
-          code#source.url.text-info
-            = @channel.push_uri
-          - if @channel.stream_key
-            span
-              | &emsp;ストリームキー&nbsp;
-            code.text-info #{@channel.stream_key}
-      tr
-        th 配信サーバー
-        td
-          = @channel.servent.name
-          span.text-muted
-            |  #{@channel.servent.hostname}:#{@channel.servent.port}
-      tr
-        th
-          | 同時配信
-          sup
-            a href="/doc/repeaters"
-              | ?
-        td
-          span#repeater_status
-            = @repeater_status
-          | &nbsp;
-          - if @channel.channel_info.stream_type == "FLV"
-            a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/create_repeater"
-              | 外部サーバーに送信...
+    .table-responsive
+      table.table.head-keep
+        tr
+          th メディア URL
+          td
+            code#source.url.text-info
+              = @channel.push_uri
+        - if @channel.stream_key
+          tr
+            th ストリームキー
+            td
+              code.text-info #{@channel.stream_key}
+        tr
+          th 配信サーバー
+          td
+            = @channel.servent.name
+            span.text-muted
+              |  #{@channel.servent.hostname}:#{@channel.servent.port}
+        tr
+          th
+            | 同時配信
+            sup
+              a href="/doc/repeaters"
+                | ?
+          td
+            span#repeater_status
+              = @repeater_status
             | &nbsp;
-            a.btn.btn-warning.btn-xs href="/channels/#{@channel.id}/stop_repeater"
-              | 停止
-          - else
-            a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/create_repeater" disabled=true
-              | 外部サーバーに送信...
-            | &nbsp;
-            a.btn.btn-warning.btn-xs href="/channels/#{@channel.id}/stop_repeater" disabled=true
-              | 停止
-      tr
-        th 稼動時間
-        td
-          span#uptime
-            = TimeUtil.render_duration @status['uptime']
-      tr
-        th 接続状態
-        td
-          span#status style="margin-right: 0.5em" class=@status_class
-            = @status['status']
-          - if @channel.servent.can_restart_channel_connection?
-            a.btn.btn-default.btn-xs style="margin-left: 0.5em; margin-right: 0.5em" href="/channels/#{@channel.id}/reset" title="エンコーダーとの現在の接続を破棄し、待ち受け状態に戻します(FLV の場合)。"
-              span.glyphicon.glyphicon-refresh
-              |  リセット
-          div style="display: inline-block; height: 1em; line-height: 1.0em; text-align: center; vertical-align: middle; transform: translate(0px, -30px)"
-            div.text-muted style="font-size: 10px; transform: translate(0px, 17px)" ▼
-            br
-            meter#bitrate_meter value="#{'%.2f' % @bitrate_meter}" max="1.0" min="0.0" low="0.25" high="0.75" optimum="0.5"
-          span#source_rate style="margin-left: 0.5em"
-            = @source_kbps
-          | Kbps
-      tr
-        th 公称ビットレート
-        td
-          span#bitrate
-            = @info['info']['bitrate']
-          | Kbps
-      tr
-        th リスナー/リレー
-        td
-          span#direct
-            = @status['totalDirects']
-          |  /&nbsp;
-          span#relay
-            = @status['totalRelays']
-          - if @channel.servent.can_get_relay_tree?
-            | &nbsp;
-            a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/relay_tree" target="_blank"
-              span.glyphicon.glyphicon-new-window
-              | リレーツリー
-      tr
-        th 直下接続
-        td
-          #connections
-            == @connections
-      tr
-        th ジャンル
-        td #{@info['info']['genre']}
-      tr
-        th 詳細
-        td #{@info['info']['desc']}
-      tr
-        th コメント
-        td #{@info['info']['comment']}
-      tr
-        th コンタクト URL
-        td
-          a target="_blank" href=@info['info']['url'] #{@info['info']['url']}
-          | &thinsp;
-          a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/thread_list"
-            span.glyphicon.glyphicon-list
-            |  一覧
-      tr
-        th 掲載YP
-        td
-          == slim :yellow_page_links, locals: { yp_names: [@channel.channel_info.yp] }
+            - if @channel.channel_info.stream_type == "FLV"
+              a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/create_repeater"
+                | 外部サーバーに送信...
+              | &nbsp;
+              a.btn.btn-warning.btn-xs href="/channels/#{@channel.id}/stop_repeater"
+                | 停止
+            - else
+              a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/create_repeater" disabled=true
+                | 外部サーバーに送信...
+              | &nbsp;
+              a.btn.btn-warning.btn-xs href="/channels/#{@channel.id}/stop_repeater" disabled=true
+                | 停止
+        tr
+          th 稼動時間
+          td
+            span#uptime
+              = TimeUtil.render_duration @status['uptime']
+        tr
+          th 接続状態
+          td
+            span#status style="margin-right: 0.5em" class=@status_class
+              = @status['status']
+            - if @channel.servent.can_restart_channel_connection?
+              a.btn.btn-default.btn-xs style="margin-left: 0.5em; margin-right: 0.5em" href="/channels/#{@channel.id}/reset" title="エンコーダーとの現在の接続を破棄し、待ち受け状態に戻します(FLV の場合)。"
+                span.glyphicon.glyphicon-refresh
+                |  リセット
+            div style="display: inline-block; height: 1em; line-height: 1.0em; text-align: center; vertical-align: middle; transform: translate(0px, -30px)"
+              div.text-muted style="font-size: 10px; transform: translate(0px, 17px)" ▼
+              br
+              meter#bitrate_meter value="#{'%.2f' % @bitrate_meter}" max="1.0" min="0.0" low="0.25" high="0.75" optimum="0.5"
+            span#source_rate style="margin-left: 0.5em"
+              = @source_kbps
+            | Kbps
+        tr
+          th 公称ビットレート
+          td
+            span#bitrate
+              = @info['info']['bitrate']
+            | Kbps
+        tr
+          th リスナー/リレー
+          td
+            span#direct
+              = @status['totalDirects']
+            |  /&nbsp;
+            span#relay
+              = @status['totalRelays']
+            - if @channel.servent.can_get_relay_tree?
+              | &nbsp;
+              a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/relay_tree" target="_blank"
+                span.glyphicon.glyphicon-new-window
+                | リレーツリー
+        tr
+          th 直下接続
+          td
+            #connections
+              == @connections
+        tr
+          th ジャンル
+          td #{@info['info']['genre']}
+        tr
+          th 詳細
+          td #{@info['info']['desc']}
+        tr
+          th コメント
+          td #{@info['info']['comment']}
+        tr
+          th コンタクト URL
+          td
+            a target="_blank" href=@info['info']['url'] #{@info['info']['url']}
+            | &thinsp;
+            a.btn.btn-default.btn-xs href="/channels/#{@channel.id}/thread_list"
+              span.glyphicon.glyphicon-list
+              |  一覧
+        tr
+          th 掲載YP
+          td
+            == slim :yellow_page_links, locals: { yp_names: [@channel.channel_info.yp] }
 
     div
       form action="/channels/#{@channel.id}/stop" method="POST" role="form"
