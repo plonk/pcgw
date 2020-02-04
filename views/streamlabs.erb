@@ -1,0 +1,44 @@
+<% content_for :title do %>配信開始の手順 Open Broadcaster Software 編<% end %>
+<% content_for :head do %><link rel="stylesheet" href="/help.css"><% end %>
+
+<div class="page-header">
+  <h1>Streamlabs Androidアプリでの配信の仕方</h1>
+</div>
+
+<h3>Streamlabsのインストール</h3>
+<p>「Play ストア」から<a href="https://play.google.com/store/apps/details?id=com.streamlabs">Streamlabsアプリ</a>をインストールします。</p>
+
+<h3>RTMP URLの設定</h3>
+
+<p>初回起動時のセットアップ画面で「Other Platforms」を選び、RTMP URLとストリームキーを設定します。URLは<code>rtmp://pcgw.pgw.jp/live</code>、キーは4桁の数字で、PeerCast Gatewayでチャンネルを作成した時に表示されます。</p>
+
+<img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-095817.png">
+<img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-095831.png">
+<p>すでに他のプラットフォームで配信する設定がされている場合は、画面左上の[≡]アイコンから[Settings]→[Streaming Platform]と進んで[Custom RTMP server]を選択し、RTMP URLとストリームキーを入力してください。</p>
+
+<img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-101832.png">
+
+<h3>レイアウトの設定</h3>
+
+<p>カメラで撮影した映像を配信するには、配信画面にカメラ映像のレイヤーを追加する必要があります。配信画面の編集を行うには右上の[≡]アイコンから[Editor]を選択します。</p>
+
+<img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-100141.png">
+<img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-100151.png">
+
+<p>下図が「エディター」の画面です。右上の矢印アイコンを押すとレイヤーの一覧が表示され、右下にレイヤーを追加するための[+]ボタンが表示されます。</p>
+
+<img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-100313.png">
+<img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-100322.png">
+
+<p>[+]ボタンを押して[Add Camera]を選択すると、カメラのレイヤーが追加されます。</p>
+
+<img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-100332.png">
+<img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-100341.png">
+
+<img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-100409.png">
+
+<p>左上のチェックマークをタップするとメインの画面にもどり、カメラの映像が表示されているはずです。</p>
+
+<img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-100608.png">
+<p>ここで画面中央下部のボタンを押すと配信が開始されます。</p>
+<img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-101133.png">
