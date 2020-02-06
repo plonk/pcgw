@@ -1,0 +1,52 @@
+<% content_for :title do %>YouTubeとの同時配信<% end %>
+
+<div class="page-header">
+  <h1><%= jp_words "YouTubeとの同時配信" %></h1>
+</div>
+
+<h2><%= jp_words 'ライブ配信を作成する' %></h2>
+
+<p> YouTubeでライブ配信を作成すると、ダッシュボードに<b>ストリーム
+  URL</b>と<b>キー</b>が表示されます。(下図の左下)</p>
+
+<img class="img-responsive" alt="" title=""
+src="/images/ss_youtube_live_dashboard.png">
+
+<h2><%= jp_words 'PeerCast Gatewayで中継を開始する' %></h2>
+
+<p>PeerCast Gateway のチャンネルの状態ページで<b>同時配信</b>の欄にある<b>外部サーバーに送信...</b>
+  ボタンを押します。</p>
+
+<img class="img-responsive" alt="" title=""
+src="/images/ss_repeater_idle.png">
+
+<p>すると配信の送信先を指定するストリームURLとキーを入力するページに移
+  動するので、YouTubeダッシュボードに表示されていた情報を入力します。</p>
+
+<img class="img-responsive" alt="" title=""
+src="/images/ss_repeater_create.png"><br>
+
+<p><b>追加</b>ボタンを押すと配信の中継が開始され、中継している間は相手先のサーバー名が表示されます。</p>
+
+<img class="img-responsive" alt="" title=""
+src="/images/ss_repeater_working.png">
+
+<p>右端にある<b>停止</b>ボタンを押すとYouTubeのサーバーへの中継が終了します。(動
+  画の送信は止まりますが、YouTubeでの配信を完了するにはYouTubeのダッシュ
+  ボードから操作する必要があります。) </p>
+
+<p>なお、PeerCast Gatewayでチャンネル自体を停止した時も中継は止まります。</p>
+
+<h2><%= jp_words 'エンコーダーの設定に関する留意点' %></h2>
+
+<p>
+  YouTubeでは、動画データの取り扱いやすさのために<b>キーフレーム間隔</b>
+  を一定の範囲(4秒未満や2秒)に設定することを要求しています。要求を満た
+  していない場合、ストリームが受け付けられない場合があるのでご注意くだ
+  さい。
+</p>
+
+<h3 style="text-align: left">参考URL</h3>
+<ul>
+  <li><a href="https://support.google.com/youtube/answer/2853702?hl=ja">YouTube - ライブ エンコーダの設定、ビットレート、解像度を選択する</a></li>
+</ul>

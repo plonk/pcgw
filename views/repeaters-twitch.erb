@@ -1,0 +1,53 @@
+<% content_for :title do %>Twitchとの同時配信<% end %>
+
+<div class="page-header">
+  <h1><%= jp_words "Twitchとの同時配信" %></h1>
+</div>
+
+<h2><%= jp_words 'ストリームキーの確認' %></h2>
+
+<p>始めに、Twitchチャンネルのストリームキーをクリップボードにコピーしておきます。</p>
+
+<p>Twitchのページ右上にある自分のプロフィール画像を選択したら出てくるメニューから<b>クリエイターダッシュボード</b>を選択します。すると、<b>配信マネージャー</b>ページに辿り着きますので、画面左上の<b>≡</b>をクリックし<b>設定</b>→<b>チャンネル</b>と進みます。</p>
+
+<p>ページが切り替わり、<b>プライマリ配信キー</b>が出てきますので、<b>コピー</b>を選択してクリップボードにコピーします。</p>
+
+<img class="img-responsive" alt="" title=""
+src="/images/Twitch/5.png">
+
+<h2><%= jp_words 'PeerCast Gatewayで中継を開始する' %></h2>
+
+<p>PeerCast Gateway のチャンネルの状態ページで<b>同時配信</b>の欄にある<b>外部サーバーに送信...</b>
+  ボタンを押します。</p>
+
+<img class="img-responsive" alt="" title=""
+src="/images/Twitch/9.png">
+
+<p>すると送信先を指定するストリームURLと、キーを入力するページに移動します。</p>
+
+<p><b>キー</b>には先ほどコピーしておいた「プライマリ配信キー」を貼り付けます。<b>ストリームURL</b>は<code>rtmp://live-tyo.twitch.tv/app</code>を入力します。</p>
+
+<img class="img-responsive" alt="" title=""
+src="/images/Twitch/6.png"><br>
+
+<p><b>追加</b>ボタンを押すと配信の中継が開始され、中継している間は相手先のサーバー名が表示されます。</p>
+
+<img class="img-responsive" alt="" title=""
+src="/images/Twitch/8.png">
+
+<p>右端にある<b>停止</b>ボタンを押すとTwitchのサーバーへの中継が終了します。</p>
+
+<p>なお、PeerCast Gatewayでチャンネル自体を停止した時も中継は止まります。</p>
+
+<h2><%= jp_words 'エンコーダーの設定に関する留意点' %></h2>
+
+<p>
+  Twitchでは、動画データの取り扱いやすさのために<b>キーフレーム間隔</b>
+  を2秒に設定することが要求されています。これを満たしていない場合、ス
+  トリームが受け付けられない場合があるのでご注意ください。
+</p>
+
+<h3 style="text-align: left">参考URL</h3>
+<ul>
+  <li><a href="https://help.twitch.tv/s/article/broadcast-requirements">Broadcast Requirements - Twitch</a></li>
+</ul>

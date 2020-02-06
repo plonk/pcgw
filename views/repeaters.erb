@@ -1,55 +1,16 @@
-<% content_for :title do %>外部サイトへの同時配信<% end %>
+<% content_for :title do %>外部サイトとの同時配信<% end %>
 
-<div class="page-header"> <h1><%= jp_words "外部サイトへの同時配信" %></h1> </div>
+<div class="page-header">
+  <h1><%= jp_words "外部サイトとの同時配信" %></h1>
+</div>
 
-<p> PeerCastに配信しているのと同じ内容を、YouTubeやTwitch等の外部ライ
-  ブストリーミングサイトに中継する機能です。FLV配信のときだけ利用でき
-  ます。以下ではYouTubeを例に取って、使い方を説明します。</p>
+<p>PeerCastに配信しているのと同じ内容を、YouTubeやTwitch等の外部ライ
+  ブストリーミングサイトに中継する機能です(FLV配信のときだけ利用でき
+  ます)。</p>
 
-<h2><%= jp_words 'YouTubeでライブ配信を作成する' %></h2>
+<p>各サイトに応じた操作の手順は、以下のページをごらんください：</p>
 
-<p> YouTubeでライブ配信を作成すると、ダッシュボードに<b>ストリーム
-  URL</b>と<b>キー</b>が表示されます。(下図の左下)</p>
-
-<img class="img-responsive" alt="" title=""
-src="/images/ss_youtube_live_dashboard.png">
-
-<h2><%= jp_words 'PeerCast Gatewayで中継を開始する' %></h2>
-
-<p>チャンネルの状態ページで<b>同時配信</b>の欄にある<b>外部サーバーに送信...</b>
-  ボタンを押します。</p>
-
-<img class="img-responsive" alt="" title=""
-src="/images/ss_repeater_idle.png">
-
-<p>すると配信の送信先を指定するストリームURLとキーを入力するページに移
-  動するので、YouTubeダッシュボードに表示されている情報を入力します。</p>
-
-<img class="img-responsive" alt="" title=""
-src="/images/ss_repeater_create.png"><br>
-
-<p><b>追加</b>ボタンを押すと配信の中継が開始され、中継している間は相手先のサーバー名が表示されます。</p>
-
-<img class="img-responsive" alt="" title=""
-src="/images/ss_repeater_working.png">
-
-<p>右端にある<b>停止</b>ボタンを押すと外部サーバーへの中継が終了します。(動
-  画の送信は止まりますが、YouTubeでの配信を完了するにはYouTubeのダッシュ
-  ボードから操作する必要があります。) </p>
-
-<p>なお、PeerCast Gatewayでチャンネル自体を停止した時も中継は止まります。</p>
-
-<h2><%= jp_words 'エンコーダーの設定に関する留意点' %></h2>
-
-<p>
-  配信サイトの多くは動画データの取り扱いやすさのために<b>キーフレーム間隔</b>
-  を一定の秒数(4秒未満や2秒)に設定することを要求しています。PeerCastで
-  は問題のない設定でも外部配信サイトの要求を満たしていない場合、それら
-  のサイトで受け付けられない場合があるのでご注意ください。
-</p>
-
-<h3 style="text-align: left">参考URL</h3>
-<ol>
-  <li><a href="https://support.google.com/youtube/answer/2853702?hl=ja">YouTube - ライブ エンコーダの設定、ビットレート、解像度を選択する</a></li>
-  <li><a href="https://help.twitch.tv/s/article/broadcast-requirements?language=ja">Twitch - Broadcast Requirements</a></li>
-</ol>
+<ul>
+  <li><a href="/doc/repeaters-youtube">YouTubeとの同時配信</a></li>
+  <li><a href="/doc/repeaters-twitch">Twitchとの同時配信</a></li>
+</ul>

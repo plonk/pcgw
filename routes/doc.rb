@@ -3,7 +3,7 @@ class Pcgw < Sinatra::Base
     erb :doc
   end
 
-  DOCS = %w(how-to-obs how-to-wme how-to-ee desc faq repeaters streamlabs)
+  DOCS = %w(how-to-obs how-to-wme how-to-ee desc faq repeaters repeaters-youtube repeaters-twitch streamlabs)
 
   get '/doc/:name' do |name|
     halt 404, 'Not Found' unless DOCS.include? name
