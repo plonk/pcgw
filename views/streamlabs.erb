@@ -42,3 +42,24 @@
 <img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-100608.png">
 <p>ここで画面中央下部のボタンを押すと配信が開始されます。</p>
 <img class="img-responsive" src="/images/Streamlabs/Screenshot_20200203-101133.png">
+<h2>留意点</h2>
+
+<p>Streamlabsのエンコードする動画には、PCで使われるプレーヤーとの互換
+性の問題が確認されています。<!-- High Profile ではなく Baseline Profile 4.1 が使われている。 -->特に広く使われている PCRPlayer
+(PeCaRecorder付属のプレーヤー)のデフォルト設定では再生できないので、リ
+スナーに注意をうながすことをおすすめします。</p>
+
+<div class="table-responsive">
+  <table class="table">
+    <tr>
+      <th>プレーヤー名</th>
+      <th>可否</th>
+      <th>備考</th>
+    </tr>
+    <tr> <td>PCRPlayer v0.27等</td> <td>△</td> <td><b>オプション</b>→<b>詳細設定</b>→<b>デコーダ</b>でDXVA2をオフにする必要あり</td> </tr>
+    <tr> <td>MPC-BE v1.5.4等</td> <td>×</td> <td></td> </tr>
+    <tr> <td>MPV</td> <td>○</td> <td></td> </tr>
+    <tr> <td>VLC</td> <td>○</td> <td></td> </tr>
+    <tr> <td><a href="http://peca.live/">ぺからいぶ！</a></td> <td>○</td> <td></td> </tr>
+  </table>
+</div>
