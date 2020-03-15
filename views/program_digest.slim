@@ -20,21 +20,21 @@
   - digest.groups.each do |group|
     - if group.posts.empty?
     - else
-      div style="margin-bottom: 0px; overflow: hidden"
-        div style="float: left"
+      div.row style="margin-bottom: 0px"
+        div.col-sm-6
           img src=group.screen_shot.path style="display: block; margin-top: 0px; margin-right:10px; margin-bottom: 20px; border-radius: 10px; border: solid 10px #555"
 
-        div style="padding-top: 0px; overflow: hidden"
+        div.col-sm-6 style="padding-top: 0px"
           - group.posts.each.with_index do |post, i|
             - text = auto_link post.body.gsub('<br>',"\0").gsub('<',"&lt;").gsub('>',"&gt;").gsub("\0",'<br>')
             - if aa?(post.body)
-              pre style="font-family: 'MS PGothic'; font-size: 16px; line-height: 18px; background-color: transparent; border-radius: 0px; border: none; border-left: solid 5px #ccc"
+              pre style="font-family: 'MS PGothic'; font-size: 16px; line-height: 18px; background-color: transparent; border-radius: 0px; border: none; border-left: solid 5px #ccc; overflow: auto"
                 == text
             - else
-              div class="#{i==0?'lead':''}" style="margin-bottom: 14px; border-left: solid 5px #ccc; padding: 10px"
+              div class="#{i==0?'lead':''}" style="margin-bottom: 14px; border-left: solid 5px #ccc; padding: 10px; ; overflow: auto"
                 == text
 
-p.text-muted
+p.text-muted style="overflow: auto"
   | 出典: 
   a.text-muted href=program.url
     = program.url
