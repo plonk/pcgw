@@ -1,0 +1,19 @@
+<script src="/flv.min.js"></script>
+<div style="text-align: center">
+  <video id="videoElement" controls autoplay style="max-width: 75vw">
+      FLVの再生がサポートされていないブラウザのようです。下のプレイリストを試してください。
+  </video>
+</div>
+<script>
+ if (flvjs.isSupported()) {
+     var videoElement = document.getElementById('videoElement');
+     var flvPlayer = flvjs.createPlayer({
+	 type: 'flv',
+	 isLive: true,
+	 url: <%= javascript_string stream %>
+     });
+     flvPlayer.attachMediaElement(videoElement);
+     flvPlayer.load();
+     flvPlayer.play();
+ }
+</script>
