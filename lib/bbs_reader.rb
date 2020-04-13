@@ -362,17 +362,24 @@ module Bbs
       class << self
         def from_url(url)
           fail ArgumentError, 'url must be a String' unless url.is_a? String
-          uri = URI.parse(url)
-          return nil unless uri.scheme == "http" || uri.scheme == "https"
-          # 板名に許される文字が何かは知らない。
-          if uri.path =~ /\A\/(\w+)\/?/
+          if url =~ NICHAN_THREAD_URL_PATTERN
             board_name = $1
+            uri = URI(url)
+            uri.path = ""
+            return Board.send(:new, uri, board_name)
           else
-            return nil
+            uri = URI.parse(url)
+            return nil unless uri.scheme == "http" || uri.scheme == "https"
+            # 板名に許される文字が何かは知らない。
+            if uri.path =~ /\A\/(\w+)\/?/
+              board_name = $1
+            else
+              return nil
+            end
+            server_uri = uri.dup
+            server_uri.path = ""
+            return Board.send(:new, server_uri, board_name)
           end
-          server_uri = uri.dup
-          server_uri.path = ""
-          Board.send(:new, server_uri, board_name)
         end
       end
 
