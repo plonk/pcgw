@@ -25,7 +25,7 @@ class Pcgw < Sinatra::Base
       else
         yp_name = "PeerCast"
       end
-      @data_text = "【#{yp_name}で配信中！】#{@info['info']['name']}「#{@info['info']['desc']}」 ぺからいぶ→"
+      @data_text = "【#{yp_name}で配信中！】#{@info['info']['name']}「#{@info['info']['desc']}」 ぺからいぶで視聴→"
       @link_url = "http://peca.live/channels/#{@channel.gnu_id}"
 
       @status_class = status_semantic_class @status['status']
