@@ -1,5 +1,10 @@
+/ user?: User
+
 - content_for :title do
-  | 配信履歴 / #{calendar.year.to_s}年#{calendar.month.to_s}月
+  - if user
+    | #{user.name}さんの配信履歴 / #{calendar.year.to_s}年#{calendar.month.to_s}月
+  - else
+    | 配信履歴 / #{calendar.year.to_s}年#{calendar.month.to_s}月
 
 .panel.panel-default
   .panel-heading

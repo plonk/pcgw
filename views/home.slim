@@ -10,5 +10,6 @@ script src="/reloader.js"
   == slim :my_channels, locals: { channels: @user.channels }, layout: false
 
 .reloader data-url="/includes/my_history" data-interval=60 data-preloaded=1
-  - programs = ChannelInfo.where(user: @user).where.not(terminated_at: nil).order(created_at: :desc).limit(10)
-  == slim :my_history, locals: { recent_programs: programs }, layout: false
+  == slim :my_history, locals: { recent_programs: recent_programs }, layout: false
+
+a.btn.btn-default href="/programs?user=#{@user.id}" もっと見る&thinsp;&raquo;

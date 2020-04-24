@@ -5,12 +5,21 @@ require_relative '../lib/core_ext'
 
 class Pcgw < Sinatra::Base
   get '/programs/?' do
-    programs = ChannelInfo.all
+    if params['user'].blank?
+      programs = ChannelInfo.all
+    else
+      begin
+        user = User.find(params['user'].to_i)
+        programs = ChannelInfo.where(user: user)
+      rescue ActiveRecord::RecordNotFound
+        halt 404, "No such user"
+      end
+    end
     # 配信のあった月と、その月にあった配信の数
     months = programs.flat_map { |pg|
       [:begin, :end].of(pg.time_range).map(&:year_month).uniq
     }.frequencies.sort_by(&:first)
-    slim :program_index, locals: { months: months }
+    slim :program_index, locals: { months: months, user: user }
   end
 
   get '/programs/recent' do
@@ -30,6 +39,11 @@ class Pcgw < Sinatra::Base
   end
 
   get '/programs/by-date/:year/:month' do
+    begin
+      user = params['user'].blank? ? nil : User.find(params['user'].to_i)
+    rescue ActiveRecord::RecordNotFound
+      halt 404, 'No such user'
+    end
     year  = params['year'].to_i
     month = params['month'].to_i
     halt 400, "date not in range" unless validate_date(year, month)
@@ -38,10 +52,13 @@ class Pcgw < Sinatra::Base
     programs = ChannelInfo.where('(created_at >= ? AND created_at < ?) OR (terminated_at IS NOT NULL AND terminated_at >= ? AND terminated_at < ?)',
                                  start, start.next(:month),
                                  start, start.next(:month))
+    if user
+      programs = programs.where(user: user)
+    end
 
     calendar = Calendar.new(year, month)
 
-    slim :program_month, locals: { calendar: calendar, programs: programs }
+    slim :program_month, locals: { calendar: calendar, programs: programs, user: user }
   end
 
   get '/programs/before/:start/pages/:num' do

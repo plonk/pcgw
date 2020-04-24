@@ -28,7 +28,8 @@ class Pcgw < Sinatra::Base
 
   # ホーム
   get '/home' do
-    slim :home
+    programs = ChannelInfo.where(user: @user).order(created_at: :desc).limit(10)
+    slim :home, locals: { recent_programs: programs }
   end
 
 end

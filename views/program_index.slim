@@ -1,15 +1,24 @@
+/ user?: User
 / months: [[年, 月], 項目数] のリスト
 
 - content_for :title do
-  | 配信履歴
+  - if user
+    | #{user.name}さんの配信履歴
+  - else
+    | 配信履歴
+
+- suffix = user ? "?user=#{user.id}" : ""
 
 .panel.panel-default
   .panel-heading
-    h5 配信履歴
+    - if user
+      h5 #{user.name}さんの配信履歴
+    - else
+      h5 配信履歴
 
   .list-group
     - months.each do |(year, month), count|
-      a.list-group-item href="/programs/by-date/#{year}/#{month}"
+      a.list-group-item href="/programs/by-date/#{year}/#{month}#{suffix}"
         | #{year}年#{month}月 
         span.badge #{count}件
       br style="display: none"
