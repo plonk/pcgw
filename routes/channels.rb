@@ -21,12 +21,12 @@ class Pcgw < Sinatra::Base
       @info = @channel.servent.api.getChannelInfo(@channel.gnu_id)
 
       if @channel.info['yellowPages'].any?
-        @link_url = @yellow_pages.find { |y| y.name == @channel.info['yellowPages'].first['name'] }.top
-        @yp_name = "【#{@channel.info['yellowPages'].first['name']}】"
+        yp_name = "【#{@channel.info['yellowPages'].first['name']}】"
       else
-        @link_url = 'http://pcgw.pgw.jp/'
+        yp_name = "PeerCast"
       end
-      @data_text = "【PeerCastで配信中！】#{@info['info']['name']}「#{@info['info']['desc']}」 #{@info['info']['url']} #{@yp_name}"
+      @data_text = "【#{yp_name}で配信中！】#{@info['info']['name']}「#{@info['info']['desc']}」 ぺからいぶ→"
+      @link_url = "http://peca.live/channels/#{@channel.gnu_id}"
 
       @status_class = status_semantic_class @status['status']
       src = @channel.source_connection
