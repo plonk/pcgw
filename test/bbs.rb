@@ -46,7 +46,7 @@ describe Bbs do
 
   end
 
-  describe 'create_thread' do
+  describe 'create_board' do
     context 'httpで' do
       it 'したらば板を認識する' do
         expect(Bbs::create_board("http://jbbs.shitaraba.net/game/48538/")).to \
@@ -78,6 +78,30 @@ describe Bbs do
       it 'JPNKN板を認識する' do
         expect(Bbs::create_board("https://bbs.jpnkn.com/yoteichi/")).to \
                be_kind_of(Bbs::BoardBase)
+      end
+    end
+
+    context 'スレURLで板を作る' do
+      it 'したらばスレッドを認識する' do
+        t = Bbs.create_board \
+                  'http://jbbs.shitaraba.net/bbs/read.cgi/game/48538/1562732337/'
+        expect(t).to be_kind_of(Bbs::BoardBase)
+      end
+
+      it 'genkaiスレッドを認識する' do
+        t = Bbs.create_board \
+                  'http://genkai.pcgw.pgw.jp/test/read.cgi/shuuraku/1000000000/'
+        expect(t).to be_kind_of(Bbs::BoardBase)
+        expect(t).to be_kind_of(Bbs::Nichan::Board)
+        expect(t.name).to eq("shuuraku")
+      end
+
+      it 'JPNKNスレッドを認識する' do
+        t = Bbs.create_board \
+                  'http://bbs.jpnkn.com/test/read.cgi/yoteichi/1563454793/'
+        expect(t).to be_kind_of(Bbs::BoardBase)
+        expect(t).to be_kind_of(Bbs::Nichan::Board)
+        expect(t.name).to eq("yoteichi")
       end
     end
   end
