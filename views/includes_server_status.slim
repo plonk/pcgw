@@ -1,0 +1,20 @@
+/ servents: [Servent]
+
+.rounded.bg-white.p-3.mb-3.shadow-sm
+  h6 サーバー
+
+  .table-responsive style="font-size: smaller"
+    table.table
+      tr
+        th 名前
+        th チャンネル数
+        th バージョン
+        th IP
+      - servents.each do |servent|
+        tr
+          td #{servent.name}
+          td
+            meter value=servent.channels.size max=servent.max_channels
+            |  #{servent.channels.size} / #{servent.max_channels}
+          td #{servent.agent}
+          td #{servent.hostname}:#{servent.port}
