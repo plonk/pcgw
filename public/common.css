@@ -56,3 +56,10 @@ td.bitrate {
     min-width: 70px;
     text-align: right;
 }
+.img-rounded { border-radius: 6px }
+
+.navbar { margin-bottom: 20px }
+
+.card { margin-bottom: 20px }
+
+a.media { text-decoration: none !important }

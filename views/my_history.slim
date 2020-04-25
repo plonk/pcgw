@@ -1,8 +1,8 @@
 / recent_programs: [ChannelInfo]
-.panel.panel-default
-  .panel-heading
-    h5 最近の配信
-  .list-group
-    - recent_programs.each do |program|
-      a.list-group-item href="/programs/#{program.id}"
-        == slim :channel_info_thumbnail, locals: { program: program }
+.rounded.shadow-sm.bg-white.p-3
+  h6 最近の配信
+  - recent_programs.each do |program|
+    a.media.border-bottom.border-gray.py-2.text-dark href="/programs/#{program.id}"
+      == slim :channel_info_thumbnail, locals: { program: program }
+
+  a.btn.btn-light.mt-3 href="/programs?user=#{@user.id}" もっと見る&thinsp;&raquo;

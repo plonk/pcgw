@@ -6,12 +6,12 @@
 == slim :flash
 
 p
-  a.btn.btn-default href="/servents" &laquo; サーバー一覧
+  a.btn.btn-light href="/servents" &laquo; サーバー一覧
 
-.panel.panel-default
-  .panel-heading サーバー情報
+.card
+  .card-header サーバー情報
 
-  .panel-body
+  .card-block
     form action="/servents/#{servent.id}/update" method="POST" role="form"
       .form-group
         label for="agent" エージェント
@@ -22,12 +22,12 @@ p
         input readonly=true class="form-control" type="text" name="yellow_pages" value=servent.yellow_pages
 
       .form-group
-        button.btn.btn-default type="submit" サーバーから更新
+        button.btn.btn-light type="submit" サーバーから更新
 
-.panel.panel-default
-  .panel-heading 設定
+.card
+  .card-header 設定
 
-  .panel-body
+  .card-block
     form action="/servents/#{servent.id}" method="POST" role="form"
       input type="hidden" name="_method" value="PATCH"
 

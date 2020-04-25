@@ -8,22 +8,6 @@ script src="/reloader.js"
 .reloader data-url="/includes/onair" data-interval=60 data-preloaded=1
   == erb :includes_onair, locals: { channels: Channel.all }, layout: false
 
-.panel.panel-default
-  .panel-heading
-    h5 サーバー
+.reloader data-url="/includes/server_status" data-interval=60 data-preloaded=1
+  == slim :includes_server_status, locals: { servents: servents }, layout: false
 
-  .table-responsive
-    table.table
-      tr
-        td 名前
-        td チャンネル数
-        td バージョン
-        td IP
-      - servents.each do |servent|
-        tr
-          td #{servent.name}
-          td
-            meter value=servent.channels.size max=servent.max_channels
-            |  #{servent.channels.size} / #{servent.max_channels}
-          td #{servent.agent}
-          td #{servent.hostname}:#{servent.port}

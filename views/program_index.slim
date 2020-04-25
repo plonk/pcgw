@@ -9,8 +9,8 @@
 
 - suffix = user ? "?user=#{user.id}" : ""
 
-.panel.panel-default
-  .panel-heading
+.card
+  .card-header
     - if user
       h5 #{user.name}さんの配信履歴
     - else
@@ -18,7 +18,9 @@
 
   .list-group
     - months.each do |(year, month), count|
-      a.list-group-item href="/programs/by-date/#{year}/#{month}#{suffix}"
+      a.list-group-item.list-group-item-action href="/programs/by-date/#{year}/#{month}#{suffix}"
         | #{year}年#{month}月 
-        span.badge #{count}件
+        span.badge.badge-secondary style="float: right"
+          | #{count}
+          span.sr-only 件
       br style="display: none"

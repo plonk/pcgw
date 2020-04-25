@@ -6,14 +6,14 @@
   - else
     | 配信履歴 / #{calendar.year.to_s}年#{calendar.month.to_s}月
 
-.panel.panel-default
-  .panel-heading
+.card
+  .card-header
     h5 #{calendar.year}年#{calendar.month}月
 
   == slim :month_calendar, locals: { calendar: calendar, programs: programs }
 
-.panel.panel-default
-  .panel-heading
+.card
+  .card-header
     h5 #{calendar.year}年#{calendar.month}月
 
   - if admin_view?

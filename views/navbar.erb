@@ -1,19 +1,13 @@
-<nav class="navbar navbar-static-top navbar-default" role="navigation">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" role="navigation">
   <div class="container">
 
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed"
-              data-toggle="collapse" data-target="#navbar-collapse-1">
-        <!-- 線３本 -->
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse-1" aria-controls="navbar-collapse-1" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
     <div class="collapse navbar-collapse" id="navbar-collapse-1">
 
-      <ul class="nav navbar-nav navbar-left">
+      <ul class="navbar-nav mr-auto">
         <% if @user %>
           <%= slim :home_tab %>
         <% end %>
@@ -28,43 +22,34 @@
       <ul class="nav navbar-nav navbar-right">
         <% if @user %>
 
-        <li class="dropdown">
+        <li class="nav-item dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="padding: 8px">
             <img width="34" src="<%= @user.image_https %>" alt="[<%= @user.name %>の画像]" class="img-rounded">
           </a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="/profile/<%= h @user.id %>">
+          <div class="dropdown-menu" role="menu">
+            <a class="dropdown-item" href="/profile/<%= h @user.id %>">
                 <strong><%= h @user.name %></strong><br>
-                <small class="metadata">プロフィールを表示</small></a></li>
-            <li class=divider></li>
+                <small class="metadata">プロフィールを表示</small></a>
+            <div class="dropdown-divider"></div>
             <% if admin_view? %>
-            <li><a href="/admin"><span class="text-warning">管理</span></a></li>
-            <li><a href="<%= h request.path_info + '?noadmin=yes' %>">一般ユーザビュー</a></li>
-            <li class=divider></li>
+              <a class="dropdown-item" href="/admin"><span class="text-warning">管理</span></a>
+              <a class="dropdown-item" href="<%= h request.path_info + '?noadmin=yes' %>">一般ユーザビュー</a>
+              <div class="dropdown-divider"></div>
             <% end %>
 
-<!--
-            <li><a href="http://jbbs.shitaraba.net/bbs/read.cgi/game/48538/1431385307/">サポート</a></li>
-            <li><a href="/doc">ヘルプ</a></li>
-            <li class=divider></li>
--->
-
-            <li><a href="/account">設定</a></li>
-            <li><a href="/logout">ログアウト</a></li>
-          </ul>
+            <a class="dropdown-item" href="/account">設定</a>
+            <a class="dropdown-item" href="/logout">ログアウト</a>
+          </div>
         </li>
 
-        <li>
+        <li class="nav-item">
           <form action="/create" method="GET">
             <button class="btn btn-primary navbar-btn"
                     title="配信する"
                     style="padding: 0px 10px 0px 10px; margin-left: 0.5em; margin-right: 1em">
-              <span class="visible-lg">
+              <span><!-- visible-lg -->
                 <img src="/images/megaphone.png" width="32" alt="[メガホン]">
                 配信する
-              </span>
-              <span class="visible-xs visible-sm visible-md">
-                <img src="/images/megaphone.png" width="32" alt="[メガホン]">
               </span>
             </button>
           </form>
@@ -82,5 +67,5 @@
 
       </ul>
     </div> <!-- /.navbar-collapse -->
-  </div> <!-- /.container-fluid -->
+  </div>
 </nav>

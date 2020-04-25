@@ -19,16 +19,16 @@ p
   | 再生されない場合はプレイリストを試してください。
 
 p
-  a.btn.btn-default href=channel.info['info']['url'] target="_blank" style="margin-left: 0.5em"
+  a.btn.btn-light href=channel.info['info']['url'] target="_blank" style="margin-left: 0.5em"
     span.glyphicon.glyphicon-new-window style="margin-right: 0.5em"
     | コンタクトURL
-  a.btn.btn-default href=channel.playlist_url target="_blank" style="margin-left: 0.5em"
+  a.btn.btn-light href=channel.playlist_url target="_blank" style="margin-left: 0.5em"
     span.glyphicon.glyphicon-download-alt style="margin-right: 0.5em"
     | プレイリスト
   - if channel.info['info']['contentType'] == 'FLV'
     - if params['flash'] == 'yes'
-      a.btn.btn-default href="#{request.path}" style="margin-left: 0.5em"
+      a.btn.btn-light href="#{request.path}" style="margin-left: 0.5em"
         | HTML5版
     - else
-      a.btn.btn-default href="#{request.path}?flash=yes" style="margin-left: 0.5em"
+      a.btn.btn-light href="#{request.path}?flash=yes" style="margin-left: 0.5em"
         | Flash版

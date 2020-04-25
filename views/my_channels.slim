@@ -1,12 +1,10 @@
-.panel.panel-default
-  .panel-heading
-    h5 マイチャンネル
+.rounded.shadow-sm.p-3.bg-white.mb-3
+  h6 マイチャンネル
 
   - if channels.any?
     .list-group
       - channels.each do |ch|
-        a.list-group-item href="/channels/#{ch.id}"
+        a.list-group-item.list-group-item-action href="/channels/#{ch.id}"
           == slim :horizontal_thumbnail, locals: { channel: ch }
   - else
-    .panel-body
-      .text-muted style="font-style: italic; text-align: center" チャンネルはありません。
+    .text-muted style="font-style: italic; text-align: center" チャンネルはありません。

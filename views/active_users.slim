@@ -8,12 +8,11 @@ div style="margin-bottom: 15px"
       input.form-control name="query" type="text" value=query placeholder="ユーザー名を入力" title="任意の文字列 % と、任意の一文字 _ のワイルドカードが使えます。これらの文字自体を検索したい場合は \ を前に付けてください。"
     button.btn.btn-primary type="submit" 検索
 
-.panel.panel-default
-  .panel-heading
-    h4
-      = title
-      span.badge #{users.to_a.count}
-  .panel-body
+.rounded.bg-white.shadow-sm.p-3.mb-3
+  h6
+    = title
+    span.badge.badge-secondary #{users.to_a.count}
+  div
     - if users.size == 0
       p.text-success style="text-align: center; font-style: italic" 条件に合致するユーザーは居ませんでした。
       - if query !~ /[%_]/

@@ -41,8 +41,8 @@
 <div>
   <a href="/users" class="btn btn-primary">戻る</a>
 
-  <a href="/users/<%= h @content_user.id %>/edit" class="btn btn-default">編集</a>
-  <a title="プロフィール画像のリンク切れを直します" href="/users/<%= h @content_user.id %>/update" class="btn btn-default">Twitterから更新</a>
+  <a href="/users/<%= h @content_user.id %>/edit" class="btn btn-light">編集</a>
+  <a title="プロフィール画像のリンク切れを直します" href="/users/<%= h @content_user.id %>/update" class="btn btn-light">Twitterから更新</a>
 
   <form action="/users/<%= h @content_user.id %>" method="POST" style="display: inline">
     <input hidden name="_method" value="DELETE">

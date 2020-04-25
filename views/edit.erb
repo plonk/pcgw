@@ -1,33 +1,43 @@
 <script src="/bbs_checker.js"></script>
 
-<form action="/channels/<%= @channel_id %>" method="POST" role="form">
+<form class="form-horizontal bg-white p-3 shadow-sm" action="/channels/<%= @channel_id %>" method="POST" role="form">
 
-  <div class="form-group">
-    <label for=name>チャンネル名</label>
-    <input class="form-control" type=text name="name" value="<%= h @info['name'] %>">
+  <div class="form-group row">
+    <label class="col-sm-3" for=name>チャンネル名</label>
+    <div class="col-sm-9">
+      <input class="form-control" type=text name="name" value="<%= h @info['name'] %>">
+    </div>
   </div>
 
-  <div class="form-group">
-    <label for=genre>ジャンル</label>
-    <input class="form-control" type=text name="genre" value="<%= h @info['genre'] %>">
+  <div class="form-group row">
+    <label class="col-sm-3" for=genre>ジャンル</label>
+    <div class="col-sm-9">
+      <input class="form-control" type=text name="genre" value="<%= h @info['genre'] %>">
+    </div>
   </div>
 
-  <div class="form-group">
-    <label for=desc>詳細</label>
-    <input class="form-control" type=text name="desc" value="<%= h @info['desc'] %>">
+  <div class="form-group row">
+    <label class="col-sm-3" for=desc>詳細</label>
+    <div class="col-sm-9">
+      <input class="form-control" type=text name="desc" value="<%= h @info['desc'] %>">
+    </div>
   </div>
 
-  <div class="form-group">
-    <label for=comment>コメント</label>
-    <input class="form-control" type=text name="comment" value="<%= h @info['comment'] %>">
+  <div class="form-group row">
+    <label class="col-sm-3" for=comment>コメント</label>
+    <div class="col-sm-9">
+      <input class="form-control" type=text name="comment" value="<%= h @info['comment'] %>">
+    </div>
   </div>
 
-  <div class="form-group">
-    <label for=url>コンタクトURL</label>
-    <span id="bbs-checker-indicator" style="float: right"></span>
-    <input class="form-control" id="bbs-checker-input" type=text name="url" value="<%= h @info['url'] %>">
+  <div class="form-group row">
+    <label class="col-sm-3" for=url>コンタクトURL</label>
+    <div class="col-sm-9">
+      <input class="form-control" id="bbs-checker-input" type=text name="url" value="<%= h @info['url'] %>">
+      <span id="bbs-checker-indicator"></span>
+    </div>
   </div>
 
-  <p><button type=submit class="btn btn-primary btn-block">変更を保存</button>
+  <button type=submit class="btn btn-primary btn-block">変更を保存</button>
 
 </form>

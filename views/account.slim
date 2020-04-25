@@ -22,8 +22,9 @@ form action="/account" method="POST" role="form"
     button.btn.btn-primary type="submit"
       | 変更を保存
 
-form action="/account/#{@user.id}" method="POST" style="float: right; display: inline"
-  .form-group
-    input type="hidden" name="_method" value="delete"
-    button.btn.btn-danger type="submit"
-      | アカウントを削除
+div style="text-align: right"
+  form action="/account/#{@user.id}" method="POST" style="display: inline"
+    .form-group
+      input type="hidden" name="_method" value="delete"
+      button.btn.btn-danger.btn-sm type="submit"
+        | アカウントを削除

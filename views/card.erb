@@ -1,12 +1,12 @@
 <!-- channel: Channel -->
-<div class="thumbnail thumbnail-channel" style="display: inline-block; text-align: left">
+<div class="thumbnail thumbnail-channel shadow-sm border border-gray" style="display: inline-block; text-align: left">
   <div style="display: inline-block; text-align: center; width: 100%; position: relative">
     <a title="ぺからいぶで開く" href="http://peca.live/channels/<%= h channel.gnu_id %>">
       <img src="<%= h channel.channel_info.primary_screenshot_path %>" style="width: 100%">
     </a>
   </div>
 
-  <div class="caption">
+  <div class="caption p-2">
     <p style="position: relative">
       <a href="/profile/<%= channel.user.id %>"><img width="48" src="<%= channel.user.image_https %>" alt="<%= channel.user.name %>" class="img-rounded" style="display: inline; margin-right: 5px"></a>
       <a href="/profile/<%= channel.user.id %>">
@@ -16,7 +16,7 @@
       </a>
 
       <small style="position: absolute; right: 0px; text-align: left">
-        <span class="glyphicon glyphicon-time"></span>
+        <span class="glyphicon glyphicon-time">⏲️<!-- timer clock --></span>
         <%= h uptime_fmt(channel.status['uptime']) %>
       </small>
     </p>
@@ -25,11 +25,11 @@
 
     <p>
       <span style="margin-right: 20px">
-        <span class="glyphicon glyphicon-user"></span>
+        <span class="glyphicon glyphicon-user">👤<!-- bust in silhouette --></span>
         <%= h channel.listener_count_display %>
       </span>
       <span style="margin-right: 20px">
-        <span class="glyphicon glyphicon-book"></span>
+        <span class="glyphicon glyphicon-book">📙<!-- orange book --></span>
         <%= slim :yellow_page_links, locals: { yp_names: [channel.channel_info.yp] } %>
       </span>
     </p>
