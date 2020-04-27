@@ -63,7 +63,7 @@ td.bitrate {
 
 a.media { text-decoration: none !important }
 
-panel {
+.panel {
     border-radius: .25rem !important;
     background-color: #fff !important;
     box-shadow: 0 .125rem .25rem rgba(0,0,0,.75) !important;
