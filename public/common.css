@@ -34,8 +34,7 @@ table.table tr td { min-height: 44px; vertical-align: middle; }
 .thumbnail-channel{
     padding: 0px; 
     max-width: 300px; 
-    margin-left: auto;
-    margin-right: auto;
+    margin: calc(1rem / 2);
 }
 
 .meter-outer {
@@ -58,7 +57,7 @@ td.bitrate {
 }
 .img-rounded { border-radius: 6px }
 
-.navbar { margin-bottom: 20px }
+.navbar { margin-bottom: 15px }
 
 .card { margin-bottom: 20px }
 

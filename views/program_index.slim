@@ -9,12 +9,11 @@
 
 - suffix = user ? "?user=#{user.id}" : ""
 
-.card
-  .card-header
-    - if user
-      h5 #{user.name}さんの配信履歴
-    - else
-      h5 配信履歴
+.p-3.bg-white.rounded.shadow-sm
+  - if user
+    h5 #{user.name}さんの配信履歴
+  - else
+    h5 配信履歴
 
   .list-group
     - months.each do |(year, month), count|
@@ -23,4 +22,3 @@
         span.badge.badge-secondary style="float: right"
           | #{count}
           span.sr-only 件
-      br style="display: none"
