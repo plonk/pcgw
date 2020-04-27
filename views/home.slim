@@ -10,5 +10,5 @@ script src="/reloader.js"
   == slim :my_channels, locals: { channels: @user.channels }, layout: false
 
 .reloader data-url="/includes/my_history" data-interval=60 data-preloaded=1
-  == slim :my_history, locals: { recent_programs: recent_programs }, layout: false
+  == slim :my_history, locals: { recent_programs: recent_programs, user: @user }, layout: false
 

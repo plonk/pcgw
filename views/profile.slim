@@ -10,4 +10,4 @@
   - if user.channels.any?
     == slim :profile_onair, locals: { user: user }
 
-== slim :my_history, locals: { recent_programs: recent_programs }
+== slim :my_history, locals: { recent_programs: recent_programs, user: user }
