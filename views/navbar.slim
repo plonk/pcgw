@@ -1,0 +1,71 @@
+nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
+  .container
+
+    button.navbar-toggler type="button" data-toggle="collapse" data-target="#navbar-collapse-1" aria-controls="navbar-collapse-1" aria-expanded="false" aria-label="Toggle navigation"
+      span.navbar-toggler-icon
+
+    .collapse.navbar-collapse#navbar-collapse-1
+
+      ul.navbar-nav.mr-auto
+        - if @user
+          li.nav-item
+            a.nav-link href="/home" style="padding: 10px" title="ホーム"
+              span.glyphicon.glyphicon-home style="font-size: 24px" 🏠
+              span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%"  ホーム
+        li.nav-item
+          a.nav-link href="/stats" style="padding: 10px" title="利用状況"
+            span.glyphicon.glyphicon-stats style="font-size: 24px" 📊
+            span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%"  利用状況
+        li.nav-item
+          a.nav-link href="/programs/recent" style="padding: 10px" title="過去の番組"
+            span.glyphicon.glyphicon-time style="font-size: 24px" ⏲️
+            span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%"  過去の番組
+        li.nav-item
+          a.nav-link href="/profile" style="padding: 10px" title="ユーザー"
+            span.glyphicon.glyphicon-user style="font-size: 24px" 👤
+            span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%" ユーザー
+        - if @user
+          / 例外的にビューからモデルを引っ張る。
+          - notices = Notice.where('created_at > ?', @user.notice_checked_at || Time.at(0))
+          li.nav-item
+            a.nav-link href="/notices/" style="padding: 10px" title="お知らせ"
+              - if notices.empty?
+                span.glyphicon.glyphicon-bell style="font-size: 24px" 🔔
+              - else
+                span.glyphicon.glyphicon-bell style="font-size: 24px; color: #ffa922" 🔔
+                  span.badge.badge-primary style="position: absolute; top: 50%; left: 55%;  font-size: 8pt" #{notices.count}
+              span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%"  お知らせ
+
+      ul.nav.navbar-nav.navbar-right
+        - if @user
+
+          li.nav-item.dropdown
+            a.dropdown-toggle href="#" data-toggle="dropdown" role="button" aria-expanded="false" style="padding: 8px"
+              img.img-rounded width="34" src=@user.image_https alt="[#{@user.name}の画像]"
+            div.dropdown-menu role="menu"
+              a.dropdown-item href="/profile/#{@user.id}"
+                  strong
+                    = @user.name
+                  br
+                  small.metadata プロフィールを表示
+              div.dropdown-divider
+              - if admin_view?
+                a.dropdown-item href="/admin"
+                  span.text-warning 管理
+                a.dropdown-item href="#{request.path_info + '?noadmin=yes'}" 一般ユーザビュー
+                div.dropdown-divider
+
+              a.dropdown-item href="/account" 設定
+              a.dropdown-item href="/logout" ログアウト
+
+          li.nav-item
+            form action="/create" method="GET"
+              button.btn.btn-primary.navbar-btn title="配信する" style="padding: 0px 10px 0px 10px; margin-left: 0.5em; margin-right: 1em"
+                img src="/images/megaphone.png" width="32" alt="[メガホン]"
+                | 配信する
+
+        - else
+
+          li
+            a href="/auth/twitter"
+              img alt="Sign in with Twitter" src="/sign-in-with-twitter-gray.png"

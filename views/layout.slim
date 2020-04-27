@@ -9,7 +9,7 @@ html lang="ja"
     == erb :common_head
     == yield_content(:head)
   body.bg-light
-    == erb :navbar
+    == slim :navbar
 
     hr style="display: none"
 
