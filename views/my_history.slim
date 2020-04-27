@@ -1,5 +1,5 @@
 / recent_programs: [ChannelInfo]
-.rounded.shadow-sm.bg-white.p-3
+.panel
   h6 最近の配信
   - recent_programs.each do |program|
     a.media.border-bottom.border-gray.py-2.text-dark href="/programs/#{program.id}"

@@ -63,3 +63,12 @@ td.bitrate {
 .card { margin-bottom: 20px }
 
 a.media { text-decoration: none !important }
+
+panel {
+    border-radius: .25rem !important;
+    background-color: #fff !important;
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.75) !important;
+    padding: 1rem !important;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}

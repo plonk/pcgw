@@ -3,7 +3,7 @@
 
 script src="/reloader.js"
 
-.rounded.bg-white.shadow-sm.p-3.mb-3
+.panel
   h4 style="display: inline"
     = @info['info']['name']
     == erb :tweet_button, locals: { link_url: @link_url, data_text: @data_text }
