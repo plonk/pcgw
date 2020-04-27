@@ -1,7 +1,7 @@
 - content_for :title do
   = user.name
 
-.bg-white.p-3.shadow-sm.mb-3
+.panel
   == slim :profile_panel_content, locals: { user: user }
 
   p
