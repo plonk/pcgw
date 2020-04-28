@@ -12,7 +12,7 @@ h1 配信履歴
   == slim :program_table, locals: { programs: programs } do |program|
     form action="/programs/#{program.id}" method="POST"
       input type="hidden" name="_method" value="DELETE"
-      button.btn.btn-warning.btn-xs type="submit" 削除
+      button.btn.btn-warning.btn-sm type="submit" 削除
 - else
   == slim :program_table, locals: { programs: programs }
 

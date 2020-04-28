@@ -8,7 +8,7 @@ script src="/reloader.js"
     = @info['info']['name']
     == erb :tweet_button, locals: { link_url: @link_url, data_text: @data_text }
     .btn-group style="vertical-align: -0.07em;"
-      button.btn.btn-light.dropdown-toggle type="button" data-toggle="dropdown" aria-expanded="false"
+      button.btn.btn-secondary.dropdown-toggle type="button" data-toggle="dropdown" aria-expanded="false"
         |  更新の間隔
         span#refresh-interval ∞
         | 秒
@@ -56,16 +56,16 @@ script src="/reloader.js"
             = @repeater_status
           | &nbsp;
           - if @channel.channel_info.stream_type == "FLV"
-            a.btn.btn-light.btn-xs href="/channels/#{@channel.id}/create_repeater"
+            a.btn.btn-secondary.btn-sm href="/channels/#{@channel.id}/create_repeater"
               | 外部サーバーに送信...
             | &nbsp;
-            a.btn.btn-warning.btn-xs href="/channels/#{@channel.id}/stop_repeater"
+            a.btn.btn-warning.btn-sm href="/channels/#{@channel.id}/stop_repeater"
               | 停止
           - else
-            a.btn.btn-light.btn-xs href="/channels/#{@channel.id}/create_repeater" disabled=true
+            a.btn.btn-secondary.btn-sm href="/channels/#{@channel.id}/create_repeater" disabled=true
               | 外部サーバーに送信...
             | &nbsp;
-            a.btn.btn-warning.btn-xs href="/channels/#{@channel.id}/stop_repeater" disabled=true
+            a.btn.btn-warning.btn-sm href="/channels/#{@channel.id}/stop_repeater" disabled=true
               | 停止
       tr
         th 稼動時間
@@ -78,7 +78,7 @@ script src="/reloader.js"
           span#status style="margin-right: 0.5em" class=@status_class
             = @status['status']
           - if @channel.servent.can_restart_channel_connection?
-            a.btn.btn-light.btn-xs style="margin-left: 0.5em; margin-right: 0.5em" href="/channels/#{@channel.id}/reset" title="エンコーダーとの現在の接続を破棄し、待ち受け状態に戻します(FLV の場合)。"
+            a.btn.btn-secondary.btn-sm style="margin-left: 0.5em; margin-right: 0.5em" href="/channels/#{@channel.id}/reset" title="エンコーダーとの現在の接続を破棄し、待ち受け状態に戻します(FLV の場合)。"
               span.glyphicon.glyphicon-refresh
               |  リセット
           div style="display: inline-block; height: 1em; line-height: 1.0em; text-align: center; vertical-align: middle; transform: translate(0px, -30px)"
@@ -104,7 +104,7 @@ script src="/reloader.js"
             = @status['totalRelays']
           - if @channel.servent.can_get_relay_tree?
             | &nbsp;
-            a.btn.btn-light.btn-xs href="/channels/#{@channel.id}/relay_tree" target="_blank"
+            a.btn.btn-secondary.btn-sm href="/channels/#{@channel.id}/relay_tree" target="_blank"
               span.glyphicon.glyphicon-new-window
               | リレーツリー
       tr
@@ -126,7 +126,7 @@ script src="/reloader.js"
         td
           a target="_blank" href=@info['info']['url'] #{@info['info']['url']}
           | &thinsp;
-          a.btn.btn-light.btn-xs href="/channels/#{@channel.id}/thread_list"
+          a.btn.btn-secondary.btn-sm href="/channels/#{@channel.id}/thread_list"
             span.glyphicon.glyphicon-list
             |  一覧
       tr
@@ -140,9 +140,9 @@ script src="/reloader.js"
         .btn-group
           button.btn.btn-warning type="submit" 配信停止
         .btn-group
-          a.btn.btn-light href="/channels/#{@channel.id}/edit" 詳細変更
+          a.btn.btn-secondary href="/channels/#{@channel.id}/edit" 詳細変更
         .btn-group
-          a.btn.btn-light href="/channels/#{@channel.id}/play" target="_blank"
+          a.btn.btn-secondary href="/channels/#{@channel.id}/play" target="_blank"
             span class="glyphicon glyphicon-new-window"
             |  再生
 

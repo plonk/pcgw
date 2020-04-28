@@ -8,7 +8,7 @@
 .panel
   h4 #{servents.count} サーバー
 
-  button.mb-3 type="button" class="btn btn-light" data-toggle="modal" data-target="#addModal"
+  button.mb-3.btn.btn-secondary type="button" data-toggle="modal" data-target="#addModal"
     span.glyphicon.glyphicon-plus ➕
     | &thinsp;追加
 
@@ -54,14 +54,14 @@
               input name="enabled#{serv.id}" form="save" type="checkbox" value="true" checked=serv.enabled
             td
               .btn-group.btn-group-xs role="group"
-                a.btn.btn-light href="/servents/#{serv.id}" 開く
+                a.btn.btn-secondary href="/servents/#{serv.id}" 開く
                 button.btn.btn-danger type="submit" form="delete#{serv.id}" 削除
 
   .mt-3
     button type="submit" class="btn btn-primary" form="save"
       span.glyphicon.glyphicon-floppy-disk &thinsp;変更を保存
     |  
-    a href="/servents" class="btn btn-light"
+    a.btn.btn-secondary href="/servents"
       span.glyphicon.glyphicon-floppy-open &thinsp;元に戻す
 
 == slim :servent_add_modal

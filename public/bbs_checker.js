@@ -11,7 +11,7 @@ $(function () {
     }
 
     function latestThreadButton(board_url) {
-        return "<button type=\"button\" class=\"btn btn-xs btn-default\" onclick=\"changeToLatestThread(&quot;" +
+        return "<button type=\"button\" class=\"btn btn-sm btn-secondary\" onclick=\"changeToLatestThread(&quot;" +
             board_url +
             "&quot;)\" title=\"コンタクトURLをこの板でまだ埋まっていない、もっとも最近立てられたスレッドに変更します。\">新スレに移動</button>";
     }
