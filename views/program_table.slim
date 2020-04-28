@@ -2,7 +2,7 @@
 
 .list-group
   - programs.each do |curr|
-    a.list-group-item href="/programs/#{curr.id}"
+    a.list-group-item.list-group-item-action href="/programs/#{curr.id}" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis"
       span  style="white-space: nowrap"
         / ユーザー画像
         img.img-rounded width="28" src=curr.user.image_https alt="[#{curr.user.name}の画像]"
@@ -11,7 +11,7 @@
           | #{curr.channel}
         span style="margin-left: 1em"
           = curr.summary
-      span style="float: right; min-width: 200px"
+      span style="float: right; min-width: 200px: text-align: right"
         - if curr.terminated_at
           = TimeUtil.render_time_range(curr.created_at.localtime, curr.terminated_at.localtime)
         - else

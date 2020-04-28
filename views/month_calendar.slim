@@ -1,7 +1,7 @@
 / calendar: Calendar
 / programs: ChannelInfoのコレクション。この月にあった番組
 - _programs = programs.to_a
-table.table.table-bordered.calendar border=true
+table.table.table-bordered.table-sm.calendar border=true
   - calendar.weeks.each do |week|
     tr
       - week.each do |day|
