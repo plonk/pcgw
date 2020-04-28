@@ -37,14 +37,14 @@
           a href=program.url target="_blank"
             = program.url
 
-  a.btn.btn-light href="/programs/#{program.id}/digest" style="margin-right: 0.8em"
+  a.my-1.btn.btn-light href="/programs/#{program.id}/digest" style="margin-right: 0.8em"
     | 配信ダイジェスト
     span.text-warning style="margin-left: 0.3em" β
   - if @user == program.user
-    a.btn.btn-light href="/create?template=#{program.id}" style="margin-right: 0.8em"
+    a.my-1.btn.btn-light href="/create?template=#{program.id}" style="margin-right: 0.8em"
       | 続きを配信 &raquo;
   - if @user == program.user || admin_view?
     form action="/programs/#{program.id}" method="POST" style="display: inline"
       input type="hidden" name="_method" value="DELETE"
       input type="hidden" name="redirect_path" value="/home"
-      button.btn.btn-warning type="submit" 削除
+      button.my-1.btn.btn-warning type="submit" 削除
