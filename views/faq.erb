@@ -4,10 +4,10 @@
   <h1>よくある質問</h1>
 </div>
 
-<h2><%= jp_words "peercast.exe が無くても配信できますか？" %></h1>
+<h2>peercast.exe が無くても配信できますか？</h1>
 <p>はい。配信者が peercast や PeerCast Station をインストールする必要はありません。</p>
 
-<h2><%= jp_words "直下ノードへのリレーは何本出ますか？" %></h1>
+<h2>直下ノードへのリレーは何本出ますか？</h1>
 <% Servent.enabled.each do |servent| %>
   <% settings = servent.api.getSettings %>
   <p>
