@@ -143,8 +143,12 @@ class Pcgw < Sinatra::Base
     # これやらないと新しく接続できなくなる。
     ActiveRecord::Base.connection.close
 
-    # メモリを接続。
-    GC.start
+    # メモリを節約。
+    if @invoke_count%10 == 0
+      log.info("GC start")
+      GC.start
+      log.info("GC finished")
+    end
   end
 
   error Peercast::Unavailable do
