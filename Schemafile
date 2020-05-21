@@ -18,7 +18,7 @@ create_table "channels", force: true do |t|
   t.belongs_to :servent, index: true
   t.boolean "hide_screenshots", default: false
   t.datetime "last_active_at"
-  t.timestamps
+  t.datetime "created_at"
 end
 
 create_table "users", force: true do |t|
