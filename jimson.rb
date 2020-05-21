@@ -55,14 +55,7 @@ class Pcgw < Sinatra::Base
     #ActiveRecord::Base.logger = Logging.logger
   end
 
-  before do
-    @noadmin = params['noadmin'] == 'yes'
-
-    # SQLiteに同期をOSに任せるように指定する。
-    ActiveRecord::Base.connection.execute('PRAGMA synchronous=OFF')
-
-    @yellow_pages = YellowPage.all
-
+  def channel_cleanup
     # チャンネルがサーバーで生きているか確認。
     Channel.all.each do |ch|
       if !ch.exist?
@@ -84,6 +77,21 @@ class Pcgw < Sinatra::Base
         end
       end
     end
+
+  end
+
+  before do
+    @invoke_count ||= 0
+    @invoke_count += 1
+
+    @noadmin = params['noadmin'] == 'yes'
+
+    # SQLiteに同期をOSに任せるように指定する。
+    ActiveRecord::Base.connection.execute('PRAGMA synchronous=OFF')
+
+    @yellow_pages = YellowPage.all
+
+    channel_cleanup if @invoke_count%100 == 0
 
     begin
       get_user
