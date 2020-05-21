@@ -26,6 +26,8 @@ class Pcgw < Sinatra::Base
 
   NO_NEW_CHANNEL = false
 
+  @@invoke_count = 0
+
   configure do
     # The session expires after 30 days.
     use Rack::Session::Cookie, expire_after: 30 * 24 * 3600, secret: ENV['CONSUMER_SECRET']
@@ -56,6 +58,7 @@ class Pcgw < Sinatra::Base
   end
 
   def channel_cleanup
+    log.info("Channel cleanup start")
     # チャンネルがサーバーで生きているか確認。
     Channel.all.each do |ch|
       if !ch.exist?
@@ -78,11 +81,11 @@ class Pcgw < Sinatra::Base
       end
     end
 
+    log.info("Channel cleanup finished")
   end
 
   before do
-    @invoke_count ||= 0
-    @invoke_count += 1
+    @@invoke_count += 1
 
     @noadmin = params['noadmin'] == 'yes'
 
@@ -91,7 +94,7 @@ class Pcgw < Sinatra::Base
 
     @yellow_pages = YellowPage.all
 
-    channel_cleanup if @invoke_count%100 == 0
+    channel_cleanup if @@invoke_count%100 == 0
 
     begin
       get_user
@@ -144,7 +147,7 @@ class Pcgw < Sinatra::Base
     ActiveRecord::Base.connection.close
 
     # メモリを節約。
-    if @invoke_count%10 == 0
+    if @@invoke_count%10 == 0
       log.info("GC start")
       GC.start
       log.info("GC finished")
