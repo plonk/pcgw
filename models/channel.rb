@@ -13,17 +13,18 @@ class Channel < ActiveRecord::Base
   end
 
   def status
-    set_status_info unless @status
+    set_status_info! unless @status
     @status
   end
 
   def info
-    set_status_info unless @info
+    set_status_info! unless @info
     @info
   end
 
   # サーバーにチャンネルの状態を問い合わせて @status と @info にセットする。
-  def set_status_info
+  # また、last_active_at を更新する。
+  def set_status_info!
     dict = servent.api.getChannels.find { |ch| ch['channelId'] == gnu_id }
     raise ChannelNotFoundError unless dict
 
@@ -39,15 +40,7 @@ class Channel < ActiveRecord::Base
     end
 
     @info = dict.slice('info', 'track', 'yellowPages')
-  end
-
-  def inactive_for
-    set_status_info unless @info
-    if !last_active_at
-      @status['uptime'].to_f
-    else
-      Time.now - last_active_at
-    end
+    nil
   end
 
   def playlist_url

@@ -64,10 +64,13 @@ class Pcgw < Sinatra::Base
       if !ch.exist?
         ch.destroy
         log.error("stale channel entry #{ch.id}(#{ch.gnu_id}) deleted")
-      elsif ch.inactive_for >= 30.minutes
-        ch.servent.api.stopChannel(ch.gnu_id)
-        ch.destroy
-        log.info("channel #{ch.id}(#{ch.gnu_id}) destroyed for inactivity")
+      else
+        ch.set_status_info!
+        if Time.now-(ch.last_active_at || ch.created_at) >= 15.minutes
+          ch.servent.api.stopChannel(ch.gnu_id)
+          ch.destroy
+          log.info("channel #{ch.id}(#{ch.gnu_id}) destroyed for inactivity")
+        end
       end
     end
 
@@ -94,7 +97,7 @@ class Pcgw < Sinatra::Base
 
     @yellow_pages = YellowPage.all
 
-    channel_cleanup if @@invoke_count%100 == 0
+    channel_cleanup if @@invoke_count%30 == 0
 
     begin
       get_user
