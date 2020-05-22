@@ -12,6 +12,10 @@ class Pcgw < Sinatra::Base
     erb :includes_onair, locals: { channels: Channel.all }, layout: false
   end
 
+  get '/includes/server_status' do
+    slim :includes_server_status, locals: { servents: Servent.enabled }, layout: false
+  end
+
   # 現在配信中のチャンネル
   get '/onair' do
     slim :onair
