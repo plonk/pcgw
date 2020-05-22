@@ -11,7 +11,7 @@ $(function () {
                         setTimeout(callback, r.dataset.interval * 1000);
                     },
                     error: function (req) {
-                        $(r).html(req.responseText);
+                        $(r).html(req.status + " " + req.statusText);
                         setTimeout(callback, r.dataset.interval * 1000);
                     },
                 });
