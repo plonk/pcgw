@@ -30,7 +30,7 @@ class Pcgw < Sinatra::Base
 
   configure do
     # The session expires after 30 days.
-    use Rack::Session::Cookie, expire_after: 30 * 24 * 3600, same_site: :strict, secret: ENV['CONSUMER_SECRET']
+    use Rack::Session::Cookie, expire_after: 30 * 24 * 3600, same_site: :lax, secret: ENV['CONSUMER_SECRET']
     use Rack::Flash
 
     set :cookie_options do
