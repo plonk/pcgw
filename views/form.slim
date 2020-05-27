@@ -4,6 +4,9 @@
 / @message: エラーメッセージ
 / TODO: フラッシュに変える
 
+style
+  | input[type="checkbox"], input[type="radio"] { margin-right: 0.5rem }
+
 p style="color: red"
   = @message
 
@@ -67,11 +70,22 @@ form.form-horizontal action="/broadcast" method="POST" role="form"
             | &nbsp;
             img src=yp.icon width="32" alt="[#{yp.name}のアイコン]"
             | &nbsp;
-            a href=yp.top style="display: inline-block; min-width: 60px"
+            a href=yp.top style="display: inline-block; min-width: 100px"
               = yp.name
           a.btn.btn-secondary.btn-sm href=yp.terms target="_blank"
             span.glyphicon.glyphicon-new-window
             | &nbsp;利用規約
+
+  .form-group.row
+    label.col-sm-3.control-label for="servent" 配信サーバー
+    .col-sm-9
+      - servents.each do |serv|
+        .radio
+          label
+            input required="required" type="radio" name="servent" data-yellow-pages=serv.yellow_pages value=serv.id
+            span style="display: inline-block; min-width: 132px"
+              = serv.name
+            small &nbsp;#{serv.desc}
 
   .form-group.row
     .col-sm-3
@@ -79,8 +93,7 @@ form.form-horizontal action="/broadcast" method="POST" role="form"
       .checkbox style="margin-bottom: 10px;"
         label title="配信画面のスクリーンショットを非公開にします。"
           input type="checkbox" name="hide_screenshots" checked=template.hide_screenshots
-          span.text-danger.glyphicon.glyphicon-eye-close
-          | &nbsp;配信画面の掲載を禁止する
+          | 配信画面の掲載を禁止する
 
       button.btn.btn-primary type="submit" 開始
 
@@ -101,3 +114,27 @@ javascript:
     return this;
   };
   $('form').preventDoubleSumission();
+
+  $('input[name="yp"]').on('change', onYellowPagesChange);
+  function onYellowPagesChange() {
+    var yp = this.value;
+    var already_checked = false;
+    $('input[name="servent"]').each(function (index) {
+      var support = $(this).data("yellow-pages").split(' ').indexOf(yp) !== -1;
+      this.checked = false;
+      if (support) {
+        this.disabled = false;
+        if (!already_checked) {
+          this.checked = true;
+          already_checked = true;
+        }
+        $(this.parentElement).removeClass("text-muted");
+      } else {
+        this.disabled = true;
+        $(this.parentElement).addClass("text-muted");
+      }
+    });
+  }
+  $(function () {
+    onYellowPagesChange.apply($('input[name="yp"][checked]')[0]);
+  });
