@@ -21,11 +21,10 @@
     input type="hidden" name="_method" value="PATCH"
 
   .table-responsive
-    table.table
+    table.table.table-sm style="white-space: nowrap"
       thead
         tr
           th 名前
-          th 種別
           th エンドポイント
           th 稼働率
           th 優先度
@@ -36,8 +35,6 @@
           tr
             td
               = serv.name
-            td
-              = serv.agent.blank? ? "(不明)" : serv.agent
             td
               input type="hidden" name="id[]" form="save" value=serv.id
               .form-inline
