@@ -11,7 +11,7 @@ class Servent < ActiveRecord::Base
   include Logging
 
   def auth_required?
-    auth_id.present? && passwd.present?
+    auth_id.present? || passwd.present?
   end
 
   def api
