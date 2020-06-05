@@ -78,7 +78,7 @@ class ScreenShotRefresh
 
       success = capture(ch, path)
       if success
-        system("convert -resize 300x10000 -strip #{path} #{path}")
+        system("convert -resize 640x10000 -strip #{path} #{path}")
         screen_shot = ch.channel_info.screen_shots.build(filename: filename)
         screen_shot.save!
       end
