@@ -7,7 +7,7 @@
 / ページネーション。
 p
   | [
-  - (program.screen_shots.size/30 + 1).times do |i|
+  - program.screen_shots.size.fdiv(30).ceil.times do |i|
     - if i != 0
       |  | 
     - if i*30 == start
