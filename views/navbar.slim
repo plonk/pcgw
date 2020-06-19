@@ -32,8 +32,9 @@ nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
               - if notices.empty?
                 span.glyphicon.glyphicon-bell style="font-size: 24px" 🔔
               - else
-                span.glyphicon.glyphicon-bell style="font-size: 24px; color: #ffa922" 🔔
-                  span.badge.badge-primary style="position: absolute; top: 50%; left: 55%;  font-size: 8pt" #{notices.count}
+                span.glyphicon.glyphicon-bell style="position: relative; font-size: 24px; color: #ffa922"
+                  | 🔔
+                  span.badge.badge-primary style="position: absolute; top: 15px; left: 18px; font-size: 9pt" #{notices.count}
               span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%"  お知らせ
 
       ul.nav.navbar-nav.navbar-right
