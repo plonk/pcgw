@@ -1,6 +1,9 @@
 require 'jimson'
+require 'timeout'
 
 class Peercast
+  RPC_TIMEOUT = 2
+
   class Unavailable < StandardError
     attr_accessor :host, :port, :message
 
@@ -25,15 +28,17 @@ class Peercast
     name, *args = _args
     value = nil
     span = time do
-      value = if args.size == 1 and args[0].is_a? Hash
-                @helper.process_call(name, *args, &block)
-              else
-                @helper.process_call(name, args, &block)
-              end
+      Timeout.timeout(RPC_TIMEOUT) do
+        value = if args.size == 1 and args[0].is_a? Hash
+                  @helper.process_call(name, *args, &block)
+                else
+                  @helper.process_call(name, args, &block)
+                end
+      end
     end
     Peercast.logger&.info("%s:%d: %s: %d usec elapsed" % [@host, @port, name, span*1000*1000])
     value
-  rescue Errno::ECONNREFUSED, RestClient::Unauthorized => e
+  rescue Errno::ECONNREFUSED, RestClient::Unauthorized, Timeout::Error => e
     raise Unavailable.new(host, port, e.message)
   end
 

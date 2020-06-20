@@ -85,6 +85,8 @@ class Pcgw < Sinatra::Base
     end
 
     log.info("Channel cleanup finished")
+  rescue Peercast::Unavailable => e
+    log.error("Channel cleanup aborted: #{e.host}:#{e.port} connection error (#{e.message})")
   end
 
   before do
