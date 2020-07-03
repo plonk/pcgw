@@ -16,7 +16,7 @@
       </a>
 
       <small style="position: absolute; right: 0px; text-align: left">
-        <span class="glyphicon glyphicon-time">⏲️<!-- timer clock --></span>
+        ⏲️<!-- timer clock -->
         <%= h uptime_fmt(channel.status['uptime']) %>
       </small>
     </p>
@@ -25,11 +25,11 @@
 
     <p>
       <span style="margin-right: 20px">
-        <span class="glyphicon glyphicon-user">👤<!-- bust in silhouette --></span>
+        👤<!-- bust in silhouette -->
         <%= h channel.listener_count_display %>
       </span>
       <span style="margin-right: 20px">
-        <span class="glyphicon glyphicon-book">📙<!-- orange book --></span>
+        📙<!-- orange book -->
         <%= slim :yellow_page_links, locals: { yp_names: [channel.channel_info.yp] } %>
       </span>
     </p>

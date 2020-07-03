@@ -9,7 +9,7 @@
   h4 #{servents.count} サーバー
 
   button.mb-3.btn.btn-secondary type="button" data-toggle="modal" data-target="#addModal"
-    span.glyphicon.glyphicon-plus ➕
+    | ➕
     | &thinsp;追加
 
   / テーブルで使うフォームを生成する。
@@ -56,9 +56,9 @@
 
   .mt-3
     button type="submit" class="btn btn-primary" form="save"
-      span.glyphicon.glyphicon-floppy-disk &thinsp;変更を保存
+      | &thinsp;変更を保存
     |  
     a.btn.btn-secondary href="/servents"
-      span.glyphicon.glyphicon-floppy-open &thinsp;元に戻す
+      | &thinsp;元に戻す
 
 == slim :servent_add_modal
