@@ -32,7 +32,7 @@ class Pcgw < Sinatra::Base
   end
 
   get '/users/:id/update' do |id|
-    content_user = User.find(id)
+    content_user = User.find(id) rescue halt(404, 'user not found')
     client = Twitter::REST::Client.new do |config|
       config.consumer_key = ENV['CONSUMER_KEY']
       config.consumer_secret = ENV['CONSUMER_SECRET']

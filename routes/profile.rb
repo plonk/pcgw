@@ -14,6 +14,25 @@ class Pcgw < Sinatra::Base
     slim :profile, locals: { user: user, recent_programs: programs }
   end
 
+  get '/profile/:id/update' do |id|
+    content_user = User.find(id) rescue halt(404, 'user not found')
+    client = Twitter::REST::Client.new do |config|
+      config.consumer_key = ENV['CONSUMER_KEY']
+      config.consumer_secret = ENV['CONSUMER_SECRET']
+    end
+    twitter_user = client.user(content_user.twitter_id)
+    url = twitter_user.profile_image_uri(:normal).to_s
+    if content_user.image != url
+      log.info("Updating profile image for #{content_user.id}: #{content_user.image}")
+      content_user.image = twitter_user.profile_image_uri(:normal).to_s
+      content_user.save!
+      log.info("Profile image for #{content_user.id} updated: #{content_user.image}")
+    else
+      halt(200, "プロフィール画像は最新のようです。")
+    end
+    redirect back
+  end
+
   # 対外用ユーザー一覧
   get '/profile' do
     users = User.joins(:channel_infos)
