@@ -79,7 +79,6 @@ script src="/reloader.js"
             = @status['status']
           - if @channel.servent.can_restart_channel_connection?
             a.btn.btn-secondary.btn-sm style="margin-left: 0.5em; margin-right: 0.5em" href="/channels/#{@channel.id}/reset" title="エンコーダーとの現在の接続を破棄し、待ち受け状態に戻します(FLV の場合)。"
-              span.glyphicon.glyphicon-refresh
               |  リセット
           div style="display: inline-block; height: 1em; line-height: 1.0em; text-align: center; vertical-align: middle; transform: translate(0px, -30px)"
             div.text-muted style="font-size: 10px; transform: translate(0px, 17px)" ▼
@@ -105,7 +104,6 @@ script src="/reloader.js"
           - if @channel.servent.can_get_relay_tree?
             | &nbsp;
             a.btn.btn-secondary.btn-sm href="/channels/#{@channel.id}/relay_tree" target="_blank"
-              span.glyphicon.glyphicon-new-window
               | リレーツリー
       tr
         th 直下接続
@@ -127,7 +125,6 @@ script src="/reloader.js"
           a target="_blank" href=@info['info']['url'] #{@info['info']['url']}
           | &thinsp;
           a.btn.btn-secondary.btn-sm href="/channels/#{@channel.id}/thread_list"
-            span.glyphicon.glyphicon-list
             |  一覧
       tr
         th 掲載YP
@@ -143,7 +140,6 @@ script src="/reloader.js"
           a.btn.btn-secondary href="/channels/#{@channel.id}/edit" 詳細変更
         .btn-group
           a.btn.btn-secondary href="/channels/#{@channel.id}/play" target="_blank"
-            span class="glyphicon glyphicon-new-window"
             |  再生
 
 javascript:

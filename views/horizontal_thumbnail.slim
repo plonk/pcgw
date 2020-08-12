@@ -10,11 +10,11 @@ div
       = channel.channel_info.summary
 
     div style="position: absolute; right: 15px; bottom: 10px"
-      span.glyphicon.glyphicon-time ⏲️
+      | ⏲️
       |  
       = uptime_fmt(channel.status['uptime'])
       |  
       span
-        span.glyphicon.glyphicon-user 👤
+        | 👤
         |  
         = channel.listener_count_display
