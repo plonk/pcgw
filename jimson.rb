@@ -59,19 +59,24 @@ class Pcgw < Sinatra::Base
 
   def channel_cleanup
     log.info("Channel cleanup start")
+
     # チャンネルがサーバーで生きているか確認。
-    Channel.all.each do |ch|
-      if !ch.exist?
-        ch.destroy
-        log.error("stale channel entry #{ch.id}(#{ch.gnu_id}) deleted")
-      else
-        ch.set_status_info!
-        if Time.now-(ch.last_active_at || ch.created_at) >= 15.minutes
-          ch.servent.api.stopChannel(ch.gnu_id)
+    begin
+      Channel.all.each do |ch|
+        if !ch.exist?
           ch.destroy
-          log.info("channel #{ch.id}(#{ch.gnu_id}) destroyed for inactivity")
+          log.error("stale channel entry #{ch.id}(#{ch.gnu_id}) deleted")
+        else
+          ch.set_status_info!
+          if Time.now-(ch.last_active_at || ch.created_at) >= 15.minutes
+            ch.servent.api.stopChannel(ch.gnu_id)
+            ch.destroy
+            log.info("channel #{ch.id}(#{ch.gnu_id}) destroyed for inactivity")
+          end
         end
       end
+    rescue => e
+      log.error(e)
     end
 
     # サーバーにだけ存在するチャンネルは停止する。
