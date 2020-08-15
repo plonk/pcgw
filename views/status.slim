@@ -149,6 +149,9 @@ javascript:
     $("#refresh-interval").text(int);
   }
   $(function() {
+    if (#{@testing})
+      return;
+
     var timeoutSec = 10;
     changeInterval(5); // Peercast のデータレート更新が5秒ごとなので5
                        // 秒が良いと思う。

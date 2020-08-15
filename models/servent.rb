@@ -62,29 +62,15 @@ class Servent < ActiveRecord::Base
   end
 
   def push_uri(stream_type, user_id)
-    case agent
-    when /^PeerCastStation\//
-      case stream_type
-      when 'WMV'
-        "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user_id}"
-      when 'FLV'
-        "rtmp://#{hostname}:#{9000 + user_id}/live/livestream"
-      else
-        fail 'unsupported stream type'
-      end
-    when /^PeerCast\//
-      case stream_type
-      when 'WMV'
-        "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user_id}"
-      when 'FLV'
-        "rtmp://#{WM_MIRROR_HOSTNAME}/live"
-      when 'MKV'
-        "http://#{WM_MIRROR_HOSTNAME}:7000/#{9000 + user_id}"
-      else
-        fail 'unsupported stream type'
-      end
+    case stream_type
+    when 'WMV'
+      "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user_id}"
+    when 'FLV'
+      "rtmp://#{WM_MIRROR_HOSTNAME}/live"
+    when 'MKV'
+      "http://#{WM_MIRROR_HOSTNAME}:7000/#{9000 + user_id}"
     else
-      fail 'unsupported agent'
+      fail 'unsupported stream type'
     end
   end
 
@@ -93,11 +79,7 @@ class Servent < ActiveRecord::Base
     when 'WMV', 'MKV'
       nil
     when 'FLV'
-      if agent =~ /^PeerCast\//
-        "#{9000 + user_id}"
-      else
-        nil
-      end
+      "#{9000 + user_id}"
     else
       fail 'unsupported stream type'
     end
