@@ -106,11 +106,6 @@ class Pcgw < Sinatra::Base
     erb :create, locals: { template: template, servents: Servent.enabled, recent_programs: programs }
   end
 
-  def broadcast_check_params!
-    fail 'チャンネル名が入力されていません'     if params['channel'].blank?
-    fail 'ストリームタイプが選択されていません' if params['stream_type'].blank?
-  end
-
   def ascertain_new!(peercast, req)
     if peercast.getChannels.any? { |ch|
         ch['info']['name']     == req.info.channel &&
@@ -157,7 +152,8 @@ class Pcgw < Sinatra::Base
       props = params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type', 'hide_screenshots')
       channel_info = ChannelInfo.new({ user: @user }.merge(props))
 
-      broadcast_check_params!
+      fail 'チャンネル名が入力されていません'     if params['channel'].blank?
+      fail 'ストリームタイプが選択されていません' if params['stream_type'].blank?
 
       servent = choose_servent(params['servent'].to_i, params['yp'])
       breq = PeercastBroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip)
