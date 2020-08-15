@@ -1,0 +1,47 @@
+/ sources: [Source]
+
+- content_for :title do
+  | 追加のソースを管理
+
+== slim :flash
+
+h1 追加のソースを管理
+
+p
+  | ストリームソースを追加すると、内容の異なるチャンネルを立てる時に使うストリームキーが取得できます。
+
+table.table.form-inline
+  - sources.each.with_index(1) do |src, index|
+    tr
+      td
+        = src.name
+      td
+        input.form-control id="key-#{index}" type="password" value=src.key readonly=true
+        | &thinsp;
+        | 👁️
+        input.revealCheckbox type="checkbox" data-number=index
+      td
+        button.btn.btn-secondary.regenButton data-id=src.id title="ランダムなキーを作りなおします。" 再生成
+        button.btn.btn-warning.delButton data-id=src.id title="このキーを削除します。" style="margin: 5px" ×
+
+button#addButton.btn.btn-primary type="button" 
+  | ➕&thinsp;追加
+
+javascript:
+  $('.revealCheckbox').on('change', function(){
+    if (this.checked)
+      $('#key-' + this.dataset.number)[0].type = 'text';
+    else
+      $('#key-' + this.dataset.number)[0].type = 'password';
+  });
+  $('#addButton').on('click', function(){
+    let new_name = prompt("次の名前で追加のソースを作成する。", "追加のソース#{sources.size+1}");
+    if (new_name)
+      window.location = "/sources/add?name=" + encodeURIComponent(new_name);
+  });
+  $('.delButton').on('click', function(){
+    window.location = "/sources/del?id=" + this.dataset.id;
+  });
+  $('.regenButton').on('click', function(){
+    window.location = "/sources/regen?id=" + this.dataset.id;
+  });
