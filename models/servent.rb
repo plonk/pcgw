@@ -61,30 +61,6 @@ class Servent < ActiveRecord::Base
     if agent =~ /^PeerCastStation\// then true else false end
   end
 
-  def push_uri(stream_type, user_id)
-    case stream_type
-    when 'WMV'
-      "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user_id}"
-    when 'FLV'
-      "rtmp://#{WM_MIRROR_HOSTNAME}/live"
-    when 'MKV'
-      "http://#{WM_MIRROR_HOSTNAME}:7000/#{9000 + user_id}"
-    else
-      fail 'unsupported stream type'
-    end
-  end
-
-  def stream_key(stream_type, user_id)
-    case stream_type
-    when 'WMV', 'MKV'
-      nil
-    when 'FLV'
-      "#{9000 + user_id}"
-    else
-      fail 'unsupported stream type'
-    end
-  end
-
   def control_panel_uri
     "http://#{hostname}:#{port}/"
   end
