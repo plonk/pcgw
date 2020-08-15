@@ -54,6 +54,7 @@ class Pcgw < Sinatra::Base
       key = generate_unique_key
       src.key = key
       src.save
+      flash[:success] = "#{src.name}のキーが変更されました。"
       redirect back
     else
       halt 403, "No such source"
