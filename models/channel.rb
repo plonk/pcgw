@@ -70,30 +70,6 @@ class Channel < ActiveRecord::Base
     end
   end
 
-  def push_uri
-    case channel_info.stream_type
-    when 'WMV'
-      "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user.id}"
-    when 'FLV'
-      "rtmp://#{WM_MIRROR_HOSTNAME}/live"
-    when 'MKV'
-      "http://#{WM_MIRROR_HOSTNAME}:7000/#{9000 + user.id}"
-    else
-      fail 'unsupported stream type'
-    end
-  end
-
-  def stream_key
-    case channel_info.stream_type
-    when 'WMV', 'MKV'
-      nil
-    when 'FLV'
-      "#{9000 + user.id}"
-    else
-      fail 'unsupported stream type'
-    end
-  end
-
   def connections
     @connections ||= servent.api.getChannelConnections(gnu_id).map(&Connection.method(:new))
   end

@@ -20,14 +20,15 @@ class PeercastBroadcastRequest
     end
   end
 
+  # PeerCastがFetchするURL
   def source_uri
     case @info.stream_type
     when 'WMV'
-      source_uri_wmv(@info.user)
+      "http://#{WM_MIRROR_HOSTNAME}:5000/#{@key}"
     when 'FLV'
-      source_uri_flv(@info.user)
+      "rtmp://#{WM_MIRROR_HOSTNAME}/live/#{@key}"
     when 'MKV'
-      source_uri_mkv(@info.user)
+      "http://#{WM_MIRROR_HOSTNAME}:7000/#{@key}"
     else
       fail 'Unsupported stream type'
     end
@@ -69,16 +70,30 @@ class PeercastBroadcastRequest
     }
   end
 
-  def source_uri_wmv(user)
-    "http://#{WM_MIRROR_HOSTNAME}:5000/#{@key}"
+  # ユーザーがPushするURL
+  def push_uri
+    case @info.stream_type
+    when 'WMV'
+      "http://#{WM_MIRROR_HOSTNAME}:5000/#{@key}"
+    when 'FLV'
+      "rtmp://#{WM_MIRROR_HOSTNAME}/live"
+    when 'MKV'
+      "http://#{WM_MIRROR_HOSTNAME}:7000/#{@key}"
+    else
+      fail 'unsupported stream type'
+    end
   end
 
-  def source_uri_flv(user)
-    "rtmp://#{WM_MIRROR_HOSTNAME}/live/#{@key}"
-  end
-
-  def source_uri_mkv(user)
-    "http://#{WM_MIRROR_HOSTNAME}:7000/#{@key}"
+  # ユーザーがPushする時に使うキー
+  def stream_key
+    case @info.stream_type
+    when 'WMV', 'MKV'
+      nil
+    when 'FLV'
+      @key
+    else
+      fail 'unsupported stream type'
+    end
   end
 end
 
@@ -189,6 +204,8 @@ class Pcgw < Sinatra::Base
       ch.channel_info = channel_info
       ch.hide_screenshots = params['hide_screenshots']
       ch.servent = servent
+      ch.push_uri = breq.push_uri
+      ch.stream_key = breq.stream_key
       ch.save!
 
       log.info("user #{@user.id} created channel #{ch.id}")
