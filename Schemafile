@@ -59,3 +59,9 @@ create_table "notices", force: true do |t|
   t.string :title
   t.timestamps
 end
+
+create_table "sources", force: true do |t|
+  t.belongs_to :user, index: true
+  t.string :name
+  t.string :key
+end
