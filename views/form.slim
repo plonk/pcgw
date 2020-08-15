@@ -50,6 +50,9 @@ form.form-horizontal action="/broadcast" method="POST" role="form"
         - @user.sources.each do |src|
           option value=src.id
             = src.name
+      div style="text-align: right"
+        small
+          a href="/sources" ソースの管理
 
   .form-group.row
     label.col-sm-3.control-label for="type" ストリームタイプ
