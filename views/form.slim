@@ -42,6 +42,16 @@ form.form-horizontal action="/broadcast" method="POST" role="form"
       span#bbs-checker-indicator style="margin-top: 5px; float: right"
 
   .form-group.row
+    label.col-sm-3.control-label for="source" ソース
+    .col-sm-9
+      select.form-control
+        option value="0"
+          | デフォルト
+        - @user.sources.each do |src|
+          option value=src.id
+            = src.name
+
+  .form-group.row
     label.col-sm-3.control-label for="type" ストリームタイプ
     .col-sm-9
       .radio

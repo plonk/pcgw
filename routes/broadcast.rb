@@ -3,12 +3,13 @@
 class PeercastBroadcastRequest
   attr_reader :info
 
-  def initialize(servent, ch_info, yellow_pages, client_ip)
+  def initialize(servent, ch_info, yellow_pages, client_ip, key)
     @servent = servent
     @info = ch_info
     @yellow_pages = yellow_pages
     # いまのところ使い道ないけど一応もっとく。
     @client_ip = client_ip
+    @key = key
   end
 
   def genre
@@ -69,21 +70,22 @@ class PeercastBroadcastRequest
   end
 
   def source_uri_wmv(user)
-    "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user.id}"
+    "http://#{WM_MIRROR_HOSTNAME}:5000/#{@key}"
   end
 
   def source_uri_flv(user)
-    "rtmp://#{WM_MIRROR_HOSTNAME}/live/#{9000 + user.id}"
+    "rtmp://#{WM_MIRROR_HOSTNAME}/live/#{@key}"
   end
 
   def source_uri_mkv(user)
-    "http://#{WM_MIRROR_HOSTNAME}:7000/#{9000 + user.id}"
+    "http://#{WM_MIRROR_HOSTNAME}:7000/#{@key}"
   end
 end
 
 class Pcgw < Sinatra::Base
   get '/create' do
-    halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL || Servent.enabled.empty?
+    halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
+    #halt 503, h('有効なサーバーがないのでチャンネルの作成ができません。') if Servent.enabled.empty?
 
     if params['template'].blank?
       info = ChannelInfo.where(user: @user).order(created_at: :desc).limit(1)
@@ -145,18 +147,39 @@ class Pcgw < Sinatra::Base
     servent
   end
 
+  # id: Source ID or zero if default
+  def source_to_key(id)
+    case id
+    when 0
+      return (9000 + @user.id).to_s
+    else
+      src = @user.sources.find(id)
+      if src
+        return src.key
+      else
+        return nil
+      end
+    end
+  end
+  
   post '/broadcast' do
     halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
 
     begin
       props = params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type', 'hide_screenshots')
       channel_info = ChannelInfo.new({ user: @user }.merge(props))
+      key = source_to_key(params['source'].to_i)
+
+      unless key
+        # 存在しないか、要求元のユーザーが所有しないソースが指定された。
+        halt 403, "存在しないソースです。"
+      end
 
       fail 'チャンネル名が入力されていません'     if params['channel'].blank?
       fail 'ストリームタイプが選択されていません' if params['stream_type'].blank?
 
       servent = choose_servent(params['servent'].to_i, params['yp'])
-      breq = PeercastBroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip)
+      breq = PeercastBroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip, key)
 
       # PeerCastStation に同じ ID のチャンネルが立たないようにする。
       # ascertain_new!(servent.api, breq)
