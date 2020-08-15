@@ -37,8 +37,11 @@ script src="/reloader.js"
       - if @channel.stream_key
         tr
           th ストリームキー
-          td
-            code.text-info #{@channel.stream_key}
+          td.form-inline
+            input#streamKey.form-control type="password" value=@channel.stream_key readonly=true
+            | &thinsp;
+            | 👁️
+            input#revealCheckbox type="checkbox"
       tr
         th 配信サーバー
         td
@@ -143,6 +146,14 @@ script src="/reloader.js"
             |  再生
 
 javascript:
+  $('#revealCheckbox').on('click', function(){
+    if (this.checked) {
+      $('#streamKey')[0].type = "text";
+    } else {
+      $('#streamKey')[0].type = "password";
+    }
+  });
+
   var g_interval;
   function changeInterval(int) {
     g_interval = int;
