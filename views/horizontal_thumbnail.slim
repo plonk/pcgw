@@ -8,13 +8,3 @@ div
         = channel.channel_info.channel
       br
       = channel.channel_info.summary
-
-    div style="position: absolute; right: 15px; bottom: 10px"
-      | ⏲️
-      |  
-      = uptime_fmt(channel.status['uptime'])
-      |  
-      span
-        | 👤
-        |  
-        = channel.listener_count_display
