@@ -70,14 +70,6 @@ class Channel < ActiveRecord::Base
     end
   end
 
-  def push_uri
-    servent.push_uri(channel_info.stream_type, user.id)
-  end
-
-  def stream_key
-    servent.stream_key(channel_info.stream_type, user.id)
-  end
-
   def connections
     @connections ||= servent.api.getChannelConnections(gnu_id).map(&Connection.method(:new))
   end

@@ -1,118 +1,15 @@
+# coding: utf-8
 # チャンネル作成要求を表わすクラス。
-class PeercastStationBroadcastRequest
-  attr_reader :info
-
-  def initialize(servent, ch_info, yellow_pages, client_ip)
-    @servent = servent
-    @info = ch_info
-    @yellow_pages = yellow_pages
-    @client_ip = client_ip
-  end
-
-  def genre
-    if !yp
-      @info.genre
-    else
-      yp.add_prefix(@info.genre)
-    end
-  end
-
-  def source_uri
-    case @info.stream_type
-    when 'WMV'
-      source_uri_http(@info.user)
-    when 'FLV'
-      source_uri_rtmp(@info.user)
-    else
-      fail 'Unsupported stream type'
-    end
-  end
-
-  def issue
-    @servent.api.broadcastChannel(to_h)
-  end
-
-  private
-
-  def ypid
-    if yp
-      pecastYP = @servent.api.getYellowPages.find { |y| y['name'] == yp.name }
-      unless pecastYP
-        raise "YP not found. servent #{@servent.name} is not properly set up."
-      end
-      pecastYP['yellowPageId']
-    else
-      nil
-    end
-  end
-
-  def yp
-    if @info.yp.blank?
-      nil
-    else
-      ret = @yellow_pages.find { |y| y.name == @info.yp }
-      fail "yellow page #{@info.yp.inspect} not found" unless ret
-      ret
-    end
-  end
-
-  # broadcastChannel RPC への引数をビルドする。
-  def to_h
-    args = {
-      yellowPageId:  ypid,
-      info: {
-        name:     @info.channel,
-        url:      @info.url,
-        bitrate:  '',
-        mimeType: '',
-        genre:    genre,
-        desc:     @info.desc,
-        comment:  @info.comment
-      },
-      track: {
-        name:    '',
-        creator: "#{@client_ip} via Peercast Gateway",
-        genre:   '',
-        album:   '',
-        url:     ''
-      },
-    }
-    case @info.stream_type
-    when 'WMV'
-      args.merge!(sourceUri:     source_uri,
-                  sourceStream:  'http',
-                  contentReader: 'ASF(WMV or WMA)')
-    when 'FLV'
-      args.merge!(sourceUri:     source_uri,
-                  sourceStream:  'RTMP Source',
-                  contentReader: 'Flash Video (FLV)')
-    else
-      fail "unknown stream type #{@info.stream_type}"
-    end
-    args
-  end
-
-  def source_uri_rtmp(user)
-    port = 9000 + user.id
-    "rtmp://#{@servent.hostname}:#{port}/live/livestream"
-  end
-
-  def source_uri_http(user)
-    path = "#{9000 + user.id}"
-    "http://#{WM_MIRROR_HOSTNAME}:5000/#{path}"
-  end
-
-end
-
 class PeercastBroadcastRequest
   attr_reader :info
 
-  def initialize(servent, ch_info, yellow_pages, client_ip)
+  def initialize(servent, ch_info, yellow_pages, client_ip, key)
     @servent = servent
     @info = ch_info
     @yellow_pages = yellow_pages
     # いまのところ使い道ないけど一応もっとく。
     @client_ip = client_ip
+    @key = key
   end
 
   def genre
@@ -123,14 +20,15 @@ class PeercastBroadcastRequest
     end
   end
 
+  # PeerCastがFetchするURL
   def source_uri
     case @info.stream_type
     when 'WMV'
-      source_uri_wmv(@info.user)
+      "http://#{WM_MIRROR_HOSTNAME}:5000/#{@key}"
     when 'FLV'
-      source_uri_flv(@info.user)
+      "rtmp://#{WM_MIRROR_HOSTNAME}/live/#{@key}"
     when 'MKV'
-      source_uri_mkv(@info.user)
+      "http://#{WM_MIRROR_HOSTNAME}:7000/#{@key}"
     else
       fail 'Unsupported stream type'
     end
@@ -172,22 +70,37 @@ class PeercastBroadcastRequest
     }
   end
 
-  def source_uri_wmv(user)
-    "http://#{WM_MIRROR_HOSTNAME}:5000/#{9000 + user.id}"
+  # ユーザーがPushするURL
+  def push_uri
+    case @info.stream_type
+    when 'WMV'
+      "http://#{WM_MIRROR_HOSTNAME}:5000/#{@key}"
+    when 'FLV'
+      "rtmp://#{WM_MIRROR_HOSTNAME}/live"
+    when 'MKV'
+      "http://#{WM_MIRROR_HOSTNAME}:7000/#{@key}"
+    else
+      fail 'unsupported stream type'
+    end
   end
 
-  def source_uri_flv(user)
-    "rtmp://#{WM_MIRROR_HOSTNAME}/live/#{9000 + user.id}"
-  end
-
-  def source_uri_mkv(user)
-    "http://#{WM_MIRROR_HOSTNAME}:7000/#{9000 + user.id}"
+  # ユーザーがPushする時に使うキー
+  def stream_key
+    case @info.stream_type
+    when 'WMV', 'MKV'
+      nil
+    when 'FLV'
+      @key
+    else
+      fail 'unsupported stream type'
+    end
   end
 end
 
 class Pcgw < Sinatra::Base
   get '/create' do
-    halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL || Servent.enabled.empty?
+    halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
+    #halt 503, h('有効なサーバーがないのでチャンネルの作成ができません。') if Servent.enabled.empty?
 
     if params['template'].blank?
       info = ChannelInfo.where(user: @user).order(created_at: :desc).limit(1)
@@ -208,11 +121,6 @@ class Pcgw < Sinatra::Base
     programs = ChannelInfo.where(user: @user).order(created_at: :desc).limit(10)
 
     erb :create, locals: { template: template, servents: Servent.enabled, recent_programs: programs }
-  end
-
-  def broadcast_check_params!
-    fail 'チャンネル名が入力されていません'     if params['channel'].blank?
-    fail 'ストリームタイプが選択されていません' if params['stream_type'].blank?
   end
 
   def ascertain_new!(peercast, req)
@@ -254,31 +162,50 @@ class Pcgw < Sinatra::Base
     servent
   end
 
+  # id: Source ID or zero if default
+  def source_to_key(id)
+    case id
+    when 0
+      return (9000 + @user.id).to_s
+    else
+      src = @user.sources.find(id)
+      if src
+        return src.key
+      else
+        return nil
+      end
+    end
+  end
+  
   post '/broadcast' do
     halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
 
     begin
       props = params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type', 'hide_screenshots')
       channel_info = ChannelInfo.new({ user: @user }.merge(props))
+      key = source_to_key(params['source'].to_i)
 
-      broadcast_check_params!
-
-      servent = choose_servent(params['servent'].to_i, params['yp'])
-      case servent.agent
-      when /^PeerCastStation\//
-        breq = PeercastStationBroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip)
-      when /^PeerCast\//
-        breq = PeercastBroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip)
+      unless key
+        # 存在しないか、要求元のユーザーが所有しないソースが指定された。
+        halt 403, "存在しないソースです。"
       end
 
-      # PeerCast Station に同じ ID のチャンネルが立たないようにする。
-      ascertain_new!(servent.api, breq)
+      fail 'チャンネル名が入力されていません'     if params['channel'].blank?
+      fail 'ストリームタイプが選択されていません' if params['stream_type'].blank?
+
+      servent = choose_servent(params['servent'].to_i, params['yp'])
+      breq = PeercastBroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip, key)
+
+      # PeerCastStation に同じ ID のチャンネルが立たないようにする。
+      # ascertain_new!(servent.api, breq)
       chid = breq.issue
 
       ch = @user.channels.build(gnu_id: chid)
       ch.channel_info = channel_info
       ch.hide_screenshots = params['hide_screenshots']
       ch.servent = servent
+      ch.push_uri = breq.push_uri
+      ch.stream_key = breq.stream_key
       ch.save!
 
       log.info("user #{@user.id} created channel #{ch.id}")

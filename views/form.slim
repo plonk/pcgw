@@ -17,22 +17,22 @@ form.form-horizontal action="/broadcast" method="POST" role="form"
   .form-group.row
     label.col-sm-3.control-label for="channel" チャンネル名
     .col-sm-9
-      input class="form-control" type="text" name="channel" required=true value=template.channel
+      input.form-control type="text" name="channel" required=true value=template.channel
 
   .form-group.row
     label.col-sm-3.control-label for="genre" ジャンル
     .col-sm-9
-      input class="form-control" type="text" name="genre" value=template.genre
+      input.form-control type="text" name="genre" value=template.genre
 
   .form-group.row
     label.col-sm-3.control-label for="desc" 詳細
     .col-sm-9
-      input class="form-control" type="text" name="desc" value=template.desc
+      input.form-control type="text" name="desc" value=template.desc
 
   .form-group.row
     label.col-sm-3.control-label for="comment" コメント
     .col-sm-9
-      input class="form-control" type="text" name="comment" value=template.comment
+      input.form-control type="text" name="comment" value=template.comment
 
   .form-group.row
     label.col-sm-3.control-label for="url"
@@ -40,6 +40,19 @@ form.form-horizontal action="/broadcast" method="POST" role="form"
     .col-sm-9
       input.form-control#bbs-checker-input name="url" type="url" value=template.url
       span#bbs-checker-indicator style="margin-top: 5px; float: right"
+
+  .form-group.row
+    label.col-sm-3.control-label for="source" ソース
+    .col-sm-9
+      select.form-control
+        option value="0"
+          | デフォルト
+        - @user.sources.each do |src|
+          option value=src.id
+            = src.name
+      div style="text-align: right"
+        small
+          a href="/sources" ソースの管理
 
   .form-group.row
     label.col-sm-3.control-label for="type" ストリームタイプ
