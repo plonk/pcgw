@@ -44,7 +44,7 @@ form.form-horizontal action="/broadcast" method="POST" role="form"
   .form-group.row
     label.col-sm-3.control-label for="source" ソース
     .col-sm-9
-      select.form-control
+      select.form-control name="source"
         option value="0"
           | デフォルト
         - @user.sources.each do |src|

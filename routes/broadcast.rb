@@ -70,6 +70,7 @@ class PeercastBroadcastRequest
     }
   end
 
+ public
   # ユーザーがPushするURL
   def push_uri
     case @info.stream_type
