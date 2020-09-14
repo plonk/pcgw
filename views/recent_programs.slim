@@ -1,5 +1,7 @@
 script src="/reloader.js"
 
+== slim :bfkb
+
 .reloader data-url="/programs/includes/recent_programs" data-interval=300 data-preloaded=1
   - programs = ChannelInfo.all.order(created_at: :desc).limit(10)
   == slim :includes_recent_programs, locals: { programs: programs }, layout: false

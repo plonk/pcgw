@@ -5,6 +5,8 @@
 
 script src="/reloader.js"
 
+== slim :bfkb
+
 .reloader data-url="/includes/onair" data-interval=60 data-preloaded=1
   == erb :includes_onair, locals: { channels: Channel.all }, layout: false
 

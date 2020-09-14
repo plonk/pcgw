@@ -1,5 +1,7 @@
 <% content_for :title do %>チャンネル作成<% end %>
 
+<%= slim :bfkb %>
+
 <div class="rounded panel">
     <% if @user.never_broadcast? %>
     <%= slim :create_help %>
