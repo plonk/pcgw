@@ -197,8 +197,8 @@ class Pcgw < Sinatra::Base
       servent = choose_servent(params['servent'].to_i, params['yp'])
       breq = PeercastBroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip, key)
 
-      # PeerCastStation に同じ ID のチャンネルが立たないようにする。
-      # ascertain_new!(servent.api, breq)
+      # 同じ ID のチャンネルが立たないようにする。
+      ascertain_new!(servent.api, breq)
       chid = breq.issue
 
       ch = @user.channels.build(gnu_id: chid)
