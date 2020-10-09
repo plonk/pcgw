@@ -4,7 +4,7 @@ gem "rack", ">= 1.6.12"
 gem 'jimson'
 gem 'sinatra'
 gem 'sinatra-contrib' # for cookies
-gem 'activerecord', "~> 5"
+gem 'activerecord', ">= 5.2.4.3"
 gem 'omniauth-twitter'
 gem 'sqlite3'
 gem 'slim'
