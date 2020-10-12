@@ -69,6 +69,13 @@ class ScreenShotRefresh
 
     n = 0
     Channel.all.each do |ch|
+      if ch.hide_screenshots
+        log.info("ss-refresh run: Skipping #{ch.gnu_id}(#{ch.channel_info.channel})")
+        next
+      else
+        log.info("ss-refresh run: #{ch.gnu_id}(#{ch.channel_info.channel})")
+      end
+
       # ファイル名を決定する。
       while true
         filename = "#{random_128bit}.jpg"
