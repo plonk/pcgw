@@ -67,7 +67,9 @@ class ScreenShotRefresh
   def run
     FileUtils.mkdir_p screen_shot_dir
 
-    n = Channel.all.to_a.count do |ch|
+    n = 0
+    Channel.all.each do |ch|
+      # ファイル名を決定する。
       while true
         filename = "#{random_128bit}.jpg"
         path = "#{screen_shot_dir}/#{filename[0..1]}/#{filename[2..3]}/#{filename}"
@@ -76,13 +78,20 @@ class ScreenShotRefresh
 
       FileUtils.mkdir_p File.dirname(path)
 
-      success = capture(ch, path)
-      if success
+      if capture(ch, path)
         system("convert -resize 640x10000 -strip #{path} #{path}")
+
+        # 過去のスクリーンショットを消す。
+        ch.channel_info.screen_shots.each do |s|
+          s.delete_file!
+        end
+        ch.channel_info.screen_shots.delete_all
+
         screen_shot = ch.channel_info.screen_shots.build(filename: filename)
         screen_shot.save!
+
+        n += 1
       end
-      success
     end
     log.info("took #{n} shots of #{Channel.all.count} channels")
 
