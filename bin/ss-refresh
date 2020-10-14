@@ -88,14 +88,18 @@ class ScreenShotRefresh
       if capture(ch, path)
         system("convert -resize 640x10000 -strip #{path} #{path}")
 
+        ss = nil
+        Channel.transaction do
+          ss = ch.channel_info.screen_shots.to_a
+          ch.channel_info.screen_shots.delete_all
+          screen_shot = ch.channel_info.screen_shots.build(filename: filename)
+          screen_shot.save!
+        end
+
         # 過去のスクリーンショットを消す。
-        ch.channel_info.screen_shots.each do |s|
+        ss.each do |s|
           s.delete_file!
         end
-        ch.channel_info.screen_shots.delete_all
-
-        screen_shot = ch.channel_info.screen_shots.build(filename: filename)
-        screen_shot.save!
 
         n += 1
       end
