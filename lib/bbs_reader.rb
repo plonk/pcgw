@@ -48,7 +48,8 @@ module Bbs
 	y, mon, d, h, min, sec = [$1, $2, $3, $4, $5, $6].map(&:to_i)
 	Time.new(y, mon, d, h, min, sec)
       else
-	fail ArgumentError, "Not a date. Delete post? #{str.inspect}"
+        Time.at(0)
+	#fail ArgumentError, "Not a date. Delete post? #{str.inspect}"
       end
     end
   end
