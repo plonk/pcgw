@@ -7,9 +7,8 @@ script src="/reloader.js"
   h4 style="display: inline"
     = @info['info']['name']
     == erb :tweet_button, locals: { link_url: @link_url, data_text: @data_text }
-    .btn-group style="vertical-align: -0.07em;"
-      button.btn.btn-secondary.dropdown-toggle type="button" data-toggle="dropdown" aria-expanded="false"
-        |  更新の間隔
+    .btn-group style="vertical-align: top;"
+      button.btn.btn-sm.btn-secondary.dropdown-toggle type="button" data-toggle="dropdown" aria-expanded="false" title="更新の間隔"
         span#refresh-interval ∞
         | 秒
         span.caret style="margin-left: 0.5em"
