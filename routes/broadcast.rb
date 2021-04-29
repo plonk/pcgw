@@ -66,7 +66,8 @@ class PeercastBroadcastRequest
       genre: genre,
       contact: @info.url,
       bitrate: 0,
-      type: @info.stream_type
+      type: @info.stream_type,
+      network: yp ? yp.network : 'ipv4'
     }
   end
 
