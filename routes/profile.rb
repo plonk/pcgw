@@ -20,7 +20,11 @@ class Pcgw < Sinatra::Base
       config.consumer_key = ENV['CONSUMER_KEY']
       config.consumer_secret = ENV['CONSUMER_SECRET']
     end
-    twitter_user = client.user(content_user.twitter_id)
+    begin
+      twitter_user = client.user(content_user.twitter_id)
+    rescue Twitter::Error::NotFound
+      halt(404, "Twitter user not found")
+    end
     url = twitter_user.profile_image_uri(:normal).to_s
     if content_user.image != url
       log.info("Updating profile image for #{content_user.id}: #{content_user.image}")
