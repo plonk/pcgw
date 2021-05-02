@@ -2,12 +2,25 @@
   = user.name
 
 .panel
-  == slim :profile_panel_content, locals: { user: user }
+  h1
+    / いずれ Twitter と同じに 200x200 にしたい
+    img.img-rounded width="48" src=user.image_https alt=user.name 
+    |  #{user.name} 
+    - unless user.suspended
+      small
+        == slim :broadcast_status, locals: { user: user }
+    small style="font-size: 9pt; float: right"
+      a.text-muted href="/profile/#{user.id}/update" title="プロフィール画像がリンク切れのときに押すと直ることがあります。"
+        | 更新
 
-  p
-    = user.bio
+  - if user.suspended
+    p.text-warning このユーザーのアカウントは凍結されています。
+  - else
+    p
+      = user.bio
 
-  - if user.channels.any?
-    == slim :profile_onair, locals: { user: user }
+    - if user.channels.any?
+      == slim :profile_onair, locals: { user: user }
 
-== slim :my_history, locals: { recent_programs: recent_programs, user: user }
+- unless user.suspended
+  == slim :my_history, locals: { recent_programs: recent_programs, user: user }

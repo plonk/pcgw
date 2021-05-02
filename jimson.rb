@@ -140,6 +140,14 @@ class Pcgw < Sinatra::Base
     pass if request.path_info =~ %r{^/stats}
 
     if logged_in?
+      if @user.suspended
+        # 凍結されたアカウントもログアウトはできるようにする。
+        pass if request.path_info =~ %r{^/logout$}
+        # pass if request.path_info =~ %r{^/account$}
+
+        halt 403, slim(:suspended)
+      end
+
       # 最終ログオン時刻を更新する。
       @user.logged_on_at = Time.now
       @user.save
