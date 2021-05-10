@@ -16,10 +16,18 @@ class RelayTree < OpenStruct
     if lookup
       Resolv.getname(address)
     else
-      address
+      if address =~ /:/
+        "[#{address}]"
+      else
+        address
+      end
     end
   rescue
-    address
+    if address =~ /:/
+      "[#{address}]"
+    else
+      address
+    end
   end
 
   def endpoint(lookup: true)

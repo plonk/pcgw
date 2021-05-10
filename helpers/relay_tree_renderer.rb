@@ -70,24 +70,12 @@ class RelayTreeRenderer
   end
 
   def attributes(t)
-    if t.port==7144
-      endpoint = anonymize(t.hostname)
-    else
-      endpoint = "#{anonymize(t.hostname)}:#{t.port}"
-    end
     puts "%p [label=%p, style=filled, fillcolor=%p]" % \
-    [t.id, endpoint, light_shade(t.color)]
+    [t.id, t.endpoint(lookup: true), light_shade(t.color)]
   end
 
   def puts(*args)
     @buf.puts(*args)
-  end
-
-  private
-
-  def anonymize(name)
-    _, *xs = name.split('.')
-    ['*', *xs].join('.')
   end
 
 end
