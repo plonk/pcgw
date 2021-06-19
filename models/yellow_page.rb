@@ -30,7 +30,7 @@ class YellowPage
                  'http://yp.pcgw.pgw.jp/favicon.ico',
                  'pcp://yp.pcgw.pgw.jp:7146/',
                  false,
-                 'ipv6']].map { |args| YellowPage.new(*args) }
+                 'ipv4']].map { |args| YellowPage.new(*args) }
       return @all
     end
 
