@@ -37,9 +37,9 @@
           a href=program.url target="_blank"
             = program.url
 
-  a.my-1.btn.btn-secondary href="/programs/#{program.id}/digest" style="margin-right: 0.8em"
-    | 配信ダイジェスト
-    span.text-warning style="margin-left: 0.3em" β
+  / a.my-1.btn.btn-secondary href="/programs/#{program.id}/digest" style="margin-right: 0.8em"
+  /   | 配信ダイジェスト
+  /   span.text-warning style="margin-left: 0.3em" β
   - if @user == program.user
     a.my-1.btn.btn-secondary href="/create?template=#{program.id}" style="margin-right: 0.8em"
       | 続きを配信 &raquo;
