@@ -1,10 +1,5 @@
 <!-- channel: Channel -->
-<div class="thumbnail thumbnail-channel shadow-sm border" style="display: inline-block; text-align: left">
-  <div style="display: inline-block; text-align: center; width: 100%; position: relative">
-    <a title="ぺからいぶで開く" href="http://peca.live/channels/<%= h channel.gnu_id %>">
-      <img src="<%= h channel.channel_info.primary_screenshot_path %>" style="width: 100%">
-    </a>
-  </div>
+<div class="thumbnail thumbnail-channel shadow-sm border" style="display: inline-block; text-align: left; width: 100%; vertical-align: top">
 
   <div class="caption p-2">
     <p style="position: relative">
@@ -32,6 +27,9 @@
         📙<!-- orange book -->
         <%= slim :yellow_page_links, locals: { yp_names: [channel.channel_info.yp] } %>
       </span>
+      <span style="margin-right: 20px">
+        <a title="ぺからいぶで開く" href="http://peca.live/channels/<%= h channel.gnu_id %>">▶&#xfe0f;<!-- play button --></a>
+      <span>
     </p>
   </div>
 </div>

@@ -20,10 +20,10 @@ nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
           a.nav-link href="/programs/recent" style="padding: 10px" title="過去の番組"
             span style="font-size: 24px" ⏲️
             span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%"  過去の番組
-        li.nav-item
-          a.nav-link href="/profile" style="padding: 10px" title="ユーザー"
-            span style="font-size: 24px" 👤
-            span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%" ユーザー
+        /li.nav-item
+        /  a.nav-link href="/profile" style="padding: 10px" title="ユーザー"
+        /    span style="font-size: 24px" 👤
+        /    span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%" ユーザー
         - if @user
           / 例外的にビューからモデルを引っ張る。
           - notices = Notice.where('created_at > ?', @user.notice_checked_at || Time.at(0))
