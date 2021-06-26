@@ -34,11 +34,6 @@ class Servent < ActiveRecord::Base
     super
   end
 
-  def yellow_page_viewer?
-    _program_name, version_number = api.getVersionInfo['agentName'].split('/')
-    version_number > '1.9.2'
-  end
-
   def load_from_server
     self.agent = api.getVersionInfo['agentName']
 
