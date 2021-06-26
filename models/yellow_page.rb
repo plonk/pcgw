@@ -30,6 +30,14 @@ class YellowPage
                  'http://yp.pcgw.pgw.jp/favicon.ico',
                  'pcp://yp.pcgw.pgw.jp:7146/',
                  false,
+                 'ipv4'],
+                ['SecretYP',
+                 '',
+                 '',
+                 'http://pcgw.pgw.jp:7144/public/',
+                 'http://pcgw.pgw.jp:7144/assets/images/peercast-logo.png',
+                 'pcp://pcgw.pgw.jp:7144/',
+                 true,
                  'ipv4']].map { |args| YellowPage.new(*args) }
       return @all
     end
