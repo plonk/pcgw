@@ -77,6 +77,7 @@ class Servent < ActiveRecord::Base
       enabled.to_a.find { |s| s.yellow_pages.split(' ').include?(yp) && s.vacancies > 0 }
     end
 
+    # すべての有効化されたサーバー。
     def enabled
       Servent.where(enabled: true).order(priority: :asc)
     end
