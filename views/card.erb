@@ -12,7 +12,7 @@
 
       <small style="position: absolute; right: 0px; text-align: left">
         ⏲️<!-- timer clock -->
-        <%= h uptime_fmt(channel.status['uptime']) %>
+        <%= h (uptime_fmt(channel.status['uptime']) rescue "?") %>
       </small>
     </p>
 
@@ -21,7 +21,7 @@
     <p>
       <span style="margin-right: 20px">
         👤<!-- bust in silhouette -->
-        <%= h channel.listener_count_display %>
+        <%= h (channel.listener_count_display rescue "?") %>
       </span>
       <span style="margin-right: 20px">
         📙<!-- orange book -->
