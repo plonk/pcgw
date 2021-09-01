@@ -2,7 +2,7 @@
 require 'jimson'
 require 'sinatra/base'
 require 'sinatra/content_for'
-require 'omniauth-twitter'
+require 'oauth'
 require 'active_record'
 require 'sinatra/cookies'
 require 'ostruct'
@@ -35,10 +35,6 @@ class Pcgw < Sinatra::Base
 
     set :cookie_options do
       { expires: Time.now + 30 * 24 * 3600 }
-    end
-
-    use OmniAuth::Builder do
-      provider :twitter, ENV['CONSUMER_KEY'], ENV['CONSUMER_SECRET']
     end
   end
 
@@ -113,9 +109,6 @@ class Pcgw < Sinatra::Base
       session.clear
     end
 
-    # /auth/ で始まる URL なら omniauth-twitter に任せる。
-    pass if request.path_info =~ %r{^/auth/}
-
     # 以下のページはログインしていなくてもアクセスできる。
     # トップページ
     if request.path_info == '/'
@@ -155,6 +148,27 @@ class Pcgw < Sinatra::Base
       # ログインされていなかったらログインさせる。
       redirect to("/auth/twitter?origin=#{Rack::Utils::escape(env['REQUEST_URI'])}")
     end
+  end
+
+  helpers do
+    def oauth
+      OAuth::Consumer.new(
+        ENV['CONSUMER_KEY'],
+        ENV['CONSUMER_SECRET'],
+        site: 'https://api.twitter.com',
+        schema: :header,
+        method: :post,
+        request_token_path: '/oauth/request_token',
+        access_token_path: '/oauth/access_token',
+        authorize_path: '/oauth/authorize')
+    end
+  end
+
+  get '/auth/twitter' do
+    request_token = oauth().get_request_token(oauth_callback: 'http://pcgw.pgw.jp/auth/twitter/callback')
+    session[:token] = request_token.token
+    session[:secret] = request_token.secret
+    redirect request_token.authorize_url
   end
 
   after do

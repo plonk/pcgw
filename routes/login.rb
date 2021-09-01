@@ -1,20 +1,34 @@
 class Pcgw < Sinatra::Base
   # ログイン成功
   get '/auth/twitter/callback' do
+    oauth_client = oauth()
+    request_token = OAuth::RequestToken.new(oauth_client, session[:token], session[:secret])
+    access_token = oauth_client.get_access_token(request_token, oauth_verifier: params[:oauth_verifier])
+    twitter_client = Twitter::REST::Client.new do |config|
+      config.consumer_key = ENV['CONSUMER_KEY']
+      config.consumer_secret = ENV['CONSUMER_SECRET']
+      config.access_token = access_token.token
+      config.access_token_secret = access_token.secret
+    end
+    twitter_user = twitter_client.user
+    name = twitter_user.name
+    image_uri = twitter_user.profile_image_uri
+    twitter_id = twitter_user.id
+
     # twitter から取得した名前とアイコンをセッションに設定する。
 
-    if (user = User.find_by(twitter_id: env['omniauth.auth']['uid']))
+    if (user = User.find_by(twitter_id: twitter_id))
       # プロフィール画像をtwitterと同期する
-      user.update!(image: env['omniauth.auth']['info']['image'])
+      user.update!(image: image_uri)
       session[:uid] = user.id.to_s
 
       log.info("user #{user.id} logged in")
 
-      redirect env['omniauth.origin']
+      redirect '/home'
     else
-      user = User.new(name:       env['omniauth.auth']['info']['name'],
-                      image:      env['omniauth.auth']['info']['image'],
-                      twitter_id: env['omniauth.auth']['uid'])
+      user = User.new(name:       name,
+                      image:      image_uri,
+                      twitter_id: twitter_id)
       user.save
       session[:uid] = user.id.to_s
 
