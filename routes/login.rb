@@ -12,7 +12,7 @@ class Pcgw < Sinatra::Base
     end
     twitter_user = twitter_client.user
     name = twitter_user.name
-    image_uri = twitter_user.profile_image_uri
+    image_uri = twitter_user.profile_image_uri_https
     twitter_id = twitter_user.id
 
     # twitter から取得した名前とアイコンをセッションに設定する。

@@ -11,10 +11,6 @@ class User < ActiveRecord::Base
   end
 
   def image_https
-    if image
-      image.sub(/\Ahttp:/, "https:")
-    else
-      image
-    end
+    image
   end
 end
