@@ -6,7 +6,27 @@ require_relative '../lib/core_ext'
 class Pcgw < Sinatra::Base
   get '/programs/?' do
     if params['user'].blank?
-      programs = ChannelInfo.all
+      month = ChannelInfo.first.created_at&.year_month
+      if month.nil?
+        return 200, "No records found"
+      end
+      last_month = Time.now.year_month
+
+      inc = proc do |year, month|
+        if month == 12
+          [year + 1, 1]
+        else
+          [year, month + 1]
+        end
+      end
+
+      months = []
+      while (month <=> last_month) <= 0
+        months << [month, nil]
+        month = inc.(month)
+      end
+
+      slim :program_index, locals: { months: months, user: nil }
     else
       begin
         user = User.find(params['user'].to_i)
@@ -14,12 +34,14 @@ class Pcgw < Sinatra::Base
       rescue ActiveRecord::RecordNotFound
         halt 404, "No such user"
       end
+
+      # 配信のあった月と、その月にあった配信の数
+      months = programs.flat_map { |pg|
+        [:begin, :end].of(pg.time_range).map(&:year_month).uniq
+      }.frequencies.sort_by(&:first)
+
+      slim :program_index, locals: { months: months, user: user }
     end
-    # 配信のあった月と、その月にあった配信の数
-    months = programs.flat_map { |pg|
-      [:begin, :end].of(pg.time_range).map(&:year_month).uniq
-    }.frequencies.sort_by(&:first)
-    slim :program_index, locals: { months: months, user: user }
   end
 
   get '/programs/recent' do
