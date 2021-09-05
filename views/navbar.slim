@@ -10,32 +10,32 @@ nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
         - if @user
           li.nav-item
             a.nav-link href="/home" style="padding: 10px" title="ホーム"
-              span style="font-size: 24px" 🏠
-              span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%"  ホーム
+              span style="font-size: 24px; display: inline-block; width: 32px; text-align: center" 🏠
+              span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500"  ホーム
         li.nav-item
           a.nav-link href="/stats" style="padding: 10px" title="利用状況"
-            span style="font-size: 24px" 📊
-            span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%"  利用状況
+            span style="font-size: 24px; display: inline-block; width: 32px; text-align: center" 📊
+            span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500"  利用状況
         li.nav-item
           a.nav-link href="/programs/recent" style="padding: 10px" title="過去の番組"
-            span style="font-size: 24px" ⏲️
-            span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%"  過去の番組
+            span style="font-size: 24px; display: inline-block; width: 32px; text-align: center" ⏲️
+            span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500"  過去の番組
         li.nav-item
           a.nav-link href="/profile" style="padding: 10px" title="ユーザー"
-            span style="font-size: 24px" 👤
-            span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%" ユーザー
+            span style="font-size: 24px; display: inline-block; width: 32px; text-align: center" 👤
+            span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500"  ユーザー
         - if @user
           / 例外的にビューからモデルを引っ張る。
           - notices = Notice.where('created_at > ?', @user.notice_checked_at || Time.at(0))
           li.nav-item
             a.nav-link href="/notices/" style="padding: 10px" title="お知らせ"
               - if notices.empty?
-                span style="font-size: 24px" 🔔
+                span style="font-size: 24px; display: inline-block; width: 32px; text-align: center" 🔔
               - else
                 span style="position: relative; font-size: 24px; color: #ffa922"
                   | 🔔
                   span.badge.badge-primary style="position: absolute; top: 15px; left: 18px; font-size: 9pt" #{notices.count}
-              span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500; vertical-align: 25%"  お知らせ
+              span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500"  お知らせ
 
       ul.nav.navbar-nav.navbar-right
         - if @user
