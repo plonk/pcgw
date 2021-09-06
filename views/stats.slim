@@ -7,9 +7,9 @@ script src="/reloader.js"
 
 == slim :bfkb
 
-.reloader data-url="/includes/onair" data-interval=60 data-preloaded=1
+.reloader data-url="?partial=onair" data-interval=60 data-preloaded=1
   == erb :includes_onair, locals: { channels: Channel.all }, layout: false
 
-.reloader data-url="/includes/server_status" data-interval=60 data-preloaded=1
+.reloader data-url="?partial=server_status" data-interval=60 data-preloaded=1
   == slim :includes_server_status, locals: { servents: servents }, layout: false
 
