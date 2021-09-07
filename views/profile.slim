@@ -4,7 +4,8 @@
 .panel
   h1
     / いずれ Twitter と同じに 200x200 にしたい
-    img.img-rounded width="48" src=user.image alt=user.name 
+    a href=user.image_200x200
+      img.img-rounded width="73" src=user.image_200x200 alt=user.name 
     |  #{user.name} 
     - unless user.suspended
       small

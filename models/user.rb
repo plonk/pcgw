@@ -13,4 +13,16 @@ class User < ActiveRecord::Base
   def image_https
     image
   end
+
+  def image_mini
+    image.sub(/normal/, 'mini')
+  end
+
+  def image_bigger
+    image.sub(/normal/, 'bigger')
+  end
+
+  def image_200x200
+    image.sub(/normal/, '200x200')
+  end
 end
