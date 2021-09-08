@@ -8,7 +8,6 @@
       tr
         th 名前
         th チャンネル数
-        th バージョン
         th IP
       - servents.each do |servent|
         tr
@@ -16,5 +15,4 @@
           td
             meter value=servent.channels.size max=servent.max_channels
             |  #{servent.channels.size} / #{servent.max_channels}
-          td #{servent.agent}
           td #{servent.hostname}:#{servent.port}
