@@ -13,6 +13,6 @@
         tr
           td #{servent.name}
           td
-            meter value=servent.channels.size max=servent.max_channels
+            meter.d-none.d-lg-inline value=servent.channels.size max=servent.max_channels
             |  #{servent.channels.size} / #{servent.max_channels}
           td #{servent.hostname}:#{servent.port}
