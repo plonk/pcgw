@@ -18,8 +18,10 @@ class Pcgw < Sinatra::Base
     # twitter から取得した名前とアイコンをセッションに設定する。
 
     if (user = User.find_by(twitter_id: twitter_id))
-      # プロフィール画像をtwitterと同期する
-      user.update!(image: image_uri)
+      # プロフィール画像がローカルではなかったらtwitterと同期する
+      unless user.image.start_with?('/')
+        user.update!(image: image_uri)
+      end
       session[:uid] = user.id.to_s
 
       log.info("user #{user.id} logged in")

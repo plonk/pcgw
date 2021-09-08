@@ -12,11 +12,18 @@ p
 
 h2 プロフィール
 
-form action="/account" method="POST" role="form"
+form action="/account" method="POST" role="form" enctype="multipart/form-data"
   .form-group
     label for="name"
       | ユーザー名
     input.form-control type="text" name="name" required=true value=@user.name
+
+  .form-group
+    label for="file"
+      | プロフィール画像
+      br
+      img#preview style="max-width: 200px" src=@user.image_200x200
+    input.form-control type="file" name="image" accept="image/png, image/jpeg"
 
   .form-group
     label for="bio"
@@ -34,3 +41,15 @@ div style="text-align: right"
       input type="hidden" name="_method" value="delete"
       button.btn.btn-danger.btn-sm type="submit"
         | アカウントを削除
+
+javascript:
+  $(function(){
+    $("input[name=image]").on('change',function(ev){
+      var file = ev.target.files[0]
+      var reader = new FileReader()
+      reader.onload = () => {
+        $('img#preview')[0].src = reader.result
+      }
+      reader.readAsDataURL(file)
+    })
+  })
