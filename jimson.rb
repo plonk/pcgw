@@ -36,6 +36,9 @@ class Pcgw < Sinatra::Base
     set :cookie_options do
       { expires: Time.now + 30 * 24 * 3600 }
     end
+
+    # 並列実行を禁止する。
+    set :lock, true
   end
 
   configure :development do
