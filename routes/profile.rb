@@ -15,7 +15,7 @@ class Pcgw < Sinatra::Base
   end
 
   get '/profile/:id/update' do |id|
-    halt 403, 'permission denied' unless @user.id == id.to_i
+    halt 403, 'permission denied' unless @user && @user.id == id.to_i
     content_user = User.find(id) rescue halt(404, 'user not found')
     client = Twitter::REST::Client.new do |config|
       config.consumer_key = ENV['CONSUMER_KEY']
