@@ -21,4 +21,5 @@ Sinatra で書かれています。
 
     $ bundle install --path vendor/bundle
     $ rake setup
+    $ rake migrate
     $ PCGW_ENV=production rake run
