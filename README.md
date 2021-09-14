@@ -16,3 +16,9 @@ Sinatra で書かれています。
 * FFMPEG
 * ImageMagick
 * Nginx (with rtmp-module)
+
+## とりあえず起動してみたい人向け
+
+    $ bundle install --path vendor/bundle
+    $ rake setup
+    $ PCGW_ENV=production rake run
