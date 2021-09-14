@@ -13,9 +13,12 @@ if ENV['PCGW_ENV'].blank?
   exit
 end
 
-if ENV['CONSUMER_KEY'].blank? or ENV['CONSUMER_SECRET'].blank?
-  puts "CONSUMER_KEY環境変数とCONSUMER_SECRET環境変数を設定して起動してください。"
-  exit
+if ENV['CONSUMER_KEY'].blank?
+  puts "警告: CONSUMER_KEY環境変数が設定されていません。"
+end
+
+if ENV['CONSUMER_SECRET'].blank?
+  puts "警告: CONSUMER_SECRET環境変数が設定されていません。"
 end
 
 # DB に接続する
