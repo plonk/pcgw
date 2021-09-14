@@ -2,6 +2,8 @@ task :setup do
   system("mkdir -v -p db tmp")
   # Sign in with Twitter ボタンをダウンロードする。
   system("curl -o public/sign-in-with-twitter-gray.png https://cdn.cms-twdigitalassets.com/content/dam/developer-twitter/auth-docs/sign-in-with-twitter-gray.png.twimg.1920.png")
+
+  system("if [ ! -f config.ru ]; then cp config.ru.sample config.ru; fi")
 end
 
 task :migrate do
