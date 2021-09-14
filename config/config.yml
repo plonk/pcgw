@@ -1,0 +1,14 @@
+wm_mirror:
+  development:
+    hostname: '127.0.0.1'
+  production:
+    hostname: 'pcgw.pgw.jp'
+db:
+  development:
+    adapter:  sqlite3
+    database: db/pcgw.db
+    timeout: 10000
+  production:
+    adapter:  sqlite3
+    database: db/pcgw.db
+    timeout: 10000

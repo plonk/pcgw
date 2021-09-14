@@ -1,4 +1,0 @@
-adapter: sqlite3
-encoding: utf8
-database: db/pcgw.db
-timeout: 30000
