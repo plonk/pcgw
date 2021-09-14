@@ -16,7 +16,8 @@
   div
     - if users.size == 0
       p.text-success style="text-align: center; font-style: italic" 条件に合致するユーザーは居ませんでした。
-      - if query !~ /[%_]/
+      / query が SQL `like` 演算子のワイルドカード(%, _)を含まないならば。
+      - if !query.empty? && query !~ /[%_]/
         p style="text-align: center"
           | 名前に
           a href="/profile/search?query=%25#{URI::escape(query)}%25"
