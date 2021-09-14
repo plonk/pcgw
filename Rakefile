@@ -1,5 +1,5 @@
 task :setup do
-  system("mkdir -v -p db tmp config screenshots")
+  system("mkdir -v -p db tmp")
 end
 
 task :migrate do
