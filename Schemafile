@@ -1,3 +1,5 @@
+# -*- mode: ruby -*-
+
 create_table "servents", force: true do |t|
   t.string "name", default: ""
   t.string "desc", default: ""
