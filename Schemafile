@@ -69,3 +69,9 @@ create_table "sources", force: true do |t|
   t.string :name
   t.string :key
 end
+
+create_table "passwords", force: true do |t|
+  t.belongs_to :user, index: true
+  t.string :sha256sum
+  t.string :salt, default: ""
+end

@@ -135,6 +135,8 @@ class Pcgw < Sinatra::Base
     # チャンネル一覧、サーバー稼働状況
     pass if request.path_info =~ %r{^/stats}
 
+    pass if request.path_info =~ %r{^/login}
+
     if logged_in?
       if @user.suspended
         # 凍結されたアカウントもログアウトはできるようにする。

@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_many :channels, dependent: :destroy
   has_many :channel_infos, dependent: :destroy
   has_many :sources, dependent: :destroy
+  has_one :password, dependent: :destroy
   validates :bio, length: { maximum: 160 }
 
   def never_broadcast?

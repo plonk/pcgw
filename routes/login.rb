@@ -58,4 +58,29 @@ class Pcgw < Sinatra::Base
 
     redirect to('/')
   end
+
+  # パスワードログイン。詮索されたくないので、ログインに失敗したときは
+  # 同じレスポンスを返すようにする。
+  post '/login' do
+    halt 400 if params[:user_id].blank? || params[:password].blank?
+    halt 400, 'Already logged in' if @user
+
+    user_id = params[:user_id].to_i
+    begin
+      user = User.find(user_id)
+    rescue ActiveRecord::RecordNotFound
+      halt 403, 'Login failed'
+    end
+
+    unless user.password
+      halt 403, 'Login failed'
+    end
+
+    if user.password.validate(params[:password])
+      session[:uid] = user_id
+      redirect to('/home')
+    else
+      halt 403, 'Login failed'
+    end
+  end
 end
