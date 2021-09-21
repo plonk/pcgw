@@ -45,6 +45,8 @@ class Pcgw < Sinatra::Base
             .group(:id)
             .having("logged_on_at >= ? and channel_count >= 1", Time.now - 30 * 24 * 3600)
             .order(:logged_on_at => :desc)
+    # ↑ PostgreSQLだと動かなったかったのだが、下のようなクエリならば動いた。
+    # users = User.where("logged_on_at >= ?", Time.now - 30 * 24 * 3600)
     slim :active_users, locals: { users: users, title: 'アクティブなユーザー', query: '' }
   end
 
