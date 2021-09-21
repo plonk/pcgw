@@ -28,17 +28,16 @@ end
 create_table "users", force: true do |t|
   t.string  "name"
   t.string  "image"
-  t.text "bio"
   t.integer "twitter_id", limit: 8
   t.boolean "admin",      default: false
   t.boolean "suspended",  default: false
   t.datetime "notice_checked_at"
   t.datetime "logged_on_at"
+  t.text "bio"
 end
 
 create_table "channel_infos", force: true do |t|
   t.references :user, index: true
-  t.references :channel, index: true
   t.string  "channel"
   t.string  "genre"
   t.string  "desc"
@@ -47,6 +46,7 @@ create_table "channel_infos", force: true do |t|
   t.string  "stream_type"
   t.string  "yp"
   t.timestamps
+  t.references :channel, index: true
   t.datetime "terminated_at"
   t.integer "primary_screen_shot_id", default: nil
   t.boolean "hide_screenshots", default: false
