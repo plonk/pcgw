@@ -178,7 +178,7 @@ class Pcgw < Sinatra::Base
       must_be_admin! @user
     end
 
-    unless info.terminated_at?
+    if info.channel_id && !info.terminated_at?
       halt(403, "cannot delete active channel info")
     end
     if info.destroy
