@@ -9,7 +9,7 @@ class Pcgw < Sinatra::Base
   end
 
   get '/includes/my_history' do
-    programs = ChannelInfo.where(user: @user).where.not(terminated_at: nil).order(created_at: :desc).limit(10)
+    programs = ChannelInfo.where(user: @user).order(created_at: :desc).limit(10)
     slim :my_history, locals: { recent_programs: programs, user: @user }, layout: false
   end
 
