@@ -26,10 +26,10 @@ class Pcgw < Sinatra::Base
     rescue Twitter::Error::NotFound
       halt(404, "Twitter user not found")
     end
-    url = twitter_user.profile_image_uri(:normal).to_s
+    url = twitter_user.profile_image_uri_https(:normal).to_s
     if content_user.image != url
       log.info("Updating profile image for #{content_user.id}: #{content_user.image}")
-      content_user.image = twitter_user.profile_image_uri(:normal).to_s
+      content_user.image = twitter_user.profile_image_uri_https(:normal).to_s
       content_user.save!
       log.info("Profile image for #{content_user.id} updated: #{content_user.image}")
     else
