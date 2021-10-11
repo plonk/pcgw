@@ -81,8 +81,9 @@ form.form-horizontal action="/broadcast" method="POST" role="form"
           label
             input required="required" type="radio" name="yp" value="#{yp.name}" checked=(template.yp == yp.name)
             | &nbsp;
-            img src=yp.icon width="32" alt="[#{yp.name}のアイコン]"
-            | &nbsp;
+            - if yp.icon
+              img src=yp.icon width="32" alt="[#{yp.name}のアイコン]"
+              | &nbsp;
             a href=yp.top style="display: inline-block; min-width: 100px"
               = yp.name
           a.btn.btn-secondary.btn-sm href=yp.terms target="_blank"
