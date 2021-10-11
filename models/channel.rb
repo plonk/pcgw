@@ -100,11 +100,13 @@ class Channel < ActiveRecord::Base
   def destroy
     info = self.channel_info
 
-    # チャンネル情報からチャンネルへの参照をクリアする
+    # チャンネル情報からチャンネルへの参照をクリアする？
+    # できてない気がする。
     self.channel_info = nil
 
     # 万一 ChannelInfo が無かった場合に消せなくならないようにしている。
     if info
+      info.channel_id = nil
       info.terminated_at = Time.now
       info.save!
     end
