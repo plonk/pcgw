@@ -183,7 +183,7 @@ class Pcgw < Sinatra::Base
 
   after do
     # これやらないと新しく接続できなくなる。
-    ActiveRecord::Base.connection.close
+    # ActiveRecord::Base.connection.close
 
     # メモリを節約。
     if @@invoke_count%10 == 0
