@@ -10,6 +10,10 @@
     - unless user.suspended
       small
         == slim :broadcast_status, locals: { user: user }
+    - if admin_view?
+      small style="font-size: 9pt; float: right"
+        a.text-muted href="/users/#{user.id}"
+          | 管理
 
   - if user.suspended
     p.text-warning このユーザーのアカウントは凍結されています。
