@@ -28,7 +28,7 @@
         <%= slim :yellow_page_links, locals: { yp_names: [channel.channel_info.yp] } %>
       </span>
       <span style="margin-right: 20px">
-        <a title="ぺからいぶで開く" href="http://peca.live/channels/<%= h channel.gnu_id %>">▶&#xfe0f;<!-- play button --></a>
+        <a title="ぺからいぶで開く" href="http://peca.live/<%= h channel.channel_info.channel %>">▶&#xfe0f;<!-- play button --></a>
       </span>
     </p>
   </div>
