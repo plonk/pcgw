@@ -2,6 +2,7 @@ require 'active_support'
 require 'active_support/core_ext'
 require 'resolv'
 require_relative '../lib/nipponize'
+require 'digest/md5'
 
 class Connection
   KEYS = [:connectionId, :type, :status, :sendRate, :recvRate,
@@ -20,6 +21,28 @@ class Connection
     Resolv.getname($1)
   rescue Resolv::ResolvError
     $1
+  end
+
+  def remoteIdPort
+    if remoteEndPoint =~ /\A(.+?):(\d+)\z/
+      addr = $1
+      port = $2
+      id = Digest::MD5.base64digest(addr.downcase)[0, 8]
+      "#{id}"
+    else
+      "[Error]"
+    end
+  end
+
+  def remoteIdPort
+    if remoteEndPoint =~ /\A(.+?):(\d+)\z/
+      addr = $1
+      port = $2
+      id = Digest::MD5.base64digest(addr.downcase)[0, 8]
+      "#{id}:#{port}"
+    else
+      "[Error]"
+    end
   end
 
   def remoteIPAddress

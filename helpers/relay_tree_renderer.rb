@@ -71,7 +71,7 @@ class RelayTreeRenderer
 
   def attributes(t)
     puts "%p [label=%p, style=filled, fillcolor=%p]" % \
-    [t.id, t.endpoint(lookup: true), light_shade(t.color)]
+    [t.id, t.idPort, light_shade(t.color)]
   end
 
   def puts(*args)
