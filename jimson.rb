@@ -193,6 +193,14 @@ class Pcgw < Sinatra::Base
     end
   end
 
+  not_found do
+    if env["PATH_INFO"].start_with?('/ss/')
+      send_file("public/images/blank_screen.png")
+    else
+      pass
+    end
+  end
+
   error Peercast::Unavailable do
     e = env['sinatra.error']
     servent = Servent.where(hostname: e.host, port: e.port).first

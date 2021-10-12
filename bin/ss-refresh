@@ -5,7 +5,7 @@ require_relative '../init'
 require_relative '../models/init'
 require_relative '../lib/logging'
 
-Logging.logger = Logger.new('log/pcgw.log', 'daily')
+Logging.logger = Logger.new('log/ss.log', 'daily')
 
 require 'shellwords'
 require 'timeout'
@@ -16,7 +16,7 @@ class ScreenShotRefresh
   include Logging
 
   # このスクリプトは(アプリケーションディレクトリ)/bin/ss-refresh。
-  APP_DIR = File.dirname File.dirname File.absolute_path(__FILE__)
+  APP_DIR = File.dirname(File.dirname(File.absolute_path(__FILE__)))
 
   def initialize
   end
@@ -56,19 +56,14 @@ class ScreenShotRefresh
   end
 
   def screen_shot_dir
-    APP_DIR + '/public/screen_shots'
+    File.join(APP_DIR, '/public/ss')
   end
-
-  def random_128bit
-    32.times.map { rand(16).to_s(16).upcase }.join
-  end
-
 
   def run
     # アプリケーションのディレクトリに移動する。
     Dir.chdir(APP_DIR)
 
-    FileUtils.mkdir_p screen_shot_dir
+    FileUtils.mkdir_p(screen_shot_dir)
 
     n = 0
     Channel.all.each do |ch|
@@ -80,30 +75,11 @@ class ScreenShotRefresh
       end
 
       # ファイル名を決定する。
-      while true
-        filename = "#{random_128bit}.jpg"
-        path = "#{screen_shot_dir}/#{filename[0..1]}/#{filename[2..3]}/#{filename}"
-        break unless File.exist? path
-      end
+      tmp_path = File.join('/tmp', "#{ch.gnu_id}.jpg")
+      store_path = File.join(screen_shot_dir, "#{ch.gnu_id}.jpg")
 
-      FileUtils.mkdir_p File.dirname(path)
-
-      if capture(ch, path)
-        system("convert -resize 640x10000 -strip #{path} #{path}")
-
-        ss = nil
-        Channel.transaction do
-          ss = ch.channel_info.screen_shots.to_a
-          ch.channel_info.screen_shots.delete_all
-          screen_shot = ch.channel_info.screen_shots.build(filename: filename)
-          screen_shot.save!
-        end
-
-        # 過去のスクリーンショットを消す。
-        ss.each do |s|
-          s.delete_file!
-        end
-
+      if capture(ch, tmp_path)
+        system("convert -resize 640x10000 -strip #{tmp_path} #{store_path}")
         n += 1
       end
     end
