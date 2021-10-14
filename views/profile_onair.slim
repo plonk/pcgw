@@ -7,7 +7,7 @@
     - user.channels.each do |ch|
       tr
         td
-          img.img-rounded src="/ss/#{ch.gnu_id}.jpg" height="28"
+          img.img-rounded src=ch.ss_path height="28"
           |  #{ch.info['info']['name']}
         td
           - if ch.channel_info.url.blank?
