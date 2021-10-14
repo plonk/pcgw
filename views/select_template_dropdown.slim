@@ -6,7 +6,6 @@
     - recent_programs.each do |program|
       a.dropdown-item href="/create?template=#{program.id}" style="padding: 10px 20px"
         div style="display: inline-block; margin-left: 5px; vertical-align: top;"
-          img src=program.primary_screenshot_path style="width: 64px; float: left"
           div style="display: inline-block; margin-left: 12px"
             b
               = program.channel
