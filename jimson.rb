@@ -8,6 +8,7 @@ require 'sinatra/cookies'
 require 'ostruct'
 require 'slim'
 require 'logger'
+require 'fileutils'
 require_relative 'lib/logging'
 require_relative 'lib/peercast'
 
@@ -93,7 +94,19 @@ class Pcgw < Sinatra::Base
     log.error("Channel cleanup aborted: #{e.host}:#{e.port} connection error (#{e.message})")
   end
 
+  def ss_cleanup
+    Dir.glob("public/ss/*.jpg").each do |path|
+      if File.mtime(path) < Time.now - 3600
+        FileUtils.rm_f(path)
+      end
+    end
+  end
+
   before do
+    if @@invoke_count%30 == 0
+      channel_cleanup
+      ss_cleanup
+    end
     @@invoke_count += 1
 
     @noadmin = params['noadmin'] == 'yes'
@@ -102,8 +115,6 @@ class Pcgw < Sinatra::Base
     ActiveRecord::Base.connection.execute('PRAGMA synchronous=OFF')
 
     @yellow_pages = YellowPage.all
-
-    channel_cleanup if @@invoke_count%30 == 0
 
     begin
       get_user
