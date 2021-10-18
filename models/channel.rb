@@ -114,11 +114,7 @@ class Channel < ActiveRecord::Base
   end
 
   def ss_path
-    if hide_screenshots
-      "/images/miserarenaiyo.png"
-    else
-      "/ss/#{gnu_id}.jpg"
-    end
+    "/ss/#{gnu_id}.jpg"
   end
 
 end
