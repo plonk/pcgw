@@ -23,7 +23,8 @@ form action="/account" method="POST" role="form" enctype="multipart/form-data"
       | プロフィール画像
       br
       img#preview style="max-width: 200px" src=@user.image_200x200
-    input.form-control type="file" name="image" accept="image/png, image/jpeg"
+    br
+    input type="file" name="image" accept="image/png, image/jpeg"
 
   .form-group
     label for="bio"
