@@ -27,6 +27,7 @@ class Pcgw < Sinatra::Base
 
   NO_NEW_CHANNEL = false
 
+  @@startup_time = Time.now
   @@invoke_count = 0
 
   configure do
