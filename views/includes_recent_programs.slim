@@ -2,7 +2,7 @@
 .panel
   h6 最近の配信
   - programs.each do |program|
-    a.media.border-bottom.py-2.text-dark href="/programs/#{program.id}"
+    a.media.border-bottom.py-2 href="/programs/#{program.id}"
       == slim :channel_info_thumbnail, locals: { program: program }
 
   a.btn.btn-secondary.mt-3 href="/programs" もっと見る&thinsp;&raquo;

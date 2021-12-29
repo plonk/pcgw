@@ -1,4 +1,4 @@
-nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
+nav.navbar.navbar-expand-sm.navbar-dark.bg-dark.border-bottom role="navigation"
   .container
 
     button.navbar-toggler type="button" data-toggle="collapse" data-target="#navbar-collapse-1" aria-controls="navbar-collapse-1" aria-expanded="false" aria-label="Toggle navigation"
@@ -48,7 +48,7 @@ nav.navbar.navbar-expand-sm.navbar-dark.bg-dark role="navigation"
                   strong
                     = @user.name
                   br
-                  small.metadata プロフィールを表示
+                  small.text-muted プロフィールを表示
               div.dropdown-divider
               - if admin_view?
                 a.dropdown-item href="/admin"
