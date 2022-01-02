@@ -6,6 +6,7 @@
 
 style
   | input[type="checkbox"], input[type="radio"] { margin-right: 0.5rem }
+  | @media (prefers-color-scheme: dark) { img[src='https://yp.pcgw.pgw.jp/favicon.ico'] { filter: invert(1) } }
 
 p style="color: red"
   = @message
