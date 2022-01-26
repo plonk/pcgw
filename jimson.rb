@@ -207,6 +207,7 @@ class Pcgw < Sinatra::Base
 
   not_found do
     if env["PATH_INFO"].start_with?('/ss/')
+      cache_control 'no-cache'
       send_file("public/images/blank_screen.png")
     else
       pass

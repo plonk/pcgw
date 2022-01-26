@@ -2,7 +2,7 @@
 <div class="thumbnail thumbnail-channel border" style="display: inline-block; text-align: left; width: 100%; vertical-align: top">
   <div style="display: inline-block; text-align: center; width: 100%; position: relative">
     <a title="ぺからいぶで開く" href="http://peca.live/<%= h channel.channel_info.channel %>">
-      <img src="<%= h channel.ss_path %>" style="width: 100%">
+      <img src="<%= h channel.ss_path %>?<%= Time.now.to_i %>" style="width: 100%">
     </a>
   </div>
 
