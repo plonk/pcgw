@@ -50,6 +50,7 @@ create_table "channel_infos", force: true do |t|
   t.datetime "terminated_at"
   t.integer "primary_screen_shot_id", default: nil
   t.boolean "hide_screenshots", default: false
+  t.string  "source_name"
 end
 
 create_table "screen_shots", force: true do |t|

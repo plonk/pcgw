@@ -178,6 +178,20 @@ class Pcgw < Sinatra::Base
       end
     end
   end
+
+  def source_name(id)
+    case id
+    when 0
+      return nil
+    else
+      src = @user.sources.find(id)
+      if src
+        return src.name
+      else
+        return nil
+      end
+    end
+  end
   
   post '/broadcast' do
     halt 503, h('現在チャンネルの作成はできません。') if NO_NEW_CHANNEL
@@ -186,6 +200,7 @@ class Pcgw < Sinatra::Base
       props = params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type', 'hide_screenshots')
       channel_info = ChannelInfo.new({ user: @user }.merge(props))
       key = source_to_key(params['source'].to_i)
+      channel_info.source_name = source_name(params['sources'].to_i)
 
       unless key
         # 存在しないか、要求元のユーザーが所有しないソースが指定された。

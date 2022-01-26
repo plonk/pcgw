@@ -49,8 +49,8 @@ form.form-horizontal action="/broadcast" method="POST" role="form"
         option value="0"
           | デフォルト
         - @user.sources.each do |src|
-          option value=src.id
-            = src.name
+          option value=src.id selected=(template.source_name == src.name)
+            | #{src.name} — #{src.key[0] + "\u{25cf}" * (src.key.size-1)}
       div style="text-align: right"
         small
           a href="/sources" ソースの管理
