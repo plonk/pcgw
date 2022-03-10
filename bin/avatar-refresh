@@ -28,11 +28,18 @@ end
 
 Logging.logger.info "プロフィール画像の更新処理を始めます。"
 User.all.each do |user|
-  if alive?(user.image)
+  if user.image.nil? 
+    Logging.logger.info "ユーザー #{user.id}(#{user.name}) にはプロフィール画像がありません！"
+  elsif user.image =~ /\A\//
+    Logging.logger.info "ユーザー #{user.id}(#{user.name}) のプロフィール画像はローカルです。"
+  elsif alive?(user.image)
     Logging.logger.info "ユーザー #{user.id}(#{user.name}) のプロフィール画像は最新です。"
   else
     begin
       twitter_user = client.user(user.twitter_id)
+    rescue Twitter::Error::Forbidden => e
+      Logging.logger.info "ユーザー #{user.id}(#{user.name}) の Twitter アカウントにはアクセスできません。(#{e.message})"
+      next
     rescue Twitter::Error::NotFound
       Logging.logger.info "ユーザー #{user.id}(#{user.name}) の Twitter アカウントがありません。"
       next

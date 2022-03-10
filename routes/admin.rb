@@ -37,7 +37,11 @@ class Pcgw < Sinatra::Base
       config.consumer_key = ENV['CONSUMER_KEY']
       config.consumer_secret = ENV['CONSUMER_SECRET']
     end
-    twitter_user = client.user(content_user.twitter_id)
+    begin
+      twitter_user = client.user(content_user.twitter_id)
+    rescue => e
+      halt 500, e.message
+    end
     content_user.image = twitter_user.profile_image_uri_https(:normal).to_s
     content_user.save!
     redirect to("/users/#{id}")
