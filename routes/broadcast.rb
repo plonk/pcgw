@@ -200,7 +200,7 @@ class Pcgw < Sinatra::Base
       props = params.slice('channel', 'desc', 'genre', 'yp', 'url', 'comment', 'stream_type', 'hide_screenshots')
       channel_info = ChannelInfo.new({ user: @user }.merge(props))
       key = source_to_key(params['source'].to_i)
-      channel_info.source_name = source_name(params['sources'].to_i)
+      channel_info.source_name = source_name(params['source'].to_i)
 
       unless key
         # 存在しないか、要求元のユーザーが所有しないソースが指定された。
