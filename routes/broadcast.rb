@@ -211,6 +211,7 @@ class Pcgw < Sinatra::Base
       fail 'ストリームタイプが選択されていません' if params['stream_type'].blank?
 
       servent = choose_servent(params['servent'].to_i, params['yp'])
+      channel_info.servent = servent
       breq = PeercastBroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip, key)
 
       # 同じ ID のチャンネルが立たないようにする。

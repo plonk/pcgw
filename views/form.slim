@@ -95,7 +95,7 @@ form.form-horizontal action="/broadcast" method="POST" role="form"
       - servents.each do |serv|
         .radio
           label
-            input required="required" type="radio" name="servent" data-yellow-pages=serv.yellow_pages value=serv.id
+            input required="required" type="radio" name="servent" data-yellow-pages=serv.yellow_pages value=serv.id data-last-used=(serv==template.servent ? "1" : "0")
             span style="display: inline-block; min-width: 132px"
               = serv.name
             small &nbsp;#{serv.desc}
@@ -132,19 +132,37 @@ javascript:
   function onYellowPagesChange() {
     var yp = this.value;
     var already_checked = false;
+
     $('input[name="servent"]').each(function (index) {
       var support = $(this).data("yellow-pages").split(' ').indexOf(yp) !== -1;
       this.checked = false;
       if (support) {
         this.disabled = false;
-        if (!already_checked) {
-          this.checked = true;
-          already_checked = true;
-        }
         $(this.parentElement).removeClass("text-muted");
       } else {
         this.disabled = true;
         $(this.parentElement).addClass("text-muted");
+      }
+    });
+
+    // 選択したYPに対応している配信サーバーで、テンプレ配信で使ったものがあれば選択する。
+    $('input[name="servent"]').each(function (index) {
+      if (!this.disabled) {
+        if (!already_checked) {
+          if ($(this).data("last-used") == "1") {
+            this.checked = true;
+            already_checked = true;
+          }
+        }
+      }
+    });
+    // テンプレ配信で使ったものがない場合は最初のサーバーを選択する。
+    $('input[name="servent"]').each(function (index) {
+      if (!this.disabled) {
+        if (!already_checked) {
+          this.checked = true;
+          already_checked = true;
+        }
       }
     });
   }

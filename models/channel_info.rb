@@ -4,6 +4,7 @@ require 'active_record'
 class ChannelInfo < ActiveRecord::Base
   belongs_to :user
   has_many :screen_shots, dependent: :destroy
+  belongs_to :servent
 
   def primary_screenshot_path
     if hide_screenshots
