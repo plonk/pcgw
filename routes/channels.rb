@@ -11,6 +11,29 @@ class Pcgw < Sinatra::Base
     end
   end
 
+  # ブラウザのURLバーのように配信名がエスケープされずにぺからいぶ視聴
+  # ページへのリンクをツイートしたかったけど、どうせ投稿するときに全部
+  # エスケープされるので実現できなかった。↓
+
+  # def url_escape(str)
+  #   esc = -> (c) { c.bytes.map { |n| "%%%02X" % n }.join }
+  #   str.each_char.map { |ch|
+  #     if ch =~ /[\p{L}\p{M}\p{N}\p{P}\p{S}]/
+  #       # スペースを含まない「印字可能文字」
+  #       if ch =~ /[[:ascii:]]/ && ch =~ /[^abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\-._~]/
+  #         # ASCII印字可能文字でURLに使用できない集合はエスケープする。(例: # -> %23)
+  #         esc.(ch)
+  #       else
+  #         # URLに直接書けるASCII文字や、漢字はエスケープしない。
+  #         ch
+  #       end
+  #     else
+  #       # 制御文字や空白文字はエスケープする。(例: SPC -> %20、全角空白 -> %E3%80%80)
+  #       esc.(ch)
+  #     end
+  #   }.join
+  # end
+
   get '/channels/:id' do
     unless @user.admin? || @channel.user == @user
       halt 403, 'permission denied'
@@ -25,8 +48,17 @@ class Pcgw < Sinatra::Base
       else
         yp_name = "PeerCast"
       end
-      @data_text = "【#{yp_name}で配信中！】#{@info['info']['name']}「#{@info['info']['desc']}」 ぺからいぶで視聴→"
-      @link_url = "http://peca.live/channels/#{@channel.gnu_id}"
+      desc = if @info['info']['desc'].blank?
+               ''
+             else 
+               "「#{@info['info']['desc']}」"
+             end
+      @data_text = "【#{yp_name}で配信中！】#{@info['info']['name']}#{desc} ぺからいぶで視聴→"
+      name_escaped = ERB::Util.url_encode(@info['info']['name'])
+      # Twitter のウィジェットによりベタでツイート本文に埋め込まれるた
+      # め、配信名に空白が入っていると都合が悪いから、事前にエスケープ
+      # しておく。
+      @link_url = "http://peca.live/#{name_escaped}"
 
       @status_class = status_semantic_class @status['status']
       src = @channel.source_connection
