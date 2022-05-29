@@ -140,9 +140,9 @@ script src="/reloader.js"
           button.btn.btn-warning type="submit" 配信停止
         .btn-group
           a.btn.btn-secondary href="/channels/#{@channel.id}/edit" 詳細変更
-        .btn-group
-          a.btn.btn-secondary href="/channels/#{@channel.id}/play" target="_blank"
-            |  再生
+        / .btn-group
+        /   a.btn.btn-secondary href="/channels/#{@channel.id}/play" target="_blank"
+        /     |  再生
 
 javascript:
   $('#revealCheckbox').on('click', function(){

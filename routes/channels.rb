@@ -221,12 +221,12 @@ class Pcgw < Sinatra::Base
     slim :thread_list, locals: { board: board, threads: threads }
   end
 
-  get '/channels/:id/play' do
-    unless @channel.user == @user
-      halt 403, '再生できるのはチャンネルの配信者だけです。'
-    end
-    slim :play, locals: { channel: @channel }
-  end
+  # get '/channels/:id/play' do
+  #   unless @channel.user == @user
+  #     halt 403, '再生できるのはチャンネルの配信者だけです。'
+  #   end
+  #   slim :play, locals: { channel: @channel }
+  # end
 
   post '/channels/:id/stop' do
     begin
