@@ -65,8 +65,8 @@ class Pcgw < Sinatra::Base
       @source_kbps = src.recvRateKbps
       @bitrate_meter = bitrate_meter(@source_kbps, @info['info']['bitrate'])
 
-      connections = @channel.connections.select { |c| c.type == "relay" }.sort_by(&:remoteIdPort)
-      @connections = slim :connections, locals: { channel: @channel, connections: connections }, layout: false, pretty: false
+      # connections = @channel.connections.select { |c| c.type == "relay" }.sort_by(&:remoteIdPort)
+      # @connections = slim :connections, locals: { channel: @channel, connections: connections }, layout: false, pretty: false
 
       @repeater_status = channels_get_repeater_status(@channel, YarrClient.new)
 
@@ -129,8 +129,8 @@ class Pcgw < Sinatra::Base
       @source_kbps = src.recvRateKbps
       @bitrate_meter = bitrate_meter(@source_kbps, @info['info']['bitrate'])
 
-      connections = @channel.connections.select { |c| c.type == "relay" }.sort_by(&:remoteIdPort)
-      @connections = slim :connections, locals: { channel: @channel, connections: connections }, layout: false, pretty: false
+      # connections = @channel.connections.select { |c| c.type == "relay" }.sort_by(&:remoteIdPort)
+      # @connections = slim :connections, locals: { channel: @channel, connections: connections }, layout: false, pretty: false
 
       @repeater_status = channels_get_repeater_status(@channel, YarrClient.new)
 
@@ -264,11 +264,20 @@ class Pcgw < Sinatra::Base
     slim :relay_tree, locals: { root_nodes: root_nodes, fertility: fertility }
   end
 
+  get '/channels/:id/local_relays' do
+    @info = @channel.servent.api.getChannelInfo(@channel.gnu_id)
+    connections = @channel.connections.select { |c| c.type == "relay" }.sort_by { |c| c.remoteIdPort.upcase }
+    @connections = slim :connections, locals: { channel: @channel, connections: connections }, layout: false, pretty: false
+
+    slim :local_relays
+  end
+
   delete '/channels/:id/connections/:connection_id' do
     halt 403, "チャンネルを所有していません。" unless @channel.user == @user
 
     success = @channel.servent.api.stopChannelConnection(@channel.gnu_id, params['connection_id'].to_i)
     if success
+      flash[:success] = "接続を切断しました。"
       redirect back
     else
       "接続は切断できませんでした。"

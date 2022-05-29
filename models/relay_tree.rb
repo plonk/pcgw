@@ -5,11 +5,8 @@ require 'digest/md5'
 class RelayTree < OpenStruct
   include Enumerable
 
-  attr_reader :children
-
   def initialize(hash)
-    children = hash.delete('children')
-    @children = children.map(&RelayTree.method(:new))
+    hash['children'].map!(&RelayTree.method(:new))
     super(hash)
   end
 

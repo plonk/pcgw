@@ -107,11 +107,8 @@ script src="/reloader.js"
             | &nbsp;
             a.btn.btn-secondary.btn-sm href="/channels/#{@channel.id}/relay_tree" target="_blank"
               | リレーツリー
-      tr
-        th 直下接続
-        td
-          #connections
-            == @connections
+            a.btn.btn-secondary.btn-sm href="/channels/#{@channel.id}/local_relays" style="margin-left:.5em"
+              | 直下接続
       tr
         th ジャンル
         td #{@info['info']['genre']}

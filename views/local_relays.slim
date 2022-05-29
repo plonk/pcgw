@@ -1,0 +1,8 @@
+== slim :flash
+
+a.btn.btn-secondary href="/channels/#{@channel.id}"
+  | ←戻る
+a.btn.btn-secondary href="#{request.path}" style="margin-left:.5em"
+  | 再読み込み
+
+== @connections

@@ -1,6 +1,5 @@
 <% if @error %>
 // 選択できなくなるのでソースURLは更新しない
-  $('#connections').text("n/a")
   $('#relay').text("n/a")
   $('#direct').text("n/a")
   $('#bitrate').text("n/a")
@@ -11,7 +10,6 @@
   $('#repeater_status').text("n/a")
   $('#error').text("<%= @error %>")
 <% else %>
-  $('#connections').html(<%= javascript_string @connections %>)
   $('#relay').text("<%= @status['totalRelays'] %>")
   $('#direct').text("<%= @status['totalDirects'] %>")
   $('#bitrate').text("<%= @info['info']['bitrate'] %>")
