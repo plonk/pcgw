@@ -16,6 +16,12 @@ $(function () {
             "&quot;)\" title=\"コンタクトURLをこの板でまだ埋まっていない、もっとも最近立てられたスレッドに変更します。\">新スレに移動</button>";
     }
 
+    function boardButton(board_url) {
+        return "<button type=\"button\" class=\"btn btn-sm btn-secondary\" onclick=\"changeToBoard(&quot;" +
+            board_url +
+            "&quot;)\" title=\"コンタクトURLを板トップに変更します。\">板トップに変更</button>";
+    }
+
     window.changeToLatestThread = function (board_url) {
         var request_url = "/bbs/latest-thread?" + $.param({ board_url: board_url })
         $.getJSON(request_url, function (data) {
@@ -23,7 +29,12 @@ $(function () {
         }).fail(function () {
             alert("changeToLatestThread: 不明なエラー。");
         });
-    }
+    };
+
+    window.changeToBoard = function (board_url) {
+        $('#bbs-checker-input').val(board_url);
+        callback();
+    };
 
     function updateEntry(r) {
         if (r.status === "error") {
@@ -38,16 +49,18 @@ $(function () {
 
     function buildMessage(r) {
         if (r.status == 'error') {
-            return "エラー: " + r.error_message;
+            let msg = `エラー: ${r.error_message}`;
+            if (r.error_message == "そのようなスレはありません。") {
+                msg = `${msg} ${boardButton(boardUrl(r))}`;
+            }
+            return msg;
         } else if (r.status == 'ok') {
             if (r.type == 'board') {
-                return "「" + "<a href=\"" + boardUrl(r) + "\">" + r.title + "</a>」掲示板トップ " + latestThreadButton(boardUrl(r));
+                return `「<a href="${boardUrl(r)}">${r.title}</a>」掲示板トップ ${latestThreadButton(boardUrl(r))}`;
             } else if (r.type == 'thread') {
-                var msg = "掲示板「" + "<a href=\"" + boardUrl(r) + "\">" + r.title + "</a>」のスレ「" + "<a href=\"" + threadUrl(r) + "\">" + r.thread_title + "</a> (";
+                var msg = `掲示板「<a href="${boardUrl(r)}">${r.title}</a>」のスレ「<a href="${threadUrl(r)}">${r.thread_title}</a> (`;
                 if (r.last == r.max) {
-                    msg += '<b class="text-danger">';
-                    msg += r.last;
-                    msg += '</b>';
+                    msg += `<b class="text-danger">${r.last}</b>`;
                 } else {
                     msg += r.last;
                 }

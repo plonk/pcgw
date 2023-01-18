@@ -121,8 +121,11 @@ class Pcgw < Sinatra::Base
       return json_response({ "status"        => "error",
                              "error_message" => "情報を得ることができませんでした。" })
     rescue Bbs::NotFoundError
-      return json_response({ "status"        => "error",
-                             "error_message" => "そのようなスレはありません。" })
+      return json_response({
+                             "status"        => "error",
+                             "error_message" => "そのようなスレはありません。",
+                             "board_url"     => Bbs.create_board(url).top_url.to_s,
+                           })
     rescue Bbs::FormatError
       return json_response({ "status"        => "error",
                              "error_message" => "取得されたデータの形式が不正です。" })
