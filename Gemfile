@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem "rack", ">= 1.6.12"
 gem 'jimson'
-gem 'sinatra'
+gem 'sinatra', '>= 2.2.3'
 gem 'sinatra-contrib' # for cookies
 gem 'activerecord', ">= 5.2.4.3"
 gem 'oauth'
