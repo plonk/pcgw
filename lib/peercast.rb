@@ -2,7 +2,7 @@ require 'jimson'
 require 'timeout'
 
 class Peercast
-  RPC_TIMEOUT = 2
+  RPC_TIMEOUT = 5
 
   class Unavailable < StandardError
     attr_accessor :host, :port, :message
