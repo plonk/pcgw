@@ -11,3 +11,4 @@ log/
 private/
 public/screen_shots/
 vendor/
+.bundle/
