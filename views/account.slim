@@ -16,8 +16,12 @@ form action="/account" method="POST" role="form" enctype="multipart/form-data"
   .form-group
     label for="file"
       | プロフィール画像
-      br
-      img#preview style="max-width: 200px" src=@user.image_200x200
+      - if @user.image
+        p
+          img#preview style="max-width: 200px" src=@user.image_200x200
+      - else
+        p.text-muted style="font-style: italic"
+          | 画像がありません。
     br
     input type="file" name="image" accept="image/png, image/jpeg"
 
