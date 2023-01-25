@@ -15,3 +15,4 @@ gem 'rspec', :group => :development
 gem 'pry', :group => :development
 gem 'rerun', :group => :development
 gem 'rake', :group => :development
+gem 'webrick', :group => :development # とりあえずrackupが動くようにHTTPサーバーのひとつを入れる。
