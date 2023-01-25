@@ -3,16 +3,19 @@
 .panel
   h6 サーバー
 
-  .table-responsive style="font-size: smaller"
-    table.table
-      tr
-        th 名前
-        th チャンネル数
-        th IP
-      - servents.each do |servent|
+  - if servents.empty?
+    p.text-warning style="text-align: center; font-style: italic" サーバーがありません！
+  - else
+    .table-responsive style="font-size: smaller"
+      table.table
         tr
-          td #{servent.name}
-          td
-            meter.d-none.d-lg-inline value=servent.channels.size max=servent.max_channels
-            |  #{servent.channels.size} / #{servent.max_channels}
-          td #{servent.hostname}:#{servent.port}
+          th 名前
+          th チャンネル数
+          th IP
+        - servents.each do |servent|
+          tr
+            td #{servent.name}
+            td
+              meter.d-none.d-lg-inline value=servent.channels.size max=servent.max_channels
+              |  #{servent.channels.size} / #{servent.max_channels}
+            td #{servent.hostname}:#{servent.port}

@@ -1,8 +1,11 @@
 / recent_programs: [ChannelInfo]
 .panel
   h6 最近の配信
-  - recent_programs.each do |program|
-    a.media.border-bottom.py-2 href="/programs/#{program.id}"
-      == slim :channel_info_thumbnail, locals: { program: program }
+  - if recent_programs.size == 0
+    p.text-muted style="text-align: center; font-style: italic" データがありません。
+  - else
+    - recent_programs.each do |program|
+      a.media.border-bottom.py-2 href="/programs/#{program.id}"
+        == slim :channel_info_thumbnail, locals: { program: program }
 
-  a.btn.btn-secondary.mt-3 href="/programs?user=#{user.id}" もっと見る&thinsp;&raquo;
+      a.btn.btn-secondary.mt-3 href="/programs?user=#{user.id}" もっと見る&thinsp;&raquo;
