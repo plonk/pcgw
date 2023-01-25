@@ -77,6 +77,7 @@ form.form-horizontal action="/broadcast" method="POST" role="form"
     .col-sm-9
       - @yellow_pages.each do |yp|
         - next if !admin_view? && yp.admin_only
+        - next unless yp.extant
         .radio
           label
             input required="required" type="radio" name="yp" value="#{yp.name}" checked=(template.yp == yp.name)
@@ -86,19 +87,23 @@ form.form-horizontal action="/broadcast" method="POST" role="form"
               | &nbsp;
             a href=yp.top style="display: inline-block; min-width: 100px"
               = yp.name
-          a.btn.btn-secondary.btn-sm href=yp.terms target="_blank"
-            | &nbsp;利用規約
+          - unless yp.terms.blank?
+            a.btn.btn-secondary.btn-sm href=yp.terms target="_blank"
+              | &nbsp;利用規約
 
   .form-group.row
     label.col-sm-3.control-label for="servent" 配信サーバー
     .col-sm-9
-      - servents.each do |serv|
-        .radio
-          label
-            input required="required" type="radio" name="servent" data-yellow-pages=serv.yellow_pages value=serv.id data-last-used=(serv==template.servent ? "1" : "0")
-            span style="display: inline-block; min-width: 132px"
-              = serv.name
-            small &nbsp;#{serv.desc}
+      - if servents.empty?
+        p.text-warning style="font-style: italic" サーバーがありません！
+      - else
+        - servents.each do |serv|
+          .radio
+            label
+              input required="required" type="radio" name="servent" data-yellow-pages=serv.yellow_pages value=serv.id data-last-used=(serv==template.servent ? "1" : "0")
+              span style="display: inline-block; min-width: 132px"
+                = serv.name
+              small &nbsp;#{serv.desc}
 
   .form-group.row
     .col-sm-3

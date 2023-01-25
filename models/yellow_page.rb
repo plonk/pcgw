@@ -15,6 +15,8 @@ class YellowPage
                  'http://160.16.61.57/yp/',
                  nil,#'http://160.16.61.57/yp/favicon.ico',
                  'pcp://160.16.61.57/',
+                 false,
+                 'ipv4',
                  false],
                 ['p@',
                  '',
@@ -29,10 +31,12 @@ class YellowPage
                  'http://takami98.sakura.ne.jp/peca-navi/turf-page/',
                  nil,#'http://takami98.sakura.ne.jp/peca-navi/image/favicon.ico',
                  'pcp://takami98.luna.ddns.vc/',
+                 false,
+                 'ipv4',
                  false],
                 ['平成YP',
                  '',
-                 'http://yp.pcgw.pgw.jp/kiyaku.html',
+                 '',
                  'http://yp.pcgw.pgw.jp/',
                  'https://yp.pcgw.pgw.jp/favicon.ico',
                  'pcp://yp.pcgw.pgw.jp:7146/',
@@ -52,8 +56,9 @@ class YellowPage
   end
 
   attr_reader :name, :prefix, :terms, :top, :icon, :uri, :admin_only, :network
+  attr_reader :extant
 
-  def initialize(name, prefix, terms, top, icon, uri, admin_only, network = 'ipv4')
+  def initialize(name, prefix, terms, top, icon, uri, admin_only, network = 'ipv4', extant = true)
     @name       = name
     @prefix     = prefix
     @terms      = terms
@@ -62,6 +67,7 @@ class YellowPage
     @uri        = uri
     @admin_only = admin_only
     @network    = network
+    @extant     = extant
   end
 
   def prefixed?(genre)
