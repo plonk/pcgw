@@ -46,7 +46,8 @@ form.form-horizontal action="/broadcast" method="POST" role="form"
     .col-sm-9
       select.form-control name="source"
         option value="0"
-          | デフォルト
+          / U+25cf は黒丸。
+          | デフォルト - #{"\u{25cf}" * 3 + (@user.id % 10).to_s}
         - @user.sources.each do |src|
           option value=src.id selected=(template.source_name == src.name)
             | #{src.name} — #{src.key[0] + "\u{25cf}" * (src.key.size-1)}
