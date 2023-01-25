@@ -9,7 +9,7 @@ CONFIG = YAML.load_file('config/config.yml')
 
 # 環境をチェックする
 if ENV['PCGW_ENV'].blank?
-  puts "PCGW_ENV環境変数を設定して起動してください。(例: PCGW_ENV=production bin/pcgw)"
+  puts "PCGW_ENV環境変数を設定して起動してください。(例: PCGW_ENV=production bundle exec rackup)"
   exit
 end
 
