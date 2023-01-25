@@ -5,11 +5,6 @@
   .alert.alert-success
     = @success_message
 
-h2 追加のソース
-
-p
-  a href="/sources" 追加のソースを管理
-
 h2 プロフィール
 
 form action="/account" method="POST" role="form" enctype="multipart/form-data"
@@ -35,6 +30,11 @@ form action="/account" method="POST" role="form" enctype="multipart/form-data"
   .form-group
     button.btn.btn-primary type="submit"
       | 変更を保存
+
+h2 追加のソース
+
+p
+  a href="/sources" 追加のソースを管理
 
 div style="text-align: right"
   form action="/account/#{@user.id}" method="POST" style="display: inline"
