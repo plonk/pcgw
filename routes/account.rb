@@ -83,30 +83,6 @@ class Pcgw < Sinatra::Base
     end
   end
 
-  post '/account' do
-    if params['image']
-      case params['image']['type']
-      when 'image/png', 'image/jpeg'
-      else
-        halt 400, 'unacceptable mime type'
-      end
-
-      prefix = "%04d" % rand(10000)
-      begin
-        image_path = save_media(params['image']['tempfile'],
-                                params['image']['type'],
-                                @user.id,
-                                prefix)
-      rescue => e
-        halt 500, "failed to save image: #{e.message}"
-      end
-      @user.update!(image: image_path)
-    end
-    @user.update!(params.slice('name', 'bio'))
-    @success_message = '変更を保存しました。'
-    slim :account
-  end
-
   delete '/account/:id' do |id|
     unless @user.id == id.to_i
       halt 403, 'not permitted'

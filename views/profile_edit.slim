@@ -1,0 +1,45 @@
+/ @user: User
+
+h2 プロフィールを編集
+
+form action="/profile/edit" method="POST" role="form" enctype="multipart/form-data"
+  .form-group
+    label for="name"
+      | ユーザー名
+    input.form-control type="text" name="name" required=true value=@user.name
+
+  .form-group
+    label for="file"
+      | プロフィール画像
+      - if @user.image
+        p
+          img#preview style="max-width: 200px" src=@user.image_200x200
+      - else
+        p.text-muted style="font-style: italic"
+          | 画像がありません。
+    br
+    input type="file" name="image" accept="image/png, image/jpeg"
+
+  .form-group
+    label for="bio"
+      | 紹介文
+    textarea.form-control name="bio"
+      = @user.bio
+
+  .form-group
+    button.btn.btn-primary type="submit"
+      | 変更を保存
+    a.btn.btn-secondary style="margin-left: 0.5em" href="/profile/#{@user.id}" プロフィールに戻る
+
+
+javascript:
+  $(function(){
+    $("input[name=image]").on('change',function(ev){
+      var file = ev.target.files[0]
+      var reader = new FileReader()
+      reader.onload = () => {
+        $('img#preview')[0].src = reader.result
+      }
+      reader.readAsDataURL(file)
+    })
+  })

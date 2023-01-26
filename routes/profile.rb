@@ -6,6 +6,33 @@ class Pcgw < Sinatra::Base
     slim :active_users, locals: { users: users, title: '検索結果', query: params['query'] }
   end
 
+  get '/profile/edit' do
+    slim :profile_edit, locals: { user: @user }
+  end
+
+  post '/profile/edit' do
+    if params['image']
+      case params['image']['type']
+      when 'image/png', 'image/jpeg'
+      else
+        halt 400, 'unacceptable mime type'
+      end
+
+      prefix = "%04d" % rand(10000)
+      begin
+        image_path = save_media(params['image']['tempfile'],
+                                params['image']['type'],
+                                @user.id,
+                                prefix)
+      rescue => e
+        halt 500, "failed to save image: #{e.message}"
+      end
+      @user.update!(image: image_path)
+    end
+    @user.update!(params.slice('name', 'bio'))
+    redirect to("/profile/#{@user.id}")
+  end
+
   # ユーザープロフィール
   get '/profile/:id' do |id|
     user = User.find(id) rescue halt(404, 'user not found')

@@ -1,39 +1,4 @@
 / @user: User
-/ @success_message: String
-
-- unless @success_message.blank?
-  .alert.alert-success
-    = @success_message
-
-h2 プロフィール
-
-form action="/account" method="POST" role="form" enctype="multipart/form-data"
-  .form-group
-    label for="name"
-      | ユーザー名
-    input.form-control type="text" name="name" required=true value=@user.name
-
-  .form-group
-    label for="file"
-      | プロフィール画像
-      - if @user.image
-        p
-          img#preview style="max-width: 200px" src=@user.image_200x200
-      - else
-        p.text-muted style="font-style: italic"
-          | 画像がありません。
-    br
-    input type="file" name="image" accept="image/png, image/jpeg"
-
-  .form-group
-    label for="bio"
-      | 紹介文
-    textarea.form-control name="bio"
-      = @user.bio
-
-  .form-group
-    button.btn.btn-primary type="submit"
-      | 変更を保存
 
 h2 追加のソース
 
@@ -51,15 +16,3 @@ div style="text-align: right"
       input type="hidden" name="_method" value="delete"
       button.btn.btn-danger.btn-sm type="submit"
         | アカウントを削除
-
-javascript:
-  $(function(){
-    $("input[name=image]").on('change',function(ev){
-      var file = ev.target.files[0]
-      var reader = new FileReader()
-      reader.onload = () => {
-        $('img#preview')[0].src = reader.result
-      }
-      reader.readAsDataURL(file)
-    })
-  })

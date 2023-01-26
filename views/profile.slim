@@ -4,14 +4,18 @@
 .panel
   h1
     a href=user.image_200x200
-      img.img-rounded width="73" src=user.image_200x200 alt=user.name 
-    |  #{user.name} 
+      img.img-rounded width="73" src=user.image_200x200 alt=user.name
+    |  #{user.name}
     - unless user.suspended
-      small
+      small style="margin-left: .5em"
         == slim :broadcast_status, locals: { user: user }
-    - if admin_view?
-      small style="font-size: 9pt; float: right"
-        a.text-muted href="/users/#{user.id}"
+
+    div style="float: right"
+      - if user.id == @user.id
+        a.btn.btn-secondary.btn-sm href="/profile/edit" プロフィールを編集
+
+      - if admin_view?
+        a.btn.btn-warning.btn-sm style="margin-left: 0.5em" href="/users/#{user.id}"
           | 管理
 
   - if user.suspended
