@@ -3,7 +3,11 @@ class Pcgw < Sinatra::Base
   get '/auth/twitter/callback' do
     oauth_client = oauth()
     request_token = OAuth::RequestToken.new(oauth_client, session[:token], session[:secret])
-    access_token = oauth_client.get_access_token(request_token, oauth_verifier: params[:oauth_verifier])
+    begin
+      access_token = oauth_client.get_access_token(request_token, oauth_verifier: params[:oauth_verifier])
+    rescue OAuth::Unauthorized
+      halt 401, "認証に失敗しました。"
+    end
     twitter_client = Twitter::REST::Client.new do |config|
       config.consumer_key = ENV['CONSUMER_KEY']
       config.consumer_secret = ENV['CONSUMER_SECRET']
