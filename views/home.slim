@@ -11,6 +11,21 @@ script src="/reloader.js"
 .reloader data-url="/includes/my_channels" data-interval=60 data-preloaded=1
   == slim :my_channels, locals: { channels: @user.channels }, layout: false
 
-.reloader data-url="/includes/my_history" data-interval=60 data-preloaded=1
-  == slim :my_history, locals: { recent_programs: recent_programs, user: @user }, layout: false
+.panel style="padding-top: 2px !important"
+  div style="text-align: right"
+    small
+      a href="/programs?user=#{@user.id}" すべての履歴を表示
 
+  h6 最近の配信
+  - if recent_programs.size == 0
+    p.text-muted style="text-align: center; font-style: italic" データがありません。
+  - else
+    script
+      | async function loadNextChunk(olderThan) {
+          const res = await fetch(`/includes/my_history?older_than=${olderThan}`)
+          const html = await res.text()
+          $('#proglist-tail').remove()
+          $('#proglist').append(html)
+        }
+    #proglist
+      == slim :my_history, locals: { recent_programs: recent_programs }, layout: false

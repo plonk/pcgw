@@ -9,8 +9,24 @@ class Pcgw < Sinatra::Base
   end
 
   get '/includes/my_history' do
-    programs = ChannelInfo.where(user: @user).order(created_at: :desc).limit(10)
-    slim :my_history, locals: { recent_programs: programs, user: @user }, layout: false
+    if params['older_than'].blank?
+      older_than = Time.now.to_i + 1
+    else
+      older_than = Time.at(params['older_than'].to_i)
+    end
+
+    if params['user'].blank?
+      user = @user
+    else
+      user = User.find(params['user'].to_i)
+      halt 404, 'user not found' unless user
+    end
+
+    programs = ChannelInfo.where(user: user)
+                 .where('created_at < ?', older_than)
+                 .order(created_at: :desc)
+                 .limit(15)
+    slim :my_history, locals: { recent_programs: programs }, layout: false
   end
 
   # 現在配信中のチャンネルとサーバーの状態

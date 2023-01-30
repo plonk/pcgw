@@ -28,4 +28,19 @@
       == slim :profile_onair, locals: { user: user }
 
 - unless user.suspended
-  == slim :my_history, locals: { recent_programs: recent_programs, user: user }
+  .panel style="padding-top: 2px !important"
+    div style="text-align: right"
+      small
+        a href="/programs?user=#{user.id}" すべての履歴を表示
+    - if recent_programs.size == 0
+      p.text-muted style="text-align: center; font-style: italic" データがありません。
+    - else
+      script
+        | async function loadNextChunk(olderThan) {
+            const res = await fetch(`/includes/my_history?older_than=${olderThan}&user=#{user.id}`)
+            const html = await res.text()
+            $('#proglist-tail').remove()
+            $('#proglist').append(html)
+          }
+      #proglist
+        == slim :my_history, locals: { recent_programs: recent_programs, user: user }

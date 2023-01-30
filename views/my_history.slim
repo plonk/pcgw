@@ -1,11 +1,10 @@
 / recent_programs: [ChannelInfo]
-.panel
-  h6 最近の配信
-  - if recent_programs.size == 0
-    p.text-muted style="text-align: center; font-style: italic" データがありません。
+- recent_programs.each do |program|
+  a.media.border-bottom.py-2 href="/programs/#{program.id}"
+    == slim :channel_info_thumbnail, locals: { program: program }
+#proglist-tail
+  - if recent_programs.last
+    button.btn.btn-secondary.mt-3 onclick="loadNextChunk(#{recent_programs.last.created_at.to_i})" もっと見る&thinsp;⩔
+    / double logical OR: ⩔
   - else
-    - recent_programs.each do |program|
-      a.media.border-bottom.py-2 href="/programs/#{program.id}"
-        == slim :channel_info_thumbnail, locals: { program: program }
-
-    a.btn.btn-secondary.mt-3 href="/programs?user=#{user.id}" もっと見る&thinsp;&raquo;
+    p.text-muted style="font-style: italic; text-align: center; margin-top:16px; margin-bottom: 0" データの終わりです。
