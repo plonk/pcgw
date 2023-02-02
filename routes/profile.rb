@@ -77,4 +77,13 @@ class Pcgw < Sinatra::Base
     slim :active_users, locals: { users: users, title: 'アクティブなユーザー', query: '' }
   end
 
+  post '/profile/edit/delete-image' do
+    if @user.image == "/profile_images/0/0_normal.jpg"
+      halt 400, "すでにデフォルト画像です。"
+    end
+    @user.image = "/profile_images/0/0_normal.jpg"
+    @user.save
+    redirect back
+  end
+
 end

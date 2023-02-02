@@ -19,28 +19,48 @@ class Pcgw < Sinatra::Base
     image_uri = twitter_user.profile_image_uri_https
     twitter_id = twitter_user.id
 
-    # twitter から取得した名前とアイコンをセッションに設定する。
+    if session[:uid].blank?
+      if (user = User.find_by(twitter_id: twitter_id))
+        # ログイン処理。
+        # プロフィール画像がローカルではなかったらtwitterと同期する
+        unless user.image.start_with?('/')
+          user.update!(image: image_uri)
+        end
+        session[:uid] = user.id.to_s
 
-    if (user = User.find_by(twitter_id: twitter_id))
-      # プロフィール画像がローカルではなかったらtwitterと同期する
-      unless user.image.start_with?('/')
-        user.update!(image: image_uri)
+        log.info("user #{user.id} logged in")
+
+        redirect '/home'
+      else
+        # サインアップ処理。
+        user = User.new(name:       name,
+                        image:      image_uri,
+                        twitter_id: twitter_id)
+        user.save
+        session[:uid] = user.id.to_s
+
+        log.info("new user #{user.id} signed up")
+
+        redirect to('/newuser')
       end
-      session[:uid] = user.id.to_s
-
-      log.info("user #{user.id} logged in")
-
-      redirect '/home'
     else
-      user = User.new(name:       name,
-                      image:      image_uri,
-                      twitter_id: twitter_id)
-      user.save
-      session[:uid] = user.id.to_s
+      # 既にログインしている状態でTwitterアプリ連携された。
+      user = User.find(session[:uid].to_i)
+      if user.twitter_id == twitter_id
+        # プロフィール画像がローカルではなかったらtwitterと同期する
+        unless user.image.start_with?('/')
+          user.update!(image: image_uri)
+        end
 
-      log.info("new user #{user.id} signed up")
-
-      redirect to('/newuser')
+        redirect '/home'
+      elsif user.twitter_id.nil?
+        user.update!(twitter_id: twitter_id)
+        log.info("user #{user.id}'s twitter id is set to #{twitter_id}")
+        redirect '/home'
+      else
+        # Twitter ID を変える？
+        halt 400, "ログアウトしてからやりなおしてください。"
+      end
     end
   end
 

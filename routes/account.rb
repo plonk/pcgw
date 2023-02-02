@@ -92,4 +92,33 @@ class Pcgw < Sinatra::Base
     session.clear
     redirect to("/")
   end
+
+  get '/account/change-password' do
+    slim :change_password
+  end
+
+  post '/account/change-password' do
+    unless params['new_password'] =~ /\A[0-9A-Za-z]{8,32}\z/
+      halt 400, "半角英数8文字～32文字で設定してください。"
+    end
+
+    @user.password = Password.for(params['new_password'])
+    flash[:info] = 'パスワードが設定されました。'
+    redirect to('/account')
+  end
+
+  post '/account/forget-twitter-id' do
+    if @user.password.nil?
+      flash[:danger] = "Twitter IDを忘れるには<a href=\"/account/change-password\">パスワードを設定する</a>必要があります。"
+      redirect back
+    else
+      @user.twitter_id = nil
+      if @user.image != /\A\//
+        @user.image = "/profile_images/0/0_normal.jpg" # デフォルトプロフィール画像。
+      end
+      @user.save
+      redirect back
+    end
+  end
+
 end

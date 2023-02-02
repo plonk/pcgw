@@ -1,5 +1,24 @@
 / @user: User
 
+- content_for :title do
+  | アカウントの設定
+
+h2 ユーザー情報
+
+table.table
+  tr
+    th ユーザーID
+    td #{@user.id}
+  tr
+    th パスワード
+    td
+      - if @user.password
+        | 設定されています。
+        a href="/account/change-password" 変更
+      - else
+        | 設定されていません。
+        a href="/account/change-password" 設定する
+
 h2 追加のソース
 
 p
@@ -7,8 +26,21 @@ p
 
 h2 外部サービスとの連携
 
-div
-  button.btn.btn-sm.btn-warning disabled=true Twitterとの連携を解除
+table.table
+  tr
+    th Twitter
+    td
+      - if @user.twitter_id
+        | Twitter アカウント
+        a href="https://twitter.com/intent/user?user_id=#{@user.twitter_id}"
+          = @user.twitter_id
+        | と連携中　
+        form action="/account/forget-twitter-id" method="POST" style="display:inline"
+          button.btn.btn-sm.btn-warning type="submit" 忘れる
+      - else
+        | なし　
+        a.btn.btn-sm.btn-secondary href="/auth/twitter?origin=#{Rack::Utils::escape(env['REQUEST_URI'])}" Twitter と連携する
+
 
 div style="text-align: right"
   form action="/account/#{@user.id}" method="POST" style="display: inline"

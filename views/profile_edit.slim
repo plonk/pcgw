@@ -2,6 +2,8 @@
 
 h2 プロフィールを編集
 
+form action="/profile/edit/delete-image" method="POST" style="display:inline" id="delete-image-form"
+
 form action="/profile/edit" method="POST" role="form" enctype="multipart/form-data"
   .form-group
     label for="name"
@@ -14,6 +16,7 @@ form action="/profile/edit" method="POST" role="form" enctype="multipart/form-da
       - if @user.image
         p
           img#preview style="max-width: 200px" src=@user.image_200x200
+        button.btn.btn-secondary type="submit" form="delete-image-form" デフォルト画像にする
       - else
         p.text-muted style="font-style: italic"
           | 画像がありません。
