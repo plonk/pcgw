@@ -12,6 +12,13 @@
   </tr>
 
   <tr>
+    <th>パスワードの有無</th>
+    <td>
+        <%= h(@content_user.password ? 'あり' : 'なし') %>
+    </td>
+  </tr>
+
+  <tr>
     <th>Twitter ID</th>
     <td>
       <a href="https://twitter.com/intent/user?user_id=<%= h @content_user.twitter_id %>">
