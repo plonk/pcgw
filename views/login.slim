@@ -1,0 +1,31 @@
+.panel
+  h3 style="text-align: center" ログイン
+
+  form.form-horizontal action="/login" method="POST" role="form" style="max-width: 640px; margin: auto"
+    input type="hidden" name="backref" value=backref
+
+    .form-group.row
+      label.col-sm-3.control-label for="user_id"
+        | ユーザー番号
+      .col-sm-9
+        input.form-control type="text" name="user_id" required=true value=""
+
+    .form-group.row
+      label.col-sm-3.control-label for="password" パスワード
+      .col-sm-9
+        input.form-control type="password" name="password" required=true value=""
+
+    .form-group.row
+      .col-sm-12
+        button.btn.btn-primary.btn-block type="submit"
+          | ログイン
+
+hr
+
+p
+  | 外部サービスのアカウントでログインすることもできます。
+
+  ul
+    li
+      a href="/auth/twitter"
+        img alt="Sign in with Twitter" src="/sign-in-with-twitter-gray.png"

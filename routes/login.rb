@@ -87,7 +87,12 @@ class Pcgw < Sinatra::Base
   # 同じレスポンスを返すようにする。
   post '/login' do
     halt 400 if params[:user_id].blank? || params[:password].blank?
-    halt 400, 'Already logged in' if @user
+
+    if params['backref']&.start_with?('/')
+      backref = params['backref']
+    else
+      backref = nil
+    end
 
     user_id = params[:user_id].to_i
     begin
@@ -102,9 +107,17 @@ class Pcgw < Sinatra::Base
 
     if user.password.validate(params[:password])
       session[:uid] = user_id
-      redirect to('/home')
+      if backref
+        redirect to(backref)
+      else
+        redirect to('/home')
+      end
     else
       halt 403, 'Login failed'
     end
+  end
+
+  get '/login' do
+    slim :login, locals: { backref: params['backref'] }
   end
 end

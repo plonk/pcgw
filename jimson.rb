@@ -162,13 +162,9 @@ class Pcgw < Sinatra::Base
       @user.logged_on_at = Time.now
       @user.save
     else
-      # ログインされていなかったらログインさせる。
+      # ログインされていなかったらログインフォームページにリダイレクトする。
 
-      # /auth/twitter と /auth/twitter/callback はループしてしまうので
-      # リダイレクトしない。
-      unless request.path_info.start_with?('/auth/twitter')
-        redirect to("/auth/twitter?origin=#{Rack::Utils::escape(env['REQUEST_URI'])}")
-      end
+      redirect to("/login?backref=#{Rack::Utils::escape(request.path)}")
     end
   end
 
