@@ -143,7 +143,7 @@ class Pcgw < Sinatra::Base
     # 配信履歴
     pass if request.path_info =~ %r{^/programs/?}
     # 配信のスクリーンショット
-    pass if request.path_info =~ %r{^/channels/\d+/screenshot$}
+    pass if request.path_info =~ %r{^/ss/}
     # チャンネル一覧、サーバー稼働状況
     pass if request.path_info =~ %r{^/stats}
 
