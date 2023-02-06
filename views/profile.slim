@@ -11,7 +11,7 @@
         == slim :broadcast_status, locals: { user: user }
 
     div style="float: right"
-      - if user.id == @user.id
+      - if user.id == @user&.id
         a.btn.btn-secondary.btn-sm href="/profile/edit" プロフィールを編集
 
       - if admin_view?
