@@ -149,6 +149,8 @@ class Pcgw < Sinatra::Base
 
     pass if request.path_info =~ %r{^/login}
 
+    pass if request.path_info =~ %r{^/auth/twitter}
+
     if logged_in?
       if @user.suspended
         # 凍結されたアカウントもログアウトはできるようにする。

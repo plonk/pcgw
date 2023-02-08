@@ -67,6 +67,7 @@ nav.navbar.navbar-expand-sm.navbar-dark.bg-dark.border-bottom role="navigation"
 
         - else
 
-          li
-            a href="/auth/twitter"
-              img alt="Sign in with Twitter" src="/sign-in-with-twitter-gray.png"
+          li.nav-item
+            a.nav-link href="/login?backref=#{request.path}" title="ログイン"
+              span style="font-size: 24px; display: inline-block; width: 32px; text-align: center" 🚪
+              span.d-sm-none.d-md-none.d-lg-inline style="font-weight: 500" ログイン
