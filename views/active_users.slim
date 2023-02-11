@@ -20,7 +20,7 @@
       - if !query.empty? && query !~ /[%_]/
         p style="text-align: center"
           | 名前に
-          a href="/profile/search?query=%25#{URI::escape(query)}%25"
+          a href="/profile/search?query=%25#{URI.encode_www_form_component(query)}%25"
             | ｢#{query}｣を含むユーザー
           | を検索しますか？
     - else
