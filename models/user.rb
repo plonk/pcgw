@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_one :password, dependent: :destroy
   validates :bio, length: { maximum: 160 }
   validates :twitter_id, uniqueness: true, allow_nil: true
+  validates :twitch, uniqueness: true, allow_nil: true
 
   def never_broadcast?
     channel_infos.empty?
