@@ -29,6 +29,7 @@ create_table "users", force: true do |t|
   t.string  "name"
   t.string  "image"
   t.integer "twitter_id", limit: 8
+  t.string "twitch_id"
   t.boolean "admin",      default: false
   t.boolean "suspended",  default: false
   t.datetime "notice_checked_at"

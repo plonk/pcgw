@@ -9,6 +9,9 @@ require 'ostruct'
 require 'slim'
 require 'logger'
 require 'fileutils'
+require 'omniauth'
+require 'omniauth-twitch'
+
 require_relative 'lib/logging'
 require_relative 'lib/peercast'
 
@@ -34,6 +37,22 @@ class Pcgw < Sinatra::Base
     # The session expires after 30 days.
     use Rack::Session::Cookie, expire_after: 30 * 24 * 3600, same_site: :lax, secret: ENV['CONSUMER_SECRET']
     use Rack::Flash
+
+    # これ無くても動く。
+    # OmniAuth::AuthenticityTokenProtection.default_options(key: "csrf.token", authenticity_param: "_csrf")
+
+    # CSRF を防ぐために、POST メソッドで、さらに authenticity_token が必須っぽいので GET はもう使えないっぽい。
+    # OmniAuth.config.allowed_request_methods = [:get, :post]
+
+    # これをここに書くと下で omniauth-twitch を設定しても動かない。
+    # use OmniAuth::Strategies::Twitch
+
+    use OmniAuth::Builder do
+      provider :twitch, ENV['TWITCH_CLIENT_ID'], ENV['TWITCH_CLIENT_SECRET']
+    end
+
+    # use Rack::Protection::AuthenticityToken はここに書くとうまく動く。
+    use Rack::Protection::AuthenticityToken
 
     set :cookie_options do
       { expires: Time.now + 30 * 24 * 3600 }
@@ -149,7 +168,7 @@ class Pcgw < Sinatra::Base
 
     pass if request.path_info =~ %r{^/login}
 
-    pass if request.path_info =~ %r{^/auth/twitter}
+    pass if request.path_info =~ %r{^/auth/}
 
     if logged_in?
       if @user.suspended
@@ -189,6 +208,69 @@ class Pcgw < Sinatra::Base
     session[:token] = request_token.token
     session[:secret] = request_token.secret
     redirect request_token.authorize_url
+  end
+
+  helpers do
+    def my_to_hash(h)
+      case h
+      when String, Integer, nil, true, false
+        h
+      when Array
+        h.map { |e| my_to_hash(elt) }
+      when Enumerable
+        h.map { |k,v| [k, my_to_hash(v)] }.to_h
+      else
+        fail h.class.to_s
+      end
+    end
+  end
+
+  get '/auth/twitch/callback' do
+    p my_to_hash(request.env['omniauth.auth'])
+    twitch_user_id = request.env['omniauth.auth']['uid']
+    fail unless twitch_user_id =~ /\A\d+\z/
+
+    if logged_in?
+      if @user.twitch_id
+        if @user.twitch_id != twitch_user_id
+          halt 400, "既に別のTwitch User IDが設定されています。"
+        else
+          # 何もすることはない。
+          if params['origin'].blank?
+            redirect to("/home")
+          else
+            redirect to(params['origin'])
+          end
+        end
+      else
+        @user.twitch_id = twitch_user_id
+        @user.save!
+        flash[:success] = 'Twitch のアカウントと連携しました。'
+        p request.env
+        p params
+        if params['origin'].blank?
+          redirect to("/home")
+        else
+          redirect to(params['origin'])
+        end
+      end
+    else
+      user = User.where(twitch_id: twitch_user_id).first
+      if user
+        session[:uid] = user.id.to_s
+
+        log.info("user #{user.id} logged in")
+
+        redirect to('/home')
+      else
+        halt 400, 'Twitchアカウントでの新規ユーザー作成はできません。'
+      end
+    end        
+  end
+
+  # RACK_ENV 環境変数が development でなければ OmniAuth が失敗した時、ここに来る。
+  get '/auth/failure' do
+    halt 403, 'auth failed'
   end
 
   after do

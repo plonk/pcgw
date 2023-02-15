@@ -121,4 +121,18 @@ class Pcgw < Sinatra::Base
     end
   end
 
+  post '/account/forget-twitch-id' do
+    if @user.password.nil?
+      flash[:danger] = "Twitch IDを忘れるには<a href=\"/account/change-password\">パスワードを設定する</a>必要があります。"
+      redirect back
+    else
+      @user.twitch_id = nil
+      if @user.image != /\A\//
+        @user.image = "/profile_images/0/0_normal.jpg" # デフォルトプロフィール画像。
+      end
+      @user.save
+      redirect back
+    end
+  end
+
 end

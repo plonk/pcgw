@@ -11,6 +11,8 @@ gem 'slim'
 gem 'ridgepole'
 gem 'twitter'
 gem 'rack-flash3'
+gem 'omniauth-twitch'
+
 gem 'rspec', :group => :development
 gem 'pry', :group => :development
 gem 'rerun', :group => :development

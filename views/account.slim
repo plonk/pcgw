@@ -36,10 +36,24 @@ table.table
           = @user.twitter_id
         | と連携中　
         form action="/account/forget-twitter-id" method="POST" style="display:inline"
+          input type="hidden" name="authenticity_token" value=request.env["rack.session"]["csrf"]
           button.btn.btn-sm.btn-warning type="submit" 忘れる
       - else
         | なし　
         a.btn.btn-sm.btn-secondary href="/auth/twitter?origin=#{Rack::Utils::escape(env['REQUEST_URI'])}" Twitter と連携する
+  tr
+    th Twitch
+    td
+      - if @user.twitch_id
+        | Twitch アカウント
+        = @user.twitch_id
+        | と連携中　
+        form action="/account/forget-twitch-id" method="POST" style="display:inline"
+          input type="hidden" name="authenticity_token" value=request.env["rack.session"]["csrf"]
+          button.btn.btn-sm.btn-warning type="submit" 忘れる
+      - else
+        | なし　
+        a.btn.btn-sm.btn-secondary href="/auth/twitch?origin=#{Rack::Utils::escape(env['REQUEST_URI'])}" Twitch と連携する
 
 
 div style="text-align: right"

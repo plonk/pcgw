@@ -29,3 +29,8 @@ p
     li
       a href="/auth/twitter"
         img alt="Sign in with Twitter" src="/sign-in-with-twitter-gray.png"
+    li
+      = request.env["rack.session"]["csrf"]
+      form action="/auth/twitch" method="POST"
+        input type="hidden" name="authenticity_token" value=request.env["rack.session"]["csrf"]
+        button type="submit" Twitch でログイン
