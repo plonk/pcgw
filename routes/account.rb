@@ -127,7 +127,7 @@ class Pcgw < Sinatra::Base
       redirect back
     else
       @user.twitch_id = nil
-      if @user.image != /\A\//
+      unless @user.image =~ /\A\//
         @user.image = "/profile_images/0/0_normal.jpg" # デフォルトプロフィール画像。
       end
       @user.save
