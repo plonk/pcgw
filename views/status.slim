@@ -132,6 +132,7 @@ script src="/reloader.js"
 
   div
     form action="/channels/#{@channel.id}/stop" method="POST" role="form"
+      == slim :authenticity_token
       div.btn-group.btn-group-justified role="group"
         .btn-group
           button.btn.btn-warning type="submit" 配信停止

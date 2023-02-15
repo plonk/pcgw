@@ -1,4 +1,6 @@
 form action="/channels/#{ch.id}/stop" id="stop#{ch.id}" method="POST"
+  == slim :authenticity_token
+
 .btn-group.btn-group-xs role="group"
   a.btn.btn-primary href="/channels/#{ch.id}" 状態
   a.btn.btn-secondary href="/channels/#{ch.id}/play" 再生

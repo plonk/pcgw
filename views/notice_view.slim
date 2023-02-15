@@ -6,6 +6,7 @@
   div
     a.btn.btn-primary href="/notices/#{notice.id}/edit" 編集
     form action="/notices/#{notice.id}" method="POST" style="display: inline;"
+      == slim :authenticity_token
       input type="hidden" name="_method" value="delete"
       button.btn.btn-warning 削除
 

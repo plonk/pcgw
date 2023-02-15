@@ -52,6 +52,7 @@
   <a title="プロフィール画像のリンク切れを直します" href="/users/<%= h @content_user.id %>/update" class="btn btn-secondary">Twitterから更新</a>
 
   <form action="/users/<%= h @content_user.id %>" method="POST" style="display: inline">
+    <%= slim :authenticity_token %>
     <input hidden name="_method" value="DELETE">
     <button class="btn btn-danger" style="float: right">削除</button>
   </form>

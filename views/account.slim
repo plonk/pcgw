@@ -36,6 +36,7 @@ table.table
           = @user.twitter_id
         | と連携中　
         form action="/account/forget-twitter-id" method="POST" style="display:inline"
+          == slim :authenticity_token
           input type="hidden" name="authenticity_token" value=request.env["rack.session"]["csrf"]
           button.btn.btn-sm.btn-warning type="submit" 忘れる
       - else
@@ -49,6 +50,7 @@ table.table
         = @user.twitch_id
         | と連携中　
         form action="/account/forget-twitch-id" method="POST" style="display:inline"
+          == slim :authenticity_token
           input type="hidden" name="authenticity_token" value=request.env["rack.session"]["csrf"]
           button.btn.btn-sm.btn-warning type="submit" 忘れる
       - else
@@ -58,6 +60,7 @@ table.table
 
 div style="text-align: right"
   form action="/account/#{@user.id}" method="POST" style="display: inline"
+    == slim :authenticity_token
     .form-group
       input type="hidden" name="_method" value="delete"
       button.btn.btn-danger.btn-sm type="submit"

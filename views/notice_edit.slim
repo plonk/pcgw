@@ -3,6 +3,7 @@
   | お知らせ編集
 
 form action="/notices/#{notice.id}" method="POST"
+  == slim :authenticity_token
   input type="hidden" name="_method" value="PATCH"
 
   .form-group

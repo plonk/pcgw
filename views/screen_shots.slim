@@ -24,5 +24,6 @@ p
       | &nbsp;
       = ss.created_at.localtime
       form style="display: inline" action="/programs/#{program.id}/delete_screen_shot" method="POST"
+        == slim :authenticity_token
         input type="hidden" name="screen_shot_id" value=ss.id
         input.btn.btn-warning type="submit" value="削除"

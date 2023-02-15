@@ -3,6 +3,7 @@
   | お知らせ作成
 
 form action="/notices" method="POST"
+  == slim :authenticity_token
 
   .form-group
     label for="title" タイトル

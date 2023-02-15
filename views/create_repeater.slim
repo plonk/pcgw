@@ -3,24 +3,24 @@
     h3 外部サーバーにストリームを送信
 
     form.form-horizontal action="/channels/#{@channel.id}/start_repeater" method="POST" role="form"
+      == slim :authenticity_token
+      .form-group
+        label.col-sm-3.control-label for="" ストリームURL
+        .col-sm-9
+          input.form-control type="text" name="stream_url" required=true placeholder="rtmp://"
 
-     .form-group
-       label.col-sm-3.control-label for="" ストリームURL
-       .col-sm-9
-         input.form-control type="text" name="stream_url" required=true placeholder="rtmp://"
+      .form-group
+        label.col-sm-3.control-label for="key" キー
+        .col-sm-9
+          input#key.form-control type="password" name="key" required=true
+          label style="font-weight: normal"
+            input#reveal type="checkbox" checked=false
+            | &thinsp;キーを表示
 
-     .form-group
-       label.col-sm-3.control-label for="key" キー
-       .col-sm-9
-         input#key.form-control type="password" name="key" required=true
-         label style="font-weight: normal"
-           input#reveal type="checkbox" checked=false
-           | &thinsp;キーを表示
-
-     .form-group
-       .col-sm-3
-       .col-sm-9
-         input.btn.btn-primary type="submit" value="追加"
+      .form-group
+        .col-sm-3
+        .col-sm-9
+          input.btn.btn-primary type="submit" value="追加"
 
 javascript:
   $("#reveal").on("change", function(){
