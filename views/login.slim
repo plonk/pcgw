@@ -2,7 +2,7 @@
   h3 style="text-align: center" ログイン
 
   form.form-horizontal action="/login" method="POST" role="form" style="max-width: 640px; margin: auto"
-    input type="hidden" name="authenticity_token" value=request.env["rack.session"]["csrf"]
+    == slim :authenticity_token
     input type="hidden" name="backref" value=backref
 
     .form-group.row
