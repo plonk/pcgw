@@ -54,7 +54,9 @@ table.table
           button.btn.btn-sm.btn-warning type="submit" 忘れる
       - else
         | なし　
-        a.btn.btn-sm.btn-secondary href="/auth/twitch?origin=#{Rack::Utils::escape(env['REQUEST_URI'])}" Twitch と連携する
+        form action="/auth/twitch" method="POST" style="display:inline"
+          == slim :authenticity_token
+          button.btn.btn-sm.btn-secondary type="submit" Twitch と連携する
 
 
 div style="text-align: right"
