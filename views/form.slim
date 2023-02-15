@@ -13,7 +13,7 @@ p style="color: red"
 script src="/bbs_checker.js"
 
 form.form-horizontal action="/broadcast" method="POST" role="form"
-  input type="hidden" name="authenticity_token" value=request.env["rack.session"]["csrf"]
+  == slim :authenticity_token
 
   .form-group.row
     label.col-sm-3.control-label for="channel" チャンネル名
