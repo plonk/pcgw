@@ -19,6 +19,8 @@ class Pcgw < Sinatra::Base
     image_uri = twitter_user.profile_image_uri_https
     twitter_id = twitter_user.id
 
+    origin = session[:origin]
+
     if session[:uid].blank?
       if (user = User.find_by(twitter_id: twitter_id))
         # ログイン処理。
@@ -46,17 +48,22 @@ class Pcgw < Sinatra::Base
     else
       # 既にログインしている状態でTwitterアプリ連携された。
       user = User.find(session[:uid].to_i)
-      if user.twitter_id == twitter_id
+      if user.twitter_id.nil? || user.twitter_id == twitter_id
+        user.update!(twitter_id: twitter_id)
+        flash[:success] = "Twitter のアカウント #{twitter_id} と連携しました。"
+        log.info("user #{user.id}'s twitter id is set to #{twitter_id}")
+        
+
         # プロフィール画像がローカルではなかったらtwitterと同期する
         unless user.image.start_with?('/')
           user.update!(image: image_uri)
         end
 
-        redirect '/home'
-      elsif user.twitter_id.nil?
-        user.update!(twitter_id: twitter_id)
-        log.info("user #{user.id}'s twitter id is set to #{twitter_id}")
-        redirect '/home'
+        if !origin.blank?
+          redirect to(origin)
+        else
+          redirect '/home'
+        end
       else
         # Twitter ID を変える？
         halt 400, "ログアウトしてからやりなおしてください。"

@@ -207,6 +207,7 @@ class Pcgw < Sinatra::Base
     request_token = oauth().get_request_token(oauth_callback: "http://#{request.env['HTTP_HOST']}/auth/twitter/callback")
     session[:token] = request_token.token
     session[:secret] = request_token.secret
+    session[:origin] = params['origin']
     redirect request_token.authorize_url
   end
 
@@ -226,7 +227,6 @@ class Pcgw < Sinatra::Base
   end
 
   get '/auth/twitch/callback' do
-    p my_to_hash(request.env['omniauth.auth'])
     twitch_user_id = request.env['omniauth.auth']['uid']
     fail unless twitch_user_id =~ /\A\d+\z/
 
@@ -236,22 +236,20 @@ class Pcgw < Sinatra::Base
           halt 400, "既に別のTwitch User IDが設定されています。"
         else
           # 何もすることはない。
-          if params['origin'].blank?
+          if request.env['omniauth.origin']
             redirect to("/home")
           else
-            redirect to(params['origin'])
+            redirect to(request.env['omniauth.origin'])
           end
         end
       else
         @user.twitch_id = twitch_user_id
         @user.save!
-        flash[:success] = 'Twitch のアカウントと連携しました。'
-        p request.env
-        p params
-        if params['origin'].blank?
+        flash[:success] = "Twitch のアカウント #{twitch_user_id} と連携しました。"
+        if request.env['omniauth.origin'].blank?
           redirect to("/home")
         else
-          redirect to(params['origin'])
+          redirect to(request.env['omniauth.origin'])
         end
       end
     else
