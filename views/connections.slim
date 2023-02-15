@@ -16,6 +16,7 @@
         td.bitrate #{conn.sendRateKbps} Kbps
         td
           form action="/channels/#{channel.id}/connections/#{conn.connectionId}" method="POST"
+            == slim :authenticity_token
             input type="hidden" name="_method" value="DELETE"
             - if channel.servent.can_stop_connections?
               button.btn.btn-warning.btn-sm type="submit" 切断

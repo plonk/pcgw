@@ -3,8 +3,6 @@
 - content_for :title do
   | 管理 / サーバー #{servent.hostname}:#{servent.port.to_s}
 
-== slim :flash
-
 p
   a.btn.btn-secondary href="/servents" &laquo; サーバー一覧
 
@@ -12,6 +10,7 @@ p
   h5 サーバー情報
 
   form action="/servents/#{servent.id}/update" method="POST" role="form"
+    == slim :authenticity_token
     .form-group
       label for="agent" エージェント
       input readonly=true class="form-control" type="text" name="agent" value=servent.agent
@@ -27,6 +26,7 @@ p
   h5 設定
 
   form action="/servents/#{servent.id}" method="POST" role="form"
+    == slim :authenticity_token
     input type="hidden" name="_method" value="PATCH"
 
     .form-group

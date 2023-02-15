@@ -45,6 +45,7 @@
       | 続きを配信 &raquo;
   - if @user == program.user || admin_view?
     form action="/programs/#{program.id}" method="POST" style="display: inline"
+      == slim :authenticity_token
       input type="hidden" name="_method" value="DELETE"
       input type="hidden" name="redirect_path" value="/home"
       button.my-1.btn.btn-warning type="submit" 削除

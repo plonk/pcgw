@@ -1,7 +1,7 @@
 <script src="/bbs_checker.js"></script>
 
 <form class="form-horizontal panel" action="/channels/<%= @channel_id %>" method="POST" role="form">
-
+  <%= slim :authenticity_token %>
   <div class="form-group row">
     <label class="col-sm-3" for=name>チャンネル名</label>
     <div class="col-sm-9">

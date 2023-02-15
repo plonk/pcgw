@@ -14,25 +14,7 @@
     p
       a.btn.btn-secondary.btn-block.btn-lg role="button" href="/doc/desc"
         | 詳しく&raquo;
-      a.btn.btn-primary.btn-block.btn-lg role="button" href="/auth/twitter"
-        | Twitter でログイン
-    hr
-      form.form-horizontal action="/login" method="POST" role="form"
-        .form-group.row
-          label.col-sm-3.control-label for="user_id" ユーザーID
-          .col-sm-9
-            input.form-control type="user_id" name="user_id" required=true value=""
-      
-        .form-group.row
-          label.col-sm-3.control-label for="password" パスワード
-          .col-sm-9
-            input.form-control type="password" name="password" required=true value=""
-
-        .form-group.row
-          .col-sm-12
-            button.btn.btn-primary.btn-block type="submit"
-              | ログイン
-
-        
+      a.btn.btn-primary.btn-block.btn-lg role="button" href="/login"
+        | ログイン&raquo;
 
 == slim :bfkb

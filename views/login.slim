@@ -2,6 +2,7 @@
   h3 style="text-align: center" ログイン
 
   form.form-horizontal action="/login" method="POST" role="form" style="max-width: 640px; margin: auto"
+    == slim :authenticity_token
     input type="hidden" name="backref" value=backref
 
     .form-group.row
@@ -29,3 +30,10 @@ p
     li
       a href="/auth/twitter"
         img alt="Sign in with Twitter" src="/sign-in-with-twitter-gray.png"
+    li
+      form action="/auth/twitch" method="POST"
+        == slim :authenticity_token
+        / Sign in with Twitter ボタン風のスタイリング。
+        button.btn.btn-light style="border: solid 1px #c8c8c8; padding: 2px 10px; background: linear-gradient(#fdfdfd,#d0d0d0); font-weight: bold; color: #4a4a4a; text-shadow: 0 0.5px 0px white; font-size: 0.9rem;" type="submit"
+          span style="color: #9146FF" Twitch
+          | &thinsp;でログイン

@@ -14,8 +14,9 @@ class Pcgw < Sinatra::Base
 
   patch '/servents/all' do
     begin
+      ids = params['id'] || []
       Servent.transaction do
-        params['id'].each do |id|
+        ids.each do |id|
           args = SERVENT_ROW_FIELDS.map do |key|
             [key, params["#{key}#{id}"]]
           end.to_h

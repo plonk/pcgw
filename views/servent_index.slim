@@ -3,8 +3,6 @@
 - content_for :title do
   | 管理 / サーバー一覧
 
-== slim :flash
-
 .panel
   h4 #{servents.count} サーバー
 
@@ -15,9 +13,11 @@
   / テーブルで使うフォームを生成する。
   - servents.each do |serv|
     form id="delete#{serv.id}" action="/servents/#{serv.id}" method="POST"
+      == slim :authenticity_token
       input type="hidden" name="_method" value="DELETE"
 
   form id="save" action="/servents/all" method="POST"
+    == slim :authenticity_token
     input type="hidden" name="_method" value="PATCH"
 
   .table-responsive

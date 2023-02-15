@@ -7,6 +7,7 @@
           span aria-hidden="true" &times;
       .modal-body
         form#add action="/servents" method="POST" role="form"
+          == slim :authenticity_token
 
           .form-group
             label for="name" 名前

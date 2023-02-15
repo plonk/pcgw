@@ -3,8 +3,10 @@
 h2 プロフィールを編集
 
 form action="/profile/edit/delete-image" method="POST" style="display:inline" id="delete-image-form"
+  == slim :authenticity_token
 
 form action="/profile/edit" method="POST" role="form" enctype="multipart/form-data"
+  == slim :authenticity_token
   .form-group
     label for="name"
       | ユーザー名

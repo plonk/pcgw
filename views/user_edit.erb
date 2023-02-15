@@ -1,6 +1,7 @@
 <% content_for :title do %><%= h @content_user.name %><% end %>
 
 <form action="/users/<%= @content_user.id %>" method="POST">
+  <%= slim :authenticity_token %>
   <input type=hidden name="_method" value="PATCH">
 
   <table class="table">
