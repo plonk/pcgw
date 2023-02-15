@@ -116,7 +116,7 @@ class Pcgw < Sinatra::Base
       if @user.image != /\A\//
         @user.image = "/profile_images/0/0_normal.jpg" # デフォルトプロフィール画像。
       end
-      @user.save
+      @user.save!
       redirect back
     end
   end
