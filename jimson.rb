@@ -185,7 +185,7 @@ class Pcgw < Sinatra::Base
   end
 
   get '/auth/twitter' do
-    request_token = oauth().get_request_token(oauth_callback: 'http://pcgw.pgw.jp/auth/twitter/callback')
+    request_token = oauth().get_request_token(oauth_callback: "http://#{request.env['HTTP_HOST']}/auth/twitter/callback")
     session[:token] = request_token.token
     session[:secret] = request_token.secret
     redirect request_token.authorize_url
