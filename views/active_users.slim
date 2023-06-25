@@ -4,7 +4,7 @@
 
 == slim :bfkb
 
-.mb-2
+.mb-3.mt-3
   form.form-inline action="/profile/search" method="GET"
     input.form-control.mr-2.mb-2 name="query" type="text" value=query placeholder="ユーザー名を入力" title="任意の文字列 % と、任意の一文字 _ のワイルドカードが使えます。これらの文字自体を検索したい場合は \ を前に付けてください。"
     button.btn.btn-primary.mb-2 type="submit" 検索
@@ -26,4 +26,4 @@
     - else
       - users.each do |user|
         a href="/profile/#{user.id}"
-          img width=48 src=user.image_bigger alt=user.name title=user.name
+          img width=48 src=user.image_bigger alt=user.name title=user.name onerror=replace_with_fallback

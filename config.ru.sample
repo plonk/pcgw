@@ -1,0 +1,16 @@
+ENV['PCGW_ENV'] = "production"
+
+# Twitter OAuth1
+#ENV['CONSUMER_KEY'] = ''
+#ENV['CONSUMER_SECRET'] = ''
+
+# Twitter OAuth2
+#ENV['TWITTER_CLIENT_ID'] = ''
+#ENV['TWITTER_CLIENT_SECRET'] =''
+
+# Twitch
+#ENV['TWITCH_CLIENT_ID'] = ''
+#ENV['TWITCH_CLIENT_SECRET'] =''
+
+require './jimson.rb'
+run Pcgw

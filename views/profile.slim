@@ -4,7 +4,7 @@
 .panel
   h1
     a href=user.image_200x200
-      img.img-rounded width="73" src=user.image_200x200 alt=user.name
+      img.img-rounded width="73" src=user.image_200x200 alt=user.name onerror=replace_with_fallback
     |  #{user.name}
     - unless user.suspended
       small style="margin-left: .5em"

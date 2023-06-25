@@ -10,7 +10,8 @@ require 'slim'
 require 'logger'
 require 'fileutils'
 require 'omniauth'
-require 'omniauth-twitch'
+require 'omniauth/twitch'
+require 'omniauth/twitter2'
 
 require_relative 'lib/logging'
 require_relative 'lib/peercast'
@@ -49,6 +50,7 @@ class Pcgw < Sinatra::Base
 
     use OmniAuth::Builder do
       provider :twitch, ENV['TWITCH_CLIENT_ID'], ENV['TWITCH_CLIENT_SECRET']
+      provider :twitter2, ENV["TWITTER_CLIENT_ID"], ENV["TWITTER_CLIENT_SECRET"], callback_path: '/auth/twitter2/callback', scope: "tweet.read users.read"
     end
 
     # use Rack::Protection::AuthenticityToken はここに書くとうまく動く。
@@ -264,11 +266,6 @@ class Pcgw < Sinatra::Base
         halt 400, 'Twitchアカウントでの新規ユーザー作成はできません。'
       end
     end        
-  end
-
-  # RACK_ENV 環境変数が development でなければ OmniAuth が失敗した時、ここに来る。
-  get '/auth/failure' do
-    halt 403, 'auth failed'
   end
 
   after do

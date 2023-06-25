@@ -1,25 +1,12 @@
 class Pcgw < Sinatra::Base
   # ログイン成功
-  get '/auth/twitter/callback' do
-    oauth_client = oauth()
-    request_token = OAuth::RequestToken.new(oauth_client, session[:token], session[:secret])
-    begin
-      access_token = oauth_client.get_access_token(request_token, oauth_verifier: params[:oauth_verifier])
-    rescue OAuth::Unauthorized
-      halt 401, "認証に失敗しました。"
-    end
-    twitter_client = Twitter::REST::Client.new do |config|
-      config.consumer_key = ENV['CONSUMER_KEY']
-      config.consumer_secret = ENV['CONSUMER_SECRET']
-      config.access_token = access_token.token
-      config.access_token_secret = access_token.secret
-    end
-    twitter_user = twitter_client.user
-    name = twitter_user.name
-    image_uri = twitter_user.profile_image_uri_https
-    twitter_id = twitter_user.id
+  get '/auth/twitter2/callback' do
+    name = request.env['omniauth.auth']['info']['name']
+    image_uri = request.env['omniauth.auth']['info']['image']
+    twitter_id = request.env['omniauth.auth']['uid']
 
-    origin = session[:origin]
+    # POST /auth/twitter2 に渡した origin パラメーターがここに入ってくる。
+    origin = request.env['omniauth.origin']
 
     if session[:uid].blank?
       if (user = User.find_by(twitter_id: twitter_id))
@@ -32,7 +19,11 @@ class Pcgw < Sinatra::Base
 
         log.info("user #{user.id} logged in")
 
-        redirect '/home'
+        if !origin.blank?
+          redirect to(origin)
+        else
+          redirect '/home'
+        end
       else
         # サインアップ処理。
         user = User.new(name:       name,
@@ -76,8 +67,9 @@ class Pcgw < Sinatra::Base
   end
 
   # ログイン失敗。ユーザーがアプリの認証を拒否した場合。
+  # RACK_ENV 環境変数が development でなければ OmniAuth が失敗した時、ここに来る。
   get '/auth/failure' do
-    '認証できませんでした'
+    halt 403, "認証できませんでした: #{params[:message]}"
   end
 
   # ログアウト。セッションをクリアする。

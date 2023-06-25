@@ -12,8 +12,8 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    addressable (2.8.0)
-      public_suffix (>= 2.0.2, < 5.0)
+    addressable (2.8.4)
+      public_suffix (>= 2.0.2, < 6.0)
     blankslate (3.1.3)
     buftok (0.2.0)
     coderay (1.1.3)
@@ -27,7 +27,7 @@ GEM
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
-    ffi (1.15.3)
+    ffi (1.15.5)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
@@ -38,7 +38,7 @@ GEM
       http-form_data (~> 2.2)
       http-parser (~> 1.2.0)
     http-accept (1.7.0)
-    http-cookie (1.0.4)
+    http-cookie (1.0.5)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
     http-parser (1.2.3)
@@ -64,7 +64,7 @@ GEM
     minitest (5.17.0)
     multi_json (1.15.0)
     multi_xml (0.6.0)
-    multipart-post (2.1.1)
+    multipart-post (2.3.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     naught (1.1.0)
@@ -86,10 +86,12 @@ GEM
       omniauth (~> 2.0)
     omniauth-twitch (1.2.0)
       omniauth-oauth2 (~> 1.6)
+    omniauth-twitter2 (0.1.0)
+      omniauth
+      omniauth-oauth2 (~> 1.0)
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    public_suffix (4.0.6)
     rack (2.2.6.4)
     rack-flash3 (1.0.5)
       rack
@@ -160,7 +162,7 @@ GEM
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.7)
+    unf_ext (0.0.8.2)
     version_gem (1.1.1)
     webrick (1.7.0)
     zeitwerk (2.6.6)
@@ -173,6 +175,7 @@ DEPENDENCIES
   jimson
   oauth
   omniauth-twitch
+  omniauth-twitter2
   pry
   rack (>= 1.6.12)
   rack-flash3

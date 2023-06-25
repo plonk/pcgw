@@ -17,7 +17,7 @@ h1 配信中のチャンネル
       tr
         td
           a href="/profile/#{ch.user.id}" style="margin-right: 0.5em"
-            img.img-rounded width="34" src=ch.user.image alt=ch.user.name
+            img.img-rounded width="34" src=ch.user.image alt=ch.user.name onerror=replace_with_fallback
           = ch.info['info']['name']
         td
           = ch.status['status']

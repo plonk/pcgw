@@ -16,7 +16,7 @@
         th style="line-height: 34px" 配信者
         td
           a href="/profile/#{program.user.id}" alt=program.user.name title=program.user.name
-            img.img-rounded width="34" src=program.user.image alt=program.user.name
+            img.img-rounded width="34" src=program.user.image alt=program.user.name onerror=replace_with_fallback
             span style="margin-left: 0.3em"
               = program.user.name
       tr

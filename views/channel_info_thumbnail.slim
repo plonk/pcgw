@@ -2,7 +2,7 @@
 / - alt_text = program.hide_screenshots ? "[見せられないよ]" : program.primary_screen_shot.alt_text
 
 / img.rounded.bd-placeholder-img src=program.primary_screenshot_path style="width: 100px" alt=alt_text
-img.rounded.bd-placeholder-img width=48 src=program.user.image_bigger
+img.rounded.bd-placeholder-img width=48 src=program.user.image_bigger onerror=replace_with_fallback
 
 div.media-body.ml-2 style="overflow: hidden; text-overflow: ellipsis"
   b

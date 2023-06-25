@@ -12,6 +12,7 @@ gem 'ridgepole'
 gem 'twitter'
 gem 'rack-flash3'
 gem 'omniauth-twitch'
+gem 'omniauth-twitter2'
 
 gem 'rspec', :group => :development
 gem 'pry', :group => :development
