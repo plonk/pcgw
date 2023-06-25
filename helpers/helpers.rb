@@ -104,5 +104,8 @@ class Pcgw < Sinatra::Base
       "%d:%02d" % [hour, min]
     end
 
+    def replace_with_fallback
+      "this.onerror = null; this.src = '/images/fallback.png'"
+    end
   end
 end

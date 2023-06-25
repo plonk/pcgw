@@ -13,7 +13,9 @@
       <td>
         <img width="24" src="<%= h user.image %>"
              alt="<%= h user.name %>"
-             class="img-rounded">
+             class="img-rounded"
+             onerror="<%= h replace_with_fallback %>"
+        >
         <a href="/users/<%= h user.id %>">
           <%= h user.name %>
         </a>
