@@ -20,6 +20,8 @@ require_relative 'lib/peercast'
 require_relative 'init'
 require 'rack-flash'
 
+require_relative 'routes/api'
+
 # Peercast Gateway アプリケーションクラス
 class Pcgw < Sinatra::Base
   include Logging
@@ -52,6 +54,8 @@ class Pcgw < Sinatra::Base
       provider :twitch, ENV['TWITCH_CLIENT_ID'], ENV['TWITCH_CLIENT_SECRET']
       provider :twitter2, ENV["TWITTER_CLIENT_ID"], ENV["TWITTER_CLIENT_SECRET"], callback_path: '/auth/twitter2/callback', scope: "tweet.read users.read"
     end
+
+    use ApiController
 
     # use Rack::Protection::AuthenticityToken はここに書くとうまく動く。
     use Rack::Protection::AuthenticityToken
@@ -167,6 +171,9 @@ class Pcgw < Sinatra::Base
     pass if request.path_info =~ %r{^/ss/}
     # チャンネル一覧、サーバー稼働状況
     pass if request.path_info =~ %r{^/stats}
+
+    # 公開API
+    pass if request.path_info =~ %r{^/api/1/}
 
     pass if request.path_info =~ %r{^/login}
 
