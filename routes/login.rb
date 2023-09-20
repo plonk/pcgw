@@ -69,6 +69,20 @@ class Pcgw < Sinatra::Base
   # ログイン失敗。ユーザーがアプリの認証を拒否した場合。
   # RACK_ENV 環境変数が development でなければ OmniAuth が失敗した時、ここに来る。
   get '/auth/failure' do
+    if params[:message] == 'invalid_credentials'
+      IO.popen("/usr/sbin/sendmail plonk@piano.email.ne.jp", 'w') do |sendmail|
+        sender = `whoami`.chomp + '@' + `hostname -f`
+        sendmail.puts "From: #{sender}"
+        sendmail.puts "Subject: #{params[:strategy]} error"
+        sendmail.puts ""
+        sendmail.puts "invalid_credentials"
+        if params[:strategy] == 'twitter2'
+          sendmail.puts ""
+          sendmail.puts "Check your settings at https://developer.twitter.com/en/portal/dashboard"
+        end
+        sendmail.puts "."
+      end
+    end
     halt 403, "認証できませんでした: #{params[:message]}"
   end
 
