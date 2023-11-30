@@ -231,7 +231,7 @@ class Pcgw < Sinatra::Base
       redirect to("/channels/#{ch.id}")
     rescue RuntimeError => e
       # 必要なフィールドがなかった場合などフォームを再表示する
-      @message = e.message
+      flash.now[:danger] = e.message
       programs = ChannelInfo.where(user: @user).order(created_at: :desc).limit(10)
       erb :create, locals: { template: channel_info, servents: Servent.enabled, recent_programs: programs }
     end
