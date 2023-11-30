@@ -171,6 +171,15 @@ class Pcgw < Sinatra::Base
     halt 403, 'permission denied' if @channel.user != @user
 
     info = params.slice('name', 'url', 'genre', 'desc', 'comment')
+    # Peercast (YT)のチャンネル情報の各フィールドには255バイトまでし
+    # か入らないので、それを越える文字列は弾く。YT 側で文字境界を無
+    # 視した切り詰めが行われると問題を生じるのでそれを回避する意味が
+    # ある。
+    halt 400, 'チャンネル名が長すぎます'  if params['name']&.bytesize > 255
+    halt 400, 'コンタクトURLが長すぎます' if params['url']&.bytesize > 255
+    halt 400, 'ジャンルが長すぎます'      if params['genre']&.bytesize > 255
+    halt 400, '詳細が長すぎます'          if params['desc']&.bytesize > 255
+    halt 400, 'コメントが長すぎます'      if params['comment']&.bytesize > 255
     @channel.servent.api.setChannelInfo(channelId: @channel.gnu_id,
                                         info:      info,
                                         track:     @channel.info['track'])

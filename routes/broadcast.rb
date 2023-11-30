@@ -210,6 +210,16 @@ class Pcgw < Sinatra::Base
       fail 'チャンネル名が入力されていません'     if params['channel'].blank?
       fail 'ストリームタイプが選択されていません' if params['stream_type'].blank?
 
+      # Peercast (YT)のチャンネル情報の各フィールドには255バイトまでし
+      # か入らないので、それを越える文字列は弾く。YT 側で文字境界を無
+      # 視した切り詰めが行われると問題を生じるのでそれを回避する意味が
+      # ある。
+      fail 'チャンネル名が長すぎます'  if params['channel']&.bytesize > 255
+      fail '詳細が長すぎます'          if params['desc']&.bytesize > 255
+      fail 'ジャンルが長すぎます'      if params['genre']&.bytesize > 255
+      fail 'コンタクトURLが長すぎます' if params['url']&.bytesize > 255
+      fail 'コメントが長すぎます'      if params['comment']&.bytesize > 255
+
       servent = choose_servent(params['servent'].to_i, params['yp'])
       channel_info.servent = servent
       breq = PeercastBroadcastRequest.new(servent, channel_info, @yellow_pages, request.ip, key)
