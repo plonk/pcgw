@@ -35,6 +35,11 @@
       <span style="margin-right: 20px">
         <a title="ぺからいぶで開く" href="http://peca.live/<%= h channel.channel_info.channel %>">▶&#xfe0f;<!-- play button --></a>
       </span>
+      <% if @user == channel.user %>
+        <span style="margin-right: 20px">
+          <a title="チャンネル状態" href="/channels/<%= h channel.id %>">&#x2699;&#xfe0f;<!-- gear --></a>
+        </span>
+      <% end %>
     </p>
   </div>
 </div>
